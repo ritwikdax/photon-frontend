@@ -5,6 +5,9 @@ import Button from "@mui/material/Button";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme, Stack } from "@mui/material";
 import { ThemeOptions } from "@mui/material/styles";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const client = new QueryClient();
 
 export default function Home() {
   const themeOptions: ThemeOptions = {
@@ -25,17 +28,19 @@ export default function Home() {
   const theme = createTheme(themeOptions);
   return (
     <ThemeProvider theme={theme}>
-      <div>
-        <main>
-          <Button variant="contained">Click Me</Button>
-          <Stack spacing={2} direction="row">
-            <Button variant="text">Text</Button>
-            <Button variant="contained">Contained</Button>
-            <Button variant="outlined">Outlined</Button>
-          </Stack>
-        </main>
-        <footer></footer>
-      </div>
+      <QueryClientProvider client={client}>
+        <div>
+          <main>
+            <Button variant="contained">Click Me</Button>
+            <Stack spacing={2} direction="row">
+              <Button variant="text">Text</Button>
+              <Button variant="contained">Contained</Button>
+              <Button variant="outlined">Outlined</Button>
+            </Stack>
+          </main>
+          <footer></footer>
+        </div>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }

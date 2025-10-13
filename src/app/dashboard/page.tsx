@@ -1,8 +1,11 @@
 "use client";
 import { Box, createTheme, Stack, Typography } from "@mui/material";
 import { ThemeOptions } from "@mui/material/styles";
+import { useProjectContext } from "../context/all";
 
 export default function Dashboard() {
+  const c = useProjectContext();
+  console.log(c.selectedProject);
   const themeOptions: ThemeOptions = {
     palette: {
       mode: "dark",
