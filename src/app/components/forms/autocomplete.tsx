@@ -2,10 +2,18 @@ import useProjects from "@/app/queries/useProjects";
 import { Autocomplete, TextField, Box } from "@mui/material";
 import { useProjectContext } from "@/app/context/all";
 
+import { useEffect } from "react";
+
 export default function AutoCompleteDropdown() {
   const { data: projects, isLoading } = useProjects();
   const { selectedProject, setSelectedProject } = useProjectContext();
   const projectList = projects || [];
+
+  useEffect(() => {
+    if (!isLoading && projectList.length > 0 && !selectedProject) {
+      setSelectedProject(projectList[0]);
+    }
+  }, [isLoading, projectList, selectedProject, setSelectedProject]);
 
   return (
     <Box

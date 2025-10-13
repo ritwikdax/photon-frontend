@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createTheme, ThemeOptions, ThemeProvider } from "@mui/material";
 
 const client = new QueryClient();
 
@@ -33,9 +34,28 @@ export default function AllContextProviders({
   children: React.ReactNode;
 }) {
   console.log("Rendering AllContextProviders");
+
+  const themeOptions: ThemeOptions = {
+    // palette: {
+    //   mode: "dark",
+    //   primary: {
+    //     main: "#5893df",
+    //   },
+    //   secondary: {
+    //     main: "#2ec5d3",
+    //   },
+    //   background: {
+    //     default: "#03050aff",
+    //     paper: "#000000ff",
+    //   },
+    // },
+  };
+  const theme = createTheme(themeOptions);
   return (
     <QueryClientProvider client={client}>
-      <ProjectProvider>{children}</ProjectProvider>
+      <ThemeProvider theme={theme}>
+        <ProjectProvider>{children}</ProjectProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
