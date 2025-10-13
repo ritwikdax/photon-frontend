@@ -4,6 +4,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import ProjectUpdates, { Update } from "./ProjectUpdates";
 
 function TabPanel(props: {
   children?: React.ReactNode;
@@ -30,12 +31,12 @@ const ProjectTabsCard: React.FC = () => {
     setValue(newValue);
   };
   return (
-    <Card sx={{ width: "100%", mt: 3 }}>
+    <Box sx={{ width: "100%", mt: 3 }}>
       <Tabs
         value={value}
         onChange={handleChange}
         aria-label="project tabs"
-        variant="fullWidth">
+        variant="standard">
         <Tab label="Events" id="mui-tab-0" aria-controls="mui-tabpanel-0" />
         <Tab
           label="Deliverables"
@@ -52,10 +53,39 @@ const ProjectTabsCard: React.FC = () => {
           No deliverables yet.
         </TabPanel>
         <TabPanel value={value} index={2}>
-          No updates yet.
+          <ProjectUpdates
+            updates={
+              [
+                {
+                  title: "Photographer & Videographer Assigned",
+                  description: "Initial project skeleton and repo created.",
+                  createdAt: new Date(
+                    Date.now() - 1000 * 60 * 60 * 24 * 3
+                  ).toISOString(),
+                  type: "info",
+                },
+                {
+                  title: "Assignment Completed by Team Lead",
+                  description: "Successfully completed the shoot at the venue.",
+                  createdAt: new Date(
+                    Date.now() - 1000 * 60 * 60 * 24 * 1
+                  ).toISOString(),
+                  type: "error",
+                },
+                {
+                  title: "Photo Transferred",
+                  description: "Deployment paused until hotfix is approved.",
+                  createdAt: new Date(
+                    Date.now() - 1000 * 60 * 60 * 2
+                  ).toISOString(),
+                  type: "blocked",
+                },
+              ] as Update[]
+            }
+          />
         </TabPanel>
       </CardContent>
-    </Card>
+    </Box>
   );
 };
 
