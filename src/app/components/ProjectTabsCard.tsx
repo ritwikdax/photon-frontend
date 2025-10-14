@@ -5,8 +5,10 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import ProjectUpdates, { Update } from "./ProjectUpdates";
 import Events from "./events";
+import Deliverables from "./Deliverables";
 import useProjectUpdates from "../queries/useUpdates";
 import useProjectEvents, { Event } from "../queries/useEvents";
+import useProjectDeliverables from "../queries/useDeliverables";
 import { useProjectContext } from "../context/all";
 
 function TabPanel(props: {
@@ -36,6 +38,7 @@ const ProjectTabsCard: React.FC = () => {
   const { selectedProject } = useProjectContext();
   const { data: projectUpdates } = useProjectUpdates(selectedProject?.id || "");
   const { data: projectEvents } = useProjectEvents(selectedProject?.id || "");
+  const { data: projectDeliverables } = useProjectDeliverables(selectedProject?.id || "");
   console.log(projectUpdates);
   return (
     <Box sx={{ width: "100%"}}>
@@ -68,7 +71,7 @@ const ProjectTabsCard: React.FC = () => {
           />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          No deliverables yet.
+          <Deliverables deliverables={projectDeliverables || []} />
         </TabPanel>
         <TabPanel value={value} index={2}>
           <ProjectUpdates

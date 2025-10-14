@@ -9,6 +9,7 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  ListItemIcon,
   AppBar,
   Typography,
   IconButton,
@@ -17,8 +18,14 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import {Add} from "@mui/icons-material"
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import EventIcon from "@mui/icons-material/Event";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import PeopleIcon from "@mui/icons-material/People";
+import BusinessIcon from "@mui/icons-material/Business";
 import AutoCompleteDropdown from "./forms/autocomplete";
 import AllContextProviders from "../context/all";
+import { useRouter, usePathname } from "next/navigation";
 const drawerWidth = 240;
 
 export default function Layout({
@@ -27,22 +34,53 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const menuItems = [
+    { text: "Dashboard", path: "/dashboard", icon: <DashboardIcon /> },
+    { text: "Events", path: "/events", icon: <EventIcon /> },
+    { text: "Deliverables", path: "/deliverables", icon: <AssignmentIcon /> },
+    { text: "Employees", path: "/employees", icon: <PeopleIcon /> },
+    { text: "Clients", path: "/clients", icon: <BusinessIcon /> },
+  ];
+
+  const handleNavigation = (path: string) => {
+    router.push(path);
   };
 
   const drawer = (
     <div>
       <Toolbar />
       <List>
-        {["Dashboard", "Users", "Settings", "Reports"].map((text) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {menuItems.map((item) => {
+          const isActive = pathname === item.path;
+          return (
+            <ListItem key={item.text} disablePadding>
+              <ListItemButton
+                selected={isActive}
+                onClick={() => handleNavigation(item.path)}
+                sx={{
+                  textDecoration: 'none',
+                  width: '100%',
+                  '&.Mui-selected': {
+                    backgroundColor: 'action.selected',
+                    '&:hover': {
+                      backgroundColor: 'action.selected',
+                    },
+                  },
+                }}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
       </List>
     </div>
   );

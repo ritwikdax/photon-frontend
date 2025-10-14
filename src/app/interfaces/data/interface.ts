@@ -83,19 +83,24 @@ export interface Update extends Entity {
   type: UpdateType;
 }
 
-export interface DeliverableUpdate extends Entity {
+export interface DeliveryUpdate extends Entity {
   title: string;
   status: "not_started" | "done" | "in_progress";
-  deliverableId: string;
 }
 
-export interface Deliverables extends Entity {
+export interface Deliverable extends Entity {
   type: DeliverableType;
   deliveryTime: number; //In days
   assetType: "physical" | "digital";
-  deliveryUpdates: Array<DeliverableUpdate>;
+  deliveryUpdates: Array<DeliveryUpdate>;
   isDelivered: boolean;
   projectId: string;
+}
+
+export interface ProjectsDeliverable extends Entity {
+  projectId: string;
+  deliverableId: string;
+  deliveryUpdates: Array<DeliveryUpdate>;
 }
 
 export interface Event extends Entity {
