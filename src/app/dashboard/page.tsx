@@ -2,15 +2,17 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { useProjectContext } from "../context/all";
 import ProjectDetails from "../components/projectDetails";
-import ProjectTabsCard from "../components/ProjectTabsCard";
+import ProjectTabsCard from "../components/projectTabsCard";
 import { ContentCopy } from "@mui/icons-material";
 export default function Dashboard() {
   const { selectedProject } = useProjectContext();
-  console.log(selectedProject);
-
   return (
     <Box>
-      <Stack direction="row">
+
+
+      <Box sx={{ display: "flex", gap: 2 }}>
+        <Box sx={{ width: "40%" }}>
+                <Stack direction="row">
         <Typography variant="h4" sx={{ mb: 3, fontWeight: 700 }}>
           {selectedProject?.name || "No Project Selected"}
         </Typography>
@@ -20,9 +22,6 @@ export default function Dashboard() {
           </Button>
         </Box>
       </Stack>
-
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <Box sx={{ width: "40%" }}>
           <ProjectDetails
             name={selectedProject?.name || "No Name"}
             phone={selectedProject?.phone || "No Phone"}

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import ProjectUpdates, { Update } from "./ProjectUpdates";
+import Events from "./events";
 import useProjectUpdates from "../queries/useUpdates";
+import useProjectEvents, { Event } from "../queries/useEvents";
 import { useProjectContext } from "../context/all";
 
 function TabPanel(props: {
@@ -34,9 +35,10 @@ const ProjectTabsCard: React.FC = () => {
   };
   const { selectedProject } = useProjectContext();
   const { data: projectUpdates } = useProjectUpdates(selectedProject?.id || "");
+  const { data: projectEvents } = useProjectEvents(selectedProject?.id || "");
   console.log(projectUpdates);
   return (
-    <Box sx={{ width: "100%", mt: 3 }}>
+    <Box sx={{ width: "100%"}}>
       <Tabs
         value={value}
         onChange={handleChange}
@@ -52,7 +54,18 @@ const ProjectTabsCard: React.FC = () => {
       </Tabs>
       <CardContent sx={{ p: 0 }}>
         <TabPanel value={value} index={0}>
-          No events yet.
+          <Events
+            events={
+              projectEvents?.map((event: Event) => {
+                return {
+                  date: event.date,
+                  venue: event.venue,
+                  usersAssigned: event.usersAssigned,
+                  assignment: event.assignment,
+                };
+              }) || []
+            }
+          />
         </TabPanel>
         <TabPanel value={value} index={1}>
           No deliverables yet.

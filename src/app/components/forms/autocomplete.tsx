@@ -11,27 +11,14 @@ export default function AutoCompleteDropdown() {
   const projectList = projects || [];
   const autocompleteRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    if (!isLoading && projectList.length > 0 && !selectedProject) {
+    if (!isLoading && projectList.length > 0 && !selectedProject && !initialized) {
       setSelectedProject(projectList[0]);
+      setInitialized(true);
     }
-  }, [isLoading, projectList, selectedProject, setSelectedProject]);
-
-  useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === "/" && autocompleteRef.current) {
-        event.preventDefault();
-        autocompleteRef.current.focus();
-        setOpen(true);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyPress);
-    return () => {
-      window.removeEventListener("keydown", handleKeyPress);
-    };
-  }, []);
+  }, [isLoading, projectList, selectedProject, setSelectedProject, initialized]);
 
   return (
     <Box
@@ -53,7 +40,6 @@ export default function AutoCompleteDropdown() {
           }}
           getOptionLabel={(option) => option?.name || ""}
           isOptionEqualToValue={(option, value) => option?.id === value?.id}
-          defaultValue={projectList[0] || null}
           size="small"
           sx={{
             width: 500,

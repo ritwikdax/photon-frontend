@@ -1,7 +1,7 @@
 import React from "react";
 
 // Remove MUI Tabs imports, import ProjectTabsCard instead
-import ProjectTabsCard from "./ProjectTabsCard";
+import ProjectTabsCard from "./projectTabsCard";
 
 interface ProjectDetailsProps {
   name: string;
