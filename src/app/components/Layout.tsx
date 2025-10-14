@@ -17,7 +17,6 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import AutoCompleteDropdown from "./forms/autocomplete";
 import AllContextProviders from "../context/all";
-
 const drawerWidth = 240;
 
 export default function Layout({

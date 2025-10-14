@@ -79,7 +79,7 @@ const ProjectUpdates: FC<ProjectUpdatesProps> = ({ updates }) => {
             padding: 0,
           },
         }}>
-        {updates.map((update, index) => (
+        {updates?.map((update, index) => (
           <TimelineItem key={index}>
             <TimelineSeparator>
               <TimelineDot color={getStatusColor(update.type)}>

@@ -5,6 +5,8 @@ import CardContent from "@mui/material/CardContent";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import ProjectUpdates, { Update } from "./ProjectUpdates";
+import useProjectUpdates from "../queries/useUpdates";
+import { useProjectContext } from "../context/all";
 
 function TabPanel(props: {
   children?: React.ReactNode;
@@ -30,6 +32,9 @@ const ProjectTabsCard: React.FC = () => {
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+  const { selectedProject } = useProjectContext();
+  const { data: projectUpdates } = useProjectUpdates(selectedProject?.id || "");
+  console.log(projectUpdates);
   return (
     <Box sx={{ width: "100%", mt: 3 }}>
       <Tabs
@@ -55,32 +60,14 @@ const ProjectTabsCard: React.FC = () => {
         <TabPanel value={value} index={2}>
           <ProjectUpdates
             updates={
-              [
-                {
-                  title: "Photographer & Videographer Assigned",
-                  description: "Initial project skeleton and repo created.",
-                  createdAt: new Date(
-                    Date.now() - 1000 * 60 * 60 * 24 * 3
-                  ).toISOString(),
-                  type: "info",
-                },
-                {
-                  title: "Assignment Completed by Team Lead",
-                  description: "Successfully completed the shoot at the venue.",
-                  createdAt: new Date(
-                    Date.now() - 1000 * 60 * 60 * 24 * 1
-                  ).toISOString(),
-                  type: "error",
-                },
-                {
-                  title: "Photo Transferred",
-                  description: "Deployment paused until hotfix is approved.",
-                  createdAt: new Date(
-                    Date.now() - 1000 * 60 * 60 * 2
-                  ).toISOString(),
-                  type: "blocked",
-                },
-              ] as Update[]
+              projectUpdates?.map((update: Update) => {
+                return {
+                  title: update.title,
+                  description: update.description,
+                  createdAt: update.createdAt,
+                  type: update.type,
+                };
+              })
             }
           />
         </TabPanel>
