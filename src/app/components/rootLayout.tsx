@@ -13,8 +13,10 @@ import {
   Typography,
   IconButton,
   Select,
+  Button,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import {Add} from "@mui/icons-material"
 import AutoCompleteDropdown from "./forms/autocomplete";
 import AllContextProviders from "../context/all";
 const drawerWidth = 240;
@@ -83,6 +85,7 @@ export default function Layout({
               </Typography>
             </div>
             <AutoCompleteDropdown />
+            <Button sx={{marginLeft:"20px" , backgroundColor: "#b70058ff"}} variant="contained" startIcon={<Add/>}> Add</Button>
           </Toolbar>
         </AppBar>
 

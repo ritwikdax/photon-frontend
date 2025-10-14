@@ -20,6 +20,18 @@ export default function AutoCompleteDropdown() {
     }
   }, [isLoading, projectList, selectedProject, setSelectedProject, initialized]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === '/' && document.activeElement?.tagName !== 'INPUT') {
+        e.preventDefault();
+        autocompleteRef.current?.focus();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <Box
       sx={{
@@ -36,7 +48,17 @@ export default function AutoCompleteDropdown() {
           onClose={() => setOpen(false)}
           value={selectedProject}
           onChange={(_e, value) => {
-            setSelectedProject(value);
+            if (value) {
+              setSelectedProject(value);
+            }
+          }}
+          onSelect={(e)=>{
+            console.log(e);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              autocompleteRef.current?.blur();
+            }
           }}
           getOptionLabel={(option) => option?.name || ""}
           isOptionEqualToValue={(option, value) => option?.id === value?.id}
@@ -48,6 +70,12 @@ export default function AutoCompleteDropdown() {
               color: "white",
             },
             "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+              borderColor: "white",
+            },
+            "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "white",
+            },
+            "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
               borderColor: "white",
             },
             "& .MuiSvgIcon-root": {
