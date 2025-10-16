@@ -15,6 +15,7 @@ import {
   IconButton,
   Select,
   Button,
+  Fab,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import {Add} from "@mui/icons-material"
@@ -42,7 +43,7 @@ export default function Layout({
   };
 
   const menuItems = [
-    { text: "Dashboard", path: "/dashboard", icon: <DashboardIcon /> },
+    { text: "Project", path: "/project", icon: <DashboardIcon /> },
     { text: "Events", path: "/events", icon: <EventIcon /> },
     { text: "Deliverables", path: "/deliverables", icon: <AssignmentIcon /> },
     { text: "Employees", path: "/employees", icon: <PeopleIcon /> },
@@ -54,7 +55,7 @@ export default function Layout({
   };
 
   const drawer = (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <Toolbar />
       <List>
         {menuItems.map((item) => {
@@ -82,6 +83,23 @@ export default function Layout({
           );
         })}
       </List>
+      <Box sx={{ flexGrow: 1 }} />
+      <Box sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
+        <Fab
+          variant="extended"
+          sx={{
+            backgroundColor: '#b70058ff',
+            color: 'white',
+            width: '100%',
+            '&:hover': {
+              backgroundColor: '#950047',
+            },
+          }}
+        >
+          <Add sx={{ mr: 1 }} />
+          Add Project
+        </Fab>
+      </Box>
     </div>
   );
 

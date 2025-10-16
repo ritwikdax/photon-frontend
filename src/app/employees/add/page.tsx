@@ -9,13 +9,6 @@ export default function AddEmployee() {
   const handleSubmit = async (data: any) => {
     console.log("Employee data:", data);
     addMutation.mutate(data);
-    // TODO: Implement API call to add employee
-    // Example:
-    // const response = await fetch('/api/employees', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(data),
-    // });
   };
 
   return (

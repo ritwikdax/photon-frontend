@@ -8,20 +8,18 @@ export default function Dashboard() {
   const { selectedProject } = useProjectContext();
   return (
     <Box>
-
-
       <Box sx={{ display: "flex", gap: 2 }}>
         <Box sx={{ width: "40%" }}>
-                <Stack direction="row">
-        <Typography variant="h4" sx={{ mb: 3, fontWeight: 700 }}>
-          {selectedProject?.name || "No Project Selected"}
-        </Typography>
-        <Box sx={{ marginLeft: "20px" }}>
-          <Button variant="outlined" startIcon={<ContentCopy />}>
-            Track
-          </Button>
-        </Box>
-      </Stack>
+          <Stack direction="row">
+            <Typography variant="h4" sx={{ mb: 3, fontWeight: 700 }}>
+              {selectedProject?.name || "No Project Selected"}
+            </Typography>
+            <Box sx={{ marginLeft: "20px" }}>
+              <Button variant="outlined" startIcon={<ContentCopy />}>
+                Track
+              </Button>
+            </Box>
+          </Stack>
           <ProjectDetails
             name={selectedProject?.name || "No Name"}
             phone={selectedProject?.phone || "No Phone"}

@@ -60,6 +60,8 @@ export interface Client extends Entity {
   alternatePhone: string;
   email: string;
   address: string;
+  isPremiumClient: boolean;
+  additionalDetails?: string;
 }
 
 export interface Employee extends Entity {
