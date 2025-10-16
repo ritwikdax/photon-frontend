@@ -25,8 +25,9 @@ export const NAVIGATION_MENU_ITEMS: MenuItem[] = [
 
 export interface AddMenuItem {
   text: string;
-  path: string;
+  path?: string;
   icon: React.ReactElement;
+  onClick?: () => void;
 }
 
 export const ADD_MENU_ITEMS: AddMenuItem[] = [

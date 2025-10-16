@@ -79,7 +79,6 @@ export interface Employee extends Entity {
 }
 
 export interface Project extends Entity {
-  significantId: string;
   name: string;
   phone: string;
   alternatePhone: string;

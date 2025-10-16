@@ -39,7 +39,7 @@ const ProjectTabsCard: React.FC = () => {
   const { selectedProject } = useProjectContext();
   const { data: projectUpdates } = useProjectUpdates(selectedProject?.id || "");
   const { data: projectEvents } = useProjectEvents(selectedProject?.id || "");
-  useProjectDeliverables();
+  const projectDeliverables= useProjectDeliverables(selectedProject?.id || "");
   console.log(projectUpdates);
   return (
     <Box sx={{ width: "100%" }}>
@@ -73,7 +73,7 @@ const ProjectTabsCard: React.FC = () => {
           />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <ProjectDeliverables deliverables={[]} />
+          <ProjectDeliverables deliverables={projectDeliverables ?? []} />
         </TabPanel>
         <TabPanel value={value} index={2}>
           <ProjectUpdates

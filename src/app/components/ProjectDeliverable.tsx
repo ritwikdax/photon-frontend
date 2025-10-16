@@ -7,6 +7,7 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  IconButton,
 } from "@mui/material";
 import {
   Timeline,
@@ -23,11 +24,13 @@ import {
   LocalShipping,
   CloudUpload,
   ExpandMore,
+  Delete,
 } from "@mui/icons-material";
 import {
   Deliverable as DeliverablesType,
   ProjectDeliverable,
 } from "../interfaces/data/interface";
+import { useDeleteMutation } from "../mutations/useDeleteMutation";
 
 interface DeliverableProps {
   deliverable: ProjectDeliverable;
@@ -65,6 +68,15 @@ const StatusConfig = {
 };
 
 export default function Deliverable({ deliverable }: DeliverableProps) {
+  console.log("Rendering Deliverable:", deliverable);
+  const deleteMutation = useDeleteMutation("projectDeliverables");
+
+  const handleDelete = () => {
+    if (window.confirm(`Are you sure you want to delete "${deliverable.displayName}"?`)) {
+      deleteMutation.mutate(deliverable.id);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -87,9 +99,12 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
       >
         <Box>
           <Typography variant="h6" component="h3" gutterBottom>
-            {DeliverableTypeLabels[deliverable.type]}
+            {deliverable.displayName}
           </Typography>
-          <Stack direction="row" spacing={2} alignItems="center">
+          <Typography variant="body2" component="h3" gutterBottom>
+            {deliverable.additionalDetails}
+          </Typography>
+          <Stack direction="row" spacing={2} alignItems="center" sx={{marginTop: "24px"}}>
             <Stack direction="row" spacing={0.5} alignItems="center">
               <AccessTime fontSize="small" color="action" />
               <Typography variant="body2" color="text.secondary">
@@ -110,11 +125,22 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
             />
           </Stack>
         </Box>
-        <Chip
-          label={deliverable.isDelivered ? "Delivered" : "Pending"}
-          color={deliverable.isDelivered ? "success" : "warning"}
-          icon={deliverable.isDelivered ? <CheckCircle /> : <Pending />}
-        />
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Chip
+            label={deliverable.isDelivered ? "Delivered" : "Pending"}
+            color={deliverable.isDelivered ? "success" : "warning"}
+            icon={deliverable.isDelivered ? <CheckCircle /> : <Pending />}
+          />
+          <IconButton
+            onClick={handleDelete}
+            disabled={deleteMutation.isPending}
+            color="error"
+            size="small"
+            aria-label="delete deliverable"
+          >
+            <Delete />
+          </IconButton>
+        </Stack>
       </Box>
 
       {/* Timeline for Delivery Updates */}
