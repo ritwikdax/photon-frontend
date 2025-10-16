@@ -51,6 +51,7 @@ const ProjectUpdates: FC<ProjectUpdatesProps> = ({ updates }) => {
   return (
     <Box
       sx={{
+        width: "100%",
         maxHeight: "70vh",
         overflowY: "auto",
         overflowX: "hidden",

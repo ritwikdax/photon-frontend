@@ -1,9 +1,8 @@
 "use client";
 
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
-import { Box, Typography, CircularProgress, Alert, Chip } from "@mui/material";
+import { Box, Alert, Chip } from "@mui/material";
 import useEmployees from "../queries/useEmployees";
-import { Employee } from "../interfaces/data/interface";
 
 const columns: GridColDef[] = [
   {
@@ -92,10 +91,7 @@ export default function EmployeesPage() {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Employees
-      </Typography>
-      <Box sx={{ height: 600, width: "100%", mt: 2 }}>
+      <Box sx={{ height: "calc(100vh - 200px)", width: "100%", mt: 2 }}>
         <DataGrid
           rows={employees || []}
           columns={columns}

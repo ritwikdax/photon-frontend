@@ -65,7 +65,7 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
   return (
     <Box
       sx={{
-        width: "100%",
+        width: "600px",
         bgcolor: "white",
         p: 3,
         borderRadius: 1,
@@ -84,15 +84,19 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
       >
         <Box>
           <Typography variant="h6" component="h3" gutterBottom>
-            {DeliverableTypeLabels[deliverable.type]}
+            {deliverable.displayName}
           </Typography>
-          <Stack direction="row" spacing={2} alignItems="center">
+          <Typography variant="body2" component="h3" gutterBottom>
+            {deliverable.additionalDetails}
+          </Typography>
+          <Stack direction="row" spacing={2} alignItems="center" sx={{marginTop: '24px'}}>
             <Stack direction="row" spacing={0.5} alignItems="center">
               <AccessTime fontSize="small" color="action" />
               <Typography variant="body2" color="text.secondary">
                 {deliverable.deliveryTime} days
               </Typography>
             </Stack>
+            <p>{deliverable.assetType}</p>
             <Chip
               label={deliverable.assetType}
               size="medium"
@@ -107,15 +111,15 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
             />
           </Stack>
         </Box>
-        <Chip
+        {/* <Chip
           label={deliverable.isDelivered ? "Delivered" : "Pending"}
           color={deliverable.isDelivered ? "success" : "warning"}
           icon={deliverable.isDelivered ? <CheckCircle /> : <Pending />}
-        />
+        /> */}
       </Box>
 
       {/* Timeline for Delivery Updates */}
-      {deliverable.deliveryUpdates.length > 0 ? (
+      {deliverable.updateTemplates.length > 0 ? (
         <Box>
           <Accordion
             defaultExpanded={false}
@@ -134,7 +138,7 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
               }}
             >
               <Typography variant="subtitle2" color="text.secondary">
-                Delivery Timeline ({deliverable.deliveryUpdates.length})
+                Delivery Timeline ({deliverable.updateTemplates.length})
               </Typography>
             </AccordionSummary>
             <AccordionDetails sx={{ pt: 0 }}>
@@ -154,14 +158,14 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
                   },
                 }}
               >
-                {deliverable.deliveryUpdates.map((update, index) => (
+                {deliverable.updateTemplates.map((update, index) => (
                   <TimelineItem key={update.id}>
                     <TimelineSeparator>
                       <TimelineDot
                         color={StatusConfig[update.status].dotColor}
                         sx={{ my: 0.5 }}
                       />
-                      {index < deliverable.deliveryUpdates.length - 1 && (
+                      {index < deliverable.updateTemplates.length - 1 && (
                         <TimelineConnector sx={{ minHeight: 20 }} />
                       )}
                     </TimelineSeparator>

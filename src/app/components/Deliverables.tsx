@@ -1,5 +1,6 @@
+'use client';
 import React from "react";
-import { Box, List, ListItem, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { LocalShipping } from "@mui/icons-material";
 import { Deliverable as DeliverablesType } from "../interfaces/data/interface";
 import Deliverable from "./Deliverable";
@@ -27,18 +28,21 @@ export default function Deliverables({ deliverables }: DeliverablesProps) {
   }
 
   return (
-    <List
+    <Box
       sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: 2,
         width: "100%",
         maxHeight: "calc(100vh - 200px)",
         overflowY: "auto",
       }}
     >
       {deliverables.map((deliverable) => (
-        <ListItem key={deliverable.id} sx={{ px: 0, py: 1.5 }}>
+        <Box key={deliverable.id}>
           <Deliverable deliverable={deliverable} />
-        </ListItem>
+        </Box>
       ))}
-    </List>
+    </Box>
   );
 }

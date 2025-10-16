@@ -4,7 +4,14 @@ interface Entity {
   updatedAt: Date;
 }
 
-type BookingType =
+export type Collections =
+  | "employees"
+  | "clients"
+  | "projects"
+  | "deliverables"
+  | "projectDeliverables";
+
+export type BookingType =
   | "wedding"
   | "pre_wedding"
   | "post_wedding"
@@ -14,7 +21,7 @@ type BookingType =
   | "baby_bump"
   | "rice_cereony"
   | "other";
-type LeadType =
+export type LeadType =
   | "facebook"
   | "instagram"
   | "whatsapp"
@@ -22,16 +29,16 @@ type LeadType =
   | "wordofmouth"
   | "referrel"
   | "other";
-type ProjectStatus = "open" | "close" | "reopen" | "withdrawn";
+export type ProjectStatus = "open" | "close" | "reopen" | "withdrawn";
 
-type UpdateType =
+export type UpdateType =
   | "info"
   | "error"
   | "blocker"
   | "success"
   | "failed"
   | "unblocker";
-type DeliverableType =
+export type DeliverableType =
   | "raw_photos"
   | "raw_videoes"
   | "album"
@@ -42,6 +49,10 @@ type DeliverableType =
   | "edited_photos"
   | "full_video"
   | "other";
+
+export type EmployeeRoleType = "admin" | "manager" | "employee";
+export type EmployeeStatusType = "active" | "inactive" | "on_leave";
+export type EmploymentType = "full_time" | "part_time" | "freelancer";
 
 export interface Client extends Entity {
   name: string;
@@ -60,6 +71,9 @@ export interface Employee extends Entity {
   alternatePhone: string;
   email: string;
   rating: number;
+  employmentType: EmploymentType;
+  status: EmployeeStatusType;
+  role: EmployeeRoleType;
 }
 
 export interface Project extends Entity {
@@ -86,15 +100,23 @@ export interface Update extends Entity {
 export interface DeliveryUpdate extends Entity {
   title: string;
   status: "not_started" | "done" | "in_progress";
+  lastUpdatedOn: Date;
 }
 
 export interface Deliverable extends Entity {
   type: DeliverableType;
+  displayName: string;
+  additionalDetails: string;
   deliveryTime: number; //In days
   assetType: "physical" | "digital";
+  updateTemplates: Array<DeliveryUpdate>;
+}
+
+export interface ProjectDeliverable extends Entity {
+  projectId: string;
+  deliverableId: string;
   deliveryUpdates: Array<DeliveryUpdate>;
   isDelivered: boolean;
-  projectId: string;
 }
 
 export interface ProjectsDeliverable extends Entity {

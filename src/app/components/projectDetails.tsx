@@ -1,7 +1,18 @@
 import React from "react";
+import { Box, Typography, Chip, Stack } from "@mui/material";
+import {
+  Phone,
+  PhoneAndroid,
+  Email,
+  Label,
+  CalendarToday,
+  Link as LinkIcon,
+  Chat,
+  Info,
+} from "@mui/icons-material";
 
 // Remove MUI Tabs imports, import ProjectTabsCard instead
-import ProjectTabsCard from "./projectTabsCard";
+import EditableTypography from "./EditableTypography";
 
 interface ProjectDetailsProps {
   name: string;
@@ -29,175 +40,186 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
   status,
 }) => {
   const statusColor =
-    status === "open" ? "#22c55e" : status === "close" ? "#ef4444" : "#d1d5db";
-  const statusText =
+    status === "open" ? "success" : status === "close" ? "error" : "default";
+  const statusLabel =
     status === "open" ? "Open" : status === "close" ? "Closed" : "Unknown";
+
   return (
-    <div
-      style={{
-        border: "1px solid #e5e7eb",
-        borderRadius: "12px",
-        padding: "1.5rem",
-        background: "#fff",
+    <Box
+      sx={{
+        border: 1,
+        borderColor: "divider",
+        borderRadius: 3,
+        p: 3,
+        bgcolor: "background.paper",
         position: "relative",
-        margin: "1rem auto",
+        m: "1rem auto",
         fontFamily: "Inter, sans-serif",
       }}>
       {status && (
-        <span
-          style={{
+        <Chip
+          label={statusLabel}
+          color={statusColor}
+          sx={{
             position: "absolute",
             top: 18,
             right: 18,
-            background: statusColor,
-            color: "#fff",
-            borderRadius: "999px",
-            padding: "0.25em 0.9em",
-            fontSize: "0.95rem",
             fontWeight: 600,
             letterSpacing: 0.5,
-            boxShadow: "0 1px 4px rgba(0,0,0,0.07)",
             textTransform: "uppercase",
-            display: "inline-block",
-          }}>
-          {statusText}
-        </span>
+          }}
+        />
       )}
-      {/* <h2
-        style={{
-          fontSize: "1.5rem",
-          fontWeight: 700,
-          marginBottom: "0.5rem",
-          color: "#111827",
-        }}>
-        {name}
-      </h2> */}
-      <div
-        style={{
-          fontSize: "1rem",
-          color: "#374151",
-          marginBottom: "0.25rem",
-          display: "flex",
-          alignItems: "center",
-          gap: 6,
-        }}>
-        <span role="img" aria-label="phone">
-          📞
-        </span>
-        <strong>Phone:</strong> {phone}
-      </div>
-      {alternatePhone && (
-        <div
-          style={{
-            fontSize: "1rem",
-            color: "#374151",
-            marginBottom: "0.25rem",
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-          }}>
-          <span role="img" aria-label="alternate phone">
-            📱
-          </span>
-          <strong>Alternate Phone:</strong> {alternatePhone}
-        </div>
-      )}
-      <div
-        style={{
-          fontSize: "1rem",
-          color: "#374151",
-          marginBottom: "0.25rem",
-          display: "flex",
-          alignItems: "center",
-          gap: 6,
-        }}>
-        <span role="img" aria-label="email">
-          ✉️
-        </span>
-        <strong>Email:</strong> {email}
-      </div>
-      {bookingCategory && (
-        <div
-          style={{
-            fontSize: "1rem",
-            color: "#374151",
-            marginBottom: "0.25rem",
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-          }}>
-          <span role="img" aria-label="category">
-            🏷️
-          </span>
-          <strong>Booking Category:</strong> {bookingCategory}
-        </div>
-      )}
-      {dateOfBooking && (
-        <div
-          style={{
-            fontSize: "1rem",
-            color: "#374151",
-            marginBottom: "0.25rem",
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-          }}>
-          <span role="img" aria-label="calendar">
-            📅
-          </span>
-          <strong>Date of Booking:</strong> {dateOfBooking}
-        </div>
-      )}
-      {leadSource && (
-        <div
-          style={{
-            fontSize: "1rem",
-            color: "#374151",
-            marginBottom: "0.25rem",
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-          }}>
-          <span role="img" aria-label="source">
-            🔗
-          </span>
-          <strong>Lead Source:</strong> {leadSource}
-        </div>
-      )}
-      {discussionSummary && (
-        <div
-          style={{
-            fontSize: "1rem",
-            color: "#2563eb",
-            margin: "0.5rem 0",
-            fontStyle: "italic",
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-          }}>
-          <span role="img" aria-label="discussion">
-            💬
-          </span>
-          <strong>Discussion Summary:</strong> {discussionSummary}
-        </div>
-      )}
-      {details && (
-        <div
-          style={{
-            fontSize: "0.95rem",
-            color: "#6b7280",
-            marginTop: "0.75rem",
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-          }}>
-          <span role="img" aria-label="info">
-            ℹ️
-          </span>
-          {details}
-        </div>
-      )}
-    </div>
+
+      <Stack spacing={1}>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Phone sx={{ color: "text.secondary" }} />
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+            <Typography variant="body1" color="text.primary" component="span">
+              <strong>Phone:</strong>
+            </Typography>
+            <EditableTypography
+              value={phone}
+              onSave={() => {}}
+              variant="body1"
+              color="text.primary"
+              component="span"
+              sx={{ display: "inline" }}
+            />
+          </Box>
+        </Stack>
+
+        {alternatePhone && (
+          <Stack direction="row" spacing={1} alignItems="center">
+            <PhoneAndroid sx={{ color: "text.secondary" }} />
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+              <Typography variant="body1" color="text.primary" component="span">
+                <strong>Alternate Phone:</strong>
+              </Typography>
+              <EditableTypography
+                value={alternatePhone}
+                onSave={() => {}}
+                variant="body1"
+                color="text.primary"
+                component="span"
+                sx={{ display: "inline" }}
+              />
+            </Box>
+          </Stack>
+        )}
+
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Email sx={{ color: "text.secondary" }} />
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+            <Typography variant="body1" color="text.primary" component="span">
+              <strong>Email:</strong>
+            </Typography>
+            <EditableTypography
+              value={email}
+              onSave={() => {}}
+              variant="body1"
+              color="text.primary"
+              component="span"
+              sx={{ display: "inline" }}
+            />
+          </Box>
+        </Stack>
+
+        {bookingCategory && (
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Label sx={{ color: "text.secondary" }} />
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+              <Typography variant="body1" color="text.primary" component="span">
+                <strong>Booking Category:</strong>
+              </Typography>
+              <EditableTypography
+                value={bookingCategory}
+                onSave={() => {}}
+                variant="body1"
+                color="text.primary"
+                component="span"
+                sx={{ display: "inline" }}
+              />
+            </Box>
+          </Stack>
+        )}
+
+        {dateOfBooking && (
+          <Stack direction="row" spacing={1} alignItems="center">
+            <CalendarToday sx={{ color: "text.secondary" }} />
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+              <Typography variant="body1" color="text.primary" component="span">
+                <strong>Date of Booking:</strong>
+              </Typography>
+              <EditableTypography
+                value={dateOfBooking}
+                onSave={() => {}}
+                variant="body1"
+                color="text.primary"
+                component="span"
+                sx={{ display: "inline" }}
+              />
+            </Box>
+          </Stack>
+        )}
+
+        {leadSource && (
+          <Stack direction="row" spacing={1} alignItems="center">
+            <LinkIcon sx={{ color: "text.secondary" }} />
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+              <Typography variant="body1" color="text.primary" component="span">
+                <strong>Lead Source:</strong>
+              </Typography>
+              <EditableTypography
+                value={leadSource}
+                onSave={() => {}}
+                variant="body1"
+                color="text.primary"
+                component="span"
+                sx={{ display: "inline" }}
+              />
+            </Box>
+          </Stack>
+        )}
+
+        {discussionSummary && (
+          <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1 }}>
+            <Chat sx={{ color: "primary.main" }} />
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+              <Typography
+                variant="body1"
+                color="primary.main"
+                component="span"
+                sx={{ fontStyle: "italic" }}>
+                <strong>Discussion Summary:</strong>
+              </Typography>
+              <EditableTypography
+                value={discussionSummary}
+                onSave={() => {}}
+                variant="body1"
+                color="primary.main"
+                component="span"
+                sx={{ display: "inline", fontStyle: "italic" }}
+              />
+            </Box>
+          </Stack>
+        )}
+
+        {details && (
+          <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1.5 }}>
+            <Info sx={{ color: "text.secondary" }} />
+            <EditableTypography
+              value={details}
+              onSave={() => {}}
+              variant="body2"
+              color="text.secondary"
+              component="span"
+              sx={{ display: "inline" }}
+            />
+          </Stack>
+        )}
+      </Stack>
+    </Box>
   );
 };
 
