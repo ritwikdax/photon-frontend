@@ -8,6 +8,8 @@ import Events from "./events";
 import useProjectUpdates from "../queries/useUpdates";
 import useProjectEvents, { Event } from "../queries/useEvents";
 import { useProjectContext } from "../context/all";
+import { useProjectDeliverables } from "../queries/useProjectDeliverables";
+import ProjectDeliverables from "./ProjectDeliverables";
 
 function TabPanel(props: {
   children?: React.ReactNode;
@@ -22,7 +24,8 @@ function TabPanel(props: {
       id={`mui-tabpanel-${index}`}
       aria-labelledby={`mui-tab-${index}`}
       {...other}
-      style={{ width: "100%" }}>
+      style={{ width: "100%" }}
+    >
       {value === index && <Box sx={{ p: 2 }}>{children}</Box>}
     </div>
   );
@@ -36,14 +39,16 @@ const ProjectTabsCard: React.FC = () => {
   const { selectedProject } = useProjectContext();
   const { data: projectUpdates } = useProjectUpdates(selectedProject?.id || "");
   const { data: projectEvents } = useProjectEvents(selectedProject?.id || "");
+  useProjectDeliverables();
   console.log(projectUpdates);
   return (
-    <Box sx={{ width: "100%"}}>
+    <Box sx={{ width: "100%" }}>
       <Tabs
         value={value}
         onChange={handleChange}
         aria-label="project tabs"
-        variant="standard">
+        variant="standard"
+      >
         <Tab label="Events" id="mui-tab-0" aria-controls="mui-tabpanel-0" />
         <Tab
           label="Deliverables"
@@ -68,20 +73,18 @@ const ProjectTabsCard: React.FC = () => {
           />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          {/* <Deliverables deliverables={projectDeliverables || []} /> */}
+          <ProjectDeliverables deliverables={[]} />
         </TabPanel>
         <TabPanel value={value} index={2}>
           <ProjectUpdates
-            updates={
-              projectUpdates?.map((update: Update) => {
-                return {
-                  title: update.title,
-                  description: update.description,
-                  createdAt: update.createdAt,
-                  type: update.type,
-                };
-              })
-            }
+            updates={projectUpdates?.map((update: Update) => {
+              return {
+                title: update.title,
+                description: update.description,
+                createdAt: update.createdAt,
+                type: update.type,
+              };
+            })}
           />
         </TabPanel>
       </CardContent>

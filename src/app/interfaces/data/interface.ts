@@ -114,7 +114,7 @@ export interface Deliverable extends Entity {
   updateTemplates: Array<DeliveryUpdate>;
 }
 
-export interface ProjectDeliverable extends Entity {
+export interface ProjectDeliverable extends Deliverable {
   projectId: string;
   deliverableId: string;
   deliveryUpdates: Array<DeliveryUpdate>;
