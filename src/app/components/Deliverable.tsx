@@ -159,7 +159,7 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
                 }}
               >
                 {deliverable.updateTemplates.map((update, index) => (
-                  <TimelineItem key={update.id}>
+                  <TimelineItem key={`index-${index}`}>
                     <TimelineSeparator>
                       <TimelineDot
                         color={StatusConfig[update.status].dotColor}

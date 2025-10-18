@@ -49,7 +49,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
       sx={{
         border: 1,
         borderColor: "divider",
-        borderRadius: 3,
+        borderRadius: 1,
         p: 3,
         bgcolor: "background.paper",
         position: "relative",

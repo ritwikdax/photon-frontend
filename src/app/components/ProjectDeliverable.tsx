@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -8,6 +8,8 @@ import {
   AccordionSummary,
   AccordionDetails,
   IconButton,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import {
   Timeline,
@@ -31,6 +33,7 @@ import {
   ProjectDeliverable,
 } from "../interfaces/data/interface";
 import { useDeleteMutation } from "../mutations/useDeleteMutation";
+import useUpdateMutation from "../mutations/useUpdateMutation";
 
 interface DeliverableProps {
   deliverable: ProjectDeliverable;
@@ -67,14 +70,55 @@ const StatusConfig = {
   },
 };
 
+type StatusType = "not_started" | "in_progress" | "done";
+
 export default function Deliverable({ deliverable }: DeliverableProps) {
-  console.log("Rendering Deliverable:", deliverable);
   const deleteMutation = useDeleteMutation("projectDeliverables");
+  const [deliveryUpdates, setDeliveryUpdates] = useState(deliverable.deliveryUpdates);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedUpdateIndex, setSelectedUpdateIndex] = useState<number | null>(null);
+  const updateDeliverablesStatusUpdateMutation = useUpdateMutation("projectDeliverables", `id=${deliverable.id}`);
 
   const handleDelete = () => {
     if (window.confirm(`Are you sure you want to delete "${deliverable.displayName}"?`)) {
       deleteMutation.mutate(deliverable.id);
     }
+  };
+
+  const handleChipClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
+    console.log("Chip clicked, index:", index);
+    setAnchorEl(event.currentTarget);
+    setSelectedUpdateIndex(index);
+  };
+
+  const handleMenuClose = () => {
+    console.log("Menu closed");
+    setAnchorEl(null);
+    setSelectedUpdateIndex(null);
+  };
+
+  const handleStatusChange = (newStatus: StatusType) => {
+    console.log("Status change triggered:", newStatus, "for index:", selectedUpdateIndex);
+    if (selectedUpdateIndex !== null) {
+      const updatedDeliveryUpdates = deliveryUpdates.map((update, index) =>
+        index === selectedUpdateIndex
+          ? { ...update, status: newStatus }
+          : update
+      );
+      
+      setDeliveryUpdates(updatedDeliveryUpdates);
+      
+      // Console log the payload
+      console.log("Updated Delivery Updates Payload:", {
+        projectDeliverableId: deliverable.id,
+        deliveryUpdates: updatedDeliveryUpdates,
+      });
+      updateDeliverablesStatusUpdateMutation.mutate({
+        deliveryUpdates: updatedDeliveryUpdates
+      })
+    }
+    
+    handleMenuClose();
   };
 
   return (
@@ -144,7 +188,7 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
       </Box>
 
       {/* Timeline for Delivery Updates */}
-      {deliverable.deliveryUpdates.length > 0 ? (
+      {deliveryUpdates.length > 0 ? (
         <Box>
           <Accordion
             defaultExpanded={false}
@@ -163,7 +207,7 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
               }}
             >
               <Typography variant="subtitle2" color="text.secondary">
-                Delivery Timeline ({deliverable.deliveryUpdates.length})
+                Delivery Timeline ({deliveryUpdates.length})
               </Typography>
             </AccordionSummary>
             <AccordionDetails sx={{ pt: 0 }}>
@@ -183,14 +227,14 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
                   },
                 }}
               >
-                {deliverable.deliveryUpdates.map((update, index) => (
+                {deliveryUpdates.map((update, index) => (
                   <TimelineItem key={update.id}>
                     <TimelineSeparator>
                       <TimelineDot
                         color={StatusConfig[update.status].dotColor}
                         sx={{ my: 0.5 }}
                       />
-                      {index < deliverable.deliveryUpdates.length - 1 && (
+                      {index < deliveryUpdates.length - 1 && (
                         <TimelineConnector sx={{ minHeight: 20 }} />
                       )}
                     </TimelineSeparator>
@@ -207,6 +251,8 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
                           label={StatusConfig[update.status].label}
                           size="small"
                           color={StatusConfig[update.status].color}
+                          onClick={(e) => handleChipClick(e, index)}
+                          sx={{ cursor: "pointer" }}
                         />
                       </Box>
                     </TimelineContent>
@@ -215,6 +261,53 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
               </Timeline>
             </AccordionDetails>
           </Accordion>
+
+          {/* Status Change Menu */}
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+          >
+            <MenuItem 
+              onClick={() => {
+                console.log("Not Started MenuItem clicked");
+                handleStatusChange("not_started");
+              }}
+            >
+              <Chip
+                label={StatusConfig.not_started.label}
+                size="small"
+                color={StatusConfig.not_started.color}
+                sx={{ pointerEvents: "none" }}
+              />
+            </MenuItem>
+            <MenuItem 
+              onClick={() => {
+                console.log("In Progress MenuItem clicked");
+                handleStatusChange("in_progress");
+              }}
+            >
+              <Chip
+                label={StatusConfig.in_progress.label}
+                size="small"
+                color={StatusConfig.in_progress.color}
+                sx={{ pointerEvents: "none" }}
+              />
+            </MenuItem>
+            <MenuItem 
+              onClick={() => {
+                console.log("Done MenuItem clicked");
+                handleStatusChange("done");
+              }}
+            >
+              <Chip
+                label={StatusConfig.done.label}
+                size="small"
+                color={StatusConfig.done.color}
+                sx={{ pointerEvents: "none" }}
+              />
+            </MenuItem>
+          </Menu>
         </Box>
       ) : (
         <Box
