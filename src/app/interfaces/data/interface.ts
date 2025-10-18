@@ -9,7 +9,8 @@ export type Collections =
   | "clients"
   | "projects"
   | "deliverables"
-  | "projectDeliverables";
+  | "projectDeliverables"
+  | "events";
 
 export type BookingType =
   | "wedding"

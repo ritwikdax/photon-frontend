@@ -228,7 +228,7 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
                 }}
               >
                 {deliveryUpdates.map((update, index) => (
-                  <TimelineItem key={update.id}>
+                  <TimelineItem key={`${update.id}-${index}`}>
                     <TimelineSeparator>
                       <TimelineDot
                         color={StatusConfig[update.status].dotColor}

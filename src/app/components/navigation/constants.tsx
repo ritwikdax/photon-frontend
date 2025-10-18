@@ -55,17 +55,17 @@ export const ROOT_LEVEL_ADD_ITEMS: AddMenuItem[] = [
 
 export const PROJECT_LEVEL_ADD_ITEMS: AddMenuItem[] = [
   {
-    text: "Event",
+    text: "Project Event",
     path: "/events/add",
     icon: <EventIcon fontSize="small" />,
   },
   {
-    text: "Deliverable",
+    text: "Project Deliverable",
     path: "/deliverables/project/add",
     icon: <TaskIcon fontSize="small" />,
   },
   {
-    text: "Update",
+    text: "Project Update",
     path: "/updates/add",
     icon: <UpdateIcon fontSize="small" />,
   },

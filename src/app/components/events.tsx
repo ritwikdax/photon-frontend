@@ -20,16 +20,52 @@ export const Events: React.FC<EventsProps> = ({ events, employees }) => {
           No events available.
         </Typography>
       ) : (
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 2,
+        // <Box
+        //   sx={{
+        //     backgroundColor:"ButtonFace",
+        //     display: "flex",
+        //     flexDirection: "column",
+        //     gap: 2,
+        //     height: "calc(100vh - 600px)",
+        //     overflow: "scroll",
+        //   }}
+        // >
+        //   {events.map((event, index) => (
+        //     <Event
+        //       key={event.id}
+        //       id={event.id}
+        //       projectId={event.projectId}
+        //       startDateTime={event.startDateTime}
+        //       endDateTime={event.endDateTime}
+        //       venue={event.venue}
+        //       assignment={event.assignment}
+        //       team={event.team}
+        //       status={event.status}
+        //       employees={employees}
+        //     />
+        //   ))}
+        // </Box>
+          <Box
+          // sx={{
+          //   backgroundColor:"ButtonFace",
+          //   display: "flex",
+          //   flexDirection: "column",
+          //   gap: 2,
+          //   height: "calc(100vh - 600px)",
+          //   overflow: "scroll",
+          // }}
+                    sx={{
+            // display: "flex",
+            // flexDirection: "column",
+            // gap: 2,
+            height: "calc(100vh - 200px)",
+            overflow: "scroll",
           }}
         >
           {events.map((event, index) => (
             <Event
-              key={index}
+              key={event.id}
+              id={event.id}
               projectId={event.projectId}
               startDateTime={event.startDateTime}
               endDateTime={event.endDateTime}

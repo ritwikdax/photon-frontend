@@ -13,6 +13,7 @@ import { Add } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { ROOT_LEVEL_ADD_ITEMS, PROJECT_LEVEL_ADD_ITEMS } from "./constants";
 import AddProjectDeliverableForm from "../forms/AddProjectDeliverableForm";
+import AddEventForm from "../forms/AddEventForm";
 import { useDialog } from "@/app/context/DialogContext";
 
 export default function AddMenu() {
@@ -32,8 +33,14 @@ export default function AddMenu() {
     handleAddMenuClose();
     
     // Check if this is the "Deliverable (Project Level)" item
-    if (item.text === "Deliverable (Project Level)") {
+    if (item.text === "Project Deliverable") {
       openDialog(<AddProjectDeliverableForm onCancel={closeDialog} />);
+      return;
+    }
+    
+    // Check if this is the "Event" item (Project Level)
+    if (item.text === "Project Event") {
+      openDialog(<AddEventForm onCancel={closeDialog} />);
       return;
     }
     
