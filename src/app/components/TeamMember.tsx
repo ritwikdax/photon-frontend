@@ -58,7 +58,7 @@ export default function TeamMember({ employeeId, isLead }: TeamMemberProps) {
               label={skill}
               size="small"
               variant="outlined"
-              sx={{ height: 22, fontSize: "0.75rem" }}
+              sx={{ height: 22, fontSize: "0.75rem", margin: "4px"}}
             />
           ))}
         </Stack>

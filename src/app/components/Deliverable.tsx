@@ -65,7 +65,6 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
   return (
     <Box
       sx={{
-        width: "100%",
         bgcolor: "white",
         p: 3,
         borderRadius: 1,

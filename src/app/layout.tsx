@@ -31,7 +31,8 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable}`}
-        style={{ overflow: "hidden", height: "100vh", margin: 0 }}>
+        style={{ overflow: "hidden", height: "100vh", margin: 0 }}
+        suppressHydrationWarning>
         <Layout>{children}</Layout>
       </body>
     </html>

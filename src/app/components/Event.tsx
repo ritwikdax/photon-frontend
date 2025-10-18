@@ -15,6 +15,7 @@ import {
   ListItemText,
   DialogTitle,
   DialogActions,
+  Grid,
 } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import AssignmentIcon from "@mui/icons-material/Assignment";
@@ -29,8 +30,9 @@ import TeamMember from "./TeamMember";
 import { useDialog } from "../context/DialogContext";
 import AddEventForm from "./forms/AddEventForm";
 import { useDeleteMutation } from "../mutations/useDeleteMutation";
+import CalendarEvent from "./CalendarEvent";
 
-interface EventProps extends Omit<EventInterface, 'createdAt' | 'updatedAt'> {
+interface EventProps extends Omit<EventInterface, "createdAt" | "updatedAt"> {
   employees?: Map<string, { name: string }>;
 }
 
@@ -81,7 +83,7 @@ export const Event: React.FC<EventProps> = ({
 
   const handleDelete = () => {
     handleMenuClose();
-    
+
     const confirmDelete = () => {
       deleteMutation.mutate(id);
       closeDialog();
@@ -162,7 +164,8 @@ export const Event: React.FC<EventProps> = ({
     return status?.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
   };
 
-  const { day, month, year } = parseDate(startDateTime);
+  const startDateParsed = parseDate(startDateTime);
+  const endDateParsed = parseDate(endDateTime);
   const startTime = formatTime(startDateTime);
   const endTime = formatTime(endDateTime);
 
@@ -185,123 +188,108 @@ export const Event: React.FC<EventProps> = ({
         width: "100%",
         position: "relative",
         marginTop: "8px",
-        //display: "flex",
-        flexDirection: "column",
+        padding: "12px",
       }}
     >
-      <CardContent sx={{ flex: 1, display: "flex", p: 2, "&:last-child": { pb: 2 } }}>
+      <CardContent
+        sx={{ flex: 1, display: "flex", p: 2, "&:last-child": { pb: 2 } }}
+      >
         <Box sx={{ display: "flex", width: "100%", gap: 3 }}>
-          {/* Left Section - Date Display */}
+          <Box sx={{ flexGrow: 1 }}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 600,
+                lineHeight: 1.3,
+              }}
+            >
+              {assignment}
+            </Typography>
+            <CalendarEvent
+              startDateTime={new Date(startDateTime)}
+              endDateTime={new Date(endDateTime)}
+              venue="Conference Room A, Building 2"
+              title={assignment}
+              color="#1976d2"
+            />
+            <Box>
+              <Box>
+                {team?.length === 0 ? (
+                  <Box>
+                    <WarningIcon color="warning" fontSize="small" />
+                    <Typography variant="body2" color="warning.dark">
+                      No team has been assigned
+                    </Typography>
+                  </Box>
+                ) : (
+                  <>
+                    <Box sx={{ marginTop: "24px" }}>
+                      <Box
+                        sx={{ display: "flex", flexDirection: "row", gap: 1.5 }}
+                      >
+                        <PeopleIcon color="action" fontSize="small" />
+                        <Typography variant="body2" fontWeight="600">
+                          Team ({team?.length})
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Grid container spacing={1} sx={{ marginTop: "12px" }}>
+                      {team?.map((member, index) => {
+                        const isLead =
+                          member.isLead === "true" || member.isLead === "1";
+                        return (
+                          <Grid size={6} key={index}>
+                            <TeamMember
+                              employeeId={member.employeeId}
+                              isLead={isLead}
+                            />
+                          </Grid>
+                        );
+                      })}
+                    </Grid>
+                    <Box
+                      sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}
+                    ></Box>
+                  </>
+                )}
+              </Box>
+            </Box>
+
+            <Grid container spacing={2} sx={{ marginTop: "24px" }}>
+              <Grid size={4}>
+                {/* Assignment Details */}
+                <Box
+                  sx={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1.5,
+                    minWidth: 0,
+                  }}
+                >
+                  <Box
+                    sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                  ></Box>
+
+                  {/* End DateTime */}
+                  <Box
+                    sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                  ></Box>
+                </Box>
+              </Grid>
+              <Grid size={8}></Grid>
+            </Grid>
+          </Box>
           <Box
             sx={{
+              position: "absolute",
+              top: 12,
+              right: 12,
               display: "flex",
-              flexDirection: "column",
+              gap: 0.5,
               alignItems: "center",
-              justifyContent: "center",
-              bgcolor: "primary.main",
-              color: "white",
-              borderRadius: 2,
-              p: 2,
-              minWidth: "120px",
-              //height: "100%",
             }}
           >
-            <Typography variant="caption" sx={{ fontSize: "0.75rem", opacity: 0.9 }}>
-              {month.toUpperCase()}
-            </Typography>
-            <Typography variant="h2" fontWeight="bold" sx={{ lineHeight: 1, my: 0.5 }}>
-              {day}
-            </Typography>
-            <Typography variant="caption" sx={{ fontSize: "0.75rem", opacity: 0.9 }}>
-              {year}
-            </Typography>
-          </Box>
-
-          {/* Middle Section - Event Details */}
-          <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 1.5, minWidth: 0 }}>
-            {/* Date and Time */}
-            <Box>
-              <Typography variant="h6" fontWeight="600" gutterBottom>
-                {assignment}
-              </Typography>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
-                <AccessTimeIcon color="action" fontSize="small" />
-                <Typography variant="body2" color="text.secondary">
-                  {formatFullDate(startDateTime)}
-                </Typography>
-              </Box>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1, ml: 4 }}>
-                <Typography variant="body2" fontWeight="500">
-                  {startTime} - {endTime}
-                </Typography>
-              </Box>
-            </Box>
-
-            {/* Venue */}
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <LocationOnIcon color="secondary" fontSize="small" />
-              <Typography variant="body2" color="text.secondary" noWrap>
-                {venue}
-              </Typography>
-            </Box>
-          </Box>
-
-          {/* Right Section - Team Members */}
-          <Box sx={{ minWidth: "300px", maxWidth: "400px", display: "flex", flexDirection: "column" }}>
-            {team?.length === 0 ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                  p: 2,
-                  bgcolor: "warning.lighter",
-                  borderRadius: 1,
-                  border: "1px solid",
-                  borderColor: "warning.light",
-                  mt: 5,
-                }}
-              >
-                <WarningIcon color="warning" fontSize="small" />
-                <Typography variant="body2" color="warning.dark">
-                  No team has been assigned
-                </Typography>
-              </Box>
-            ) : (
-              <>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
-                  <PeopleIcon color="action" fontSize="small" />
-                  <Typography variant="body2" fontWeight="600">
-                    Team ({team?.length})
-                  </Typography>
-                </Box>
-                <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
-                  {team?.map((member, index) => {
-                    const isLead = member.isLead === "true" || member.isLead === "1";
-                    return (
-                      <Box key={index} sx={{ flex: "1 1 auto", minWidth: "140px" }}>
-                        <TeamMember
-                          employeeId={member.employeeId}
-                          isLead={isLead}
-                        />
-                      </Box>
-                    );
-                  })}
-                  {/* {team?.length > 2 && (
-                    <Chip
-                      label={`+${team.length - 2} more`}
-                      size="small"
-                      variant="outlined"
-                      sx={{ fontSize: "0.75rem", height: "28px", alignSelf: "center" }}
-                    />
-                  )} */}
-                </Box>
-              </>
-            )}
-          </Box>
-
-          {/* Status Badge and Menu Button */}
-          <Box sx={{ position: "absolute", top: 12, right: 12, display: "flex", gap: 0.5, alignItems: "center" }}>
             <Chip
               label={getStatusLabel(status)}
               color={getStatusColor(status)}

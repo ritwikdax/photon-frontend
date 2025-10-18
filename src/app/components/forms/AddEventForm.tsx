@@ -313,7 +313,7 @@ export default function AddEventForm({ onCancel, mode = "add", eventId, initialD
 
             <Stack spacing={2}>
               {fields.map((field, index) => (
-                <Paper key={field.id} elevation={1} sx={{ p: 2 }}>
+                <Paper key={field.id} elevation={0} sx={{ p: 2 }}>
                   <Box display="flex" gap={2} alignItems="flex-start">
                     <Box flex={1}>
                       <Controller

@@ -29,13 +29,21 @@ export default function Deliverables({ deliverables }: DeliverablesProps) {
 
   return (
     <Box
-      sx={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: 2,
-        width: "100%",
+    //   sx={{
+    //     display: "flex",
+    //     flexWrap: "wrap",
+    //     gap: 2,
+    //     width: "100%",
+    //     maxHeight: "calc(100vh - 200px)",
+    //     overflowY: "auto",
+    //   }}
+            sx={{ 
+        display: "grid", 
+        gridTemplateColumns: "1fr 1fr",
+        gap: 2, 
+        mb: 3,
         maxHeight: "calc(100vh - 200px)",
-        overflowY: "auto",
+        overflow: "auto",
       }}
     >
       {deliverables.map((deliverable) => (
