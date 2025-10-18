@@ -41,13 +41,60 @@ export const eventsData = JSON.parse(`[
     "id": "b89089ac-6be1-4fbc-b2e3-1742792b92e0",
     "createdAt": "2025-10-14T14:01:14.623Z",
     "updatedAt": "2025-10-14T14:03:04.353Z",
-    "date": "2025-10-14T13:59:01.060Z",
-    "venue": "Zodhpur Palace",
-    "usersAssigned": [
-      "Pratik",
-      "Ritwik"
+    "startDateTime": "2025-10-14T13:59:01.060Z",
+    "endDateTime": "2025-10-14T18:00:00.000Z",
+    "venue": "Jodhpur Palace",
+    "team": [
+      {
+        "employeeId": "emp-001",
+        "isLead": "true"
+      },
+      {
+        "employeeId": "emp-002",
+        "isLead": "false"
+      }
     ],
     "assignment": "Still Photoshoot",
+    "status": "upcoming",
+    "projectId": "4b43cd3d-85fd-4d88-8ceb-7e840829843a"
+  },
+  {
+    "_id": "68ee57aaaa188cf1f3b812ff",
+    "id": "c99189bc-7ce2-5gcd-c3f4-2853803c03d1",
+    "createdAt": "2025-10-15T09:00:00.000Z",
+    "updatedAt": "2025-10-15T09:00:00.000Z",
+    "startDateTime": "2025-10-20T10:00:00.000Z",
+    "endDateTime": "2025-10-20T16:00:00.000Z",
+    "venue": "City Park Garden",
+    "team": [],
+    "assignment": "Pre-Wedding Photography",
+    "status": "upcoming",
+    "projectId": "381a7837-f775-4801-96a5-2772443ea974"
+  },
+  {
+    "_id": "68ee57aaaa188cf1f3b81300",
+    "id": "d00290cd-8df3-6hde-d4g5-3964914d14e2",
+    "createdAt": "2025-10-16T11:30:00.000Z",
+    "updatedAt": "2025-10-16T11:30:00.000Z",
+    "startDateTime": "2025-10-25T08:00:00.000Z",
+    "endDateTime": "2025-10-25T20:00:00.000Z",
+    "venue": "Beach Resort Goa",
+    "team": [
+      {
+        "employeeId": "emp-003",
+        "isLead": "true"
+      },
+      {
+        "employeeId": "emp-004",
+        "isLead": "false"
+      },
+      {
+        "employeeId": "emp-005",
+        "isLead": "false"
+      }
+    ],
+    "assignment": "Corporate Event Coverage",
+    "status": "upcoming",
     "projectId": "4b43cd3d-85fd-4d88-8ceb-7e840829843a"
   }
 ]`)

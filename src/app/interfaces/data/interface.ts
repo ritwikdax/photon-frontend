@@ -128,9 +128,10 @@ export interface ProjectsDeliverable extends Entity {
 
 export interface Event extends Entity {
   projectId: string;
-  date: Date;
+  startDateTime: Date;
+  endDateTime: Date,
   venue: string;
   assignment: string;
   team: Array<{ employeeId: string; isLead: string }>;
-  status: "upcoming" | "done";
+  status: "upcoming" | "done" | "cancelled" | "postponed" | "in_progress";
 }

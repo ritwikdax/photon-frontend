@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createTheme, ThemeOptions, ThemeProvider } from "@mui/material";
 import { SnackbarProvider } from "./SnackbarContext";
+import { DialogProvider } from "./DialogContext";
 
 const client = new QueryClient({
   defaultOptions: {
@@ -64,7 +65,9 @@ export default function AllContextProviders({
     <QueryClientProvider client={client}>
       <ThemeProvider theme={theme}>
         <SnackbarProvider>
-          <ProjectProvider>{children}</ProjectProvider>
+          <ProjectProvider>
+            <DialogProvider>{children}</DialogProvider>
+          </ProjectProvider>
         </SnackbarProvider>
       </ThemeProvider>
     </QueryClientProvider>

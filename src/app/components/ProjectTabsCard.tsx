@@ -6,7 +6,8 @@ import Tab from "@mui/material/Tab";
 import ProjectUpdates, { Update } from "./ProjectUpdates";
 import Events from "./events";
 import useProjectUpdates from "../queries/useUpdates";
-import useProjectEvents, { Event } from "../queries/useEvents";
+import useProjectEvents from "../queries/useEvents";
+import { Event } from "../interfaces/data/interface";
 import { useProjectContext } from "../context/all";
 import { useProjectDeliverables } from "../queries/useProjectDeliverables";
 import ProjectDeliverables from "./ProjectDeliverables";
@@ -60,16 +61,7 @@ const ProjectTabsCard: React.FC = () => {
       <CardContent sx={{ p: 0 }}>
         <TabPanel value={value} index={0}>
           <Events
-            events={
-              projectEvents?.map((event: Event) => {
-                return {
-                  date: event.date,
-                  venue: event.venue,
-                  usersAssigned: event.usersAssigned,
-                  assignment: event.assignment,
-                };
-              }) || []
-            }
+            events={projectEvents || []}
           />
         </TabPanel>
         <TabPanel value={value} index={1}>

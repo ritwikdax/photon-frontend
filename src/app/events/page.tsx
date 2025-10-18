@@ -14,32 +14,51 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 
-interface EventData {
-  date: string;
-  venue: string;
-  usersAssigned: string[];
-  assignment: string;
-}
+import { Event } from "../interfaces/data/interface";
 
 // Sample events data - replace with your actual data source
-const sampleEvents: EventData[] = [
+const sampleEvents: Event[] = [
   {
-    date: "2025-10-15",
+    id: "evt-001",
+    createdAt: new Date("2025-10-13T10:00:00.000Z"),
+    updatedAt: new Date("2025-10-13T10:00:00.000Z"),
+    projectId: "proj-001",
+    startDateTime: new Date("2025-10-15T10:00:00.000Z"),
+    endDateTime: new Date("2025-10-15T18:00:00.000Z"),
     venue: "Grand Ballroom",
-    usersAssigned: ["John Doe", "Jane Smith"],
+    team: [
+      { employeeId: "emp-001", isLead: "true" },
+      { employeeId: "emp-002", isLead: "false" }
+    ],
     assignment: "Wedding Photography",
+    status: "upcoming",
   },
   {
-    date: "2025-10-20",
+    id: "evt-002",
+    createdAt: new Date("2025-10-14T09:00:00.000Z"),
+    updatedAt: new Date("2025-10-14T09:00:00.000Z"),
+    projectId: "proj-002",
+    startDateTime: new Date("2025-10-20T11:00:00.000Z"),
+    endDateTime: new Date("2025-10-20T15:00:00.000Z"),
     venue: "City Park",
-    usersAssigned: ["Mike Johnson", "Sarah Lee"],
+    team: [
+      { employeeId: "emp-003", isLead: "true" },
+      { employeeId: "emp-004", isLead: "false" }
+    ],
     assignment: "Pre-Wedding Shoot",
+    status: "upcoming",
   },
   {
-    date: "2025-10-25",
+    id: "evt-003",
+    createdAt: new Date("2025-10-15T12:00:00.000Z"),
+    updatedAt: new Date("2025-10-15T12:00:00.000Z"),
+    projectId: "proj-003",
+    startDateTime: new Date("2025-10-25T08:00:00.000Z"),
+    endDateTime: new Date("2025-10-25T20:00:00.000Z"),
     venue: "Beach Resort",
-    usersAssigned: ["Tom Brown", "Emily White", "Chris Green"],
+    team: [],
     assignment: "Corporate Event",
+    status: "upcoming",
   },
 ];
 
@@ -82,7 +101,10 @@ export default function EventsPage() {
   const getEventsForDate = (date: Date | null) => {
     if (!date) return [];
     const dateStr = date.toISOString().split("T")[0];
-    return sampleEvents.filter((event) => event.date === dateStr);
+    return sampleEvents.filter((event) => {
+      const eventDateStr = new Date(event.startDateTime).toISOString().split("T")[0];
+      return eventDateStr === dateStr;
+    });
   };
 
   // Navigate to previous month
@@ -233,7 +255,7 @@ export default function EventsPage() {
                                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mt: 0.5 }}>
                                   <AssignmentIcon fontSize="small" />
                                   <Typography variant="caption">
-                                    {event.usersAssigned.join(", ")}
+                                    Team: {event.team.length > 0 ? `${event.team.length} members` : "Not assigned"}
                                   </Typography>
                                 </Box>
                               </Box>

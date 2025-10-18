@@ -5,18 +5,20 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
-  Dialog,
-  DialogContent,
+  MenuList,
+  ListSubheader,
+  Divider,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
-import { ADD_MENU_ITEMS } from "./constants";
+import { ROOT_LEVEL_ADD_ITEMS, PROJECT_LEVEL_ADD_ITEMS } from "./constants";
 import AddProjectDeliverableForm from "../forms/AddProjectDeliverableForm";
+import { useDialog } from "@/app/context/DialogContext";
 
 export default function AddMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [openDialog, setOpenDialog] = React.useState(false);
   const router = useRouter();
+  const { openDialog, closeDialog } = useDialog();
 
   const handleAddMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -26,20 +28,12 @@ export default function AddMenu() {
     setAnchorEl(null);
   };
 
-  const handleDialogOpen = () => {
-    setOpenDialog(true);
-  };
-
-  const handleDialogClose = () => {
-    setOpenDialog(false);
-  };
-
-  const handleAddMenuItem = (item: typeof ADD_MENU_ITEMS[0]) => {
+  const handleAddMenuItem = (item: typeof ROOT_LEVEL_ADD_ITEMS[0]) => {
     handleAddMenuClose();
     
     // Check if this is the "Deliverable (Project Level)" item
     if (item.text === "Deliverable (Project Level)") {
-      handleDialogOpen();
+      openDialog(<AddProjectDeliverableForm onCancel={closeDialog} />);
       return;
     }
     
@@ -72,27 +66,34 @@ export default function AddMenu() {
           vertical: "top",
           horizontal: "right",
         }}
+        slotProps={{
+          paper: {
+            sx: {
+              minWidth: 280,
+            },
+          },
+        }}
       >
-        {ADD_MENU_ITEMS.map((item, index) => (
-          <MenuItem key={item.path || `menu-item-${index}`} onClick={() => handleAddMenuItem(item)}>
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText>{item.text}</ListItemText>
-          </MenuItem>
-        ))}
+        <MenuList>
+          <ListSubheader>Root Level</ListSubheader>
+          {ROOT_LEVEL_ADD_ITEMS.map((item, index) => (
+            <MenuItem key={item.path || `root-item-${index}`} onClick={() => handleAddMenuItem(item)}>
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText>{item.text}</ListItemText>
+            </MenuItem>
+          ))}
+          
+          <Divider sx={{ my: 1 }} />
+          
+          <ListSubheader>Project Level</ListSubheader>
+          {PROJECT_LEVEL_ADD_ITEMS.map((item, index) => (
+            <MenuItem key={item.path || `project-item-${index}`} onClick={() => handleAddMenuItem(item)}>
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText>{item.text}</ListItemText>
+            </MenuItem>
+          ))}
+        </MenuList>
       </Menu>
-
-      <Dialog
-        open={openDialog}
-        onClose={handleDialogClose}
-        maxWidth="md"
-        fullWidth
-      >
-        <DialogContent>
-          <AddProjectDeliverableForm
-            onCancel={handleDialogClose}
-          />
-        </DialogContent>
-      </Dialog>
     </>
   );
 }
