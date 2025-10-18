@@ -19,10 +19,12 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { DeliverableType } from "@/app/interfaces/data/interface";
+import { DeliverableType, Deliverable } from "@/app/interfaces/data/interface";
 
 interface DeliveryUpdateFormData {
   title: string;
+  status?: "not_started" | "done" | "in_progress";
+  lastUpdatedOn?: string;
 }
 
 interface AddDeliverableFormData {
@@ -37,6 +39,7 @@ interface AddDeliverableFormData {
 interface AddDeliverableFormProps {
   onSubmit: (data: AddDeliverableFormData) => void;
   isLoading?: boolean;
+  deliverable?: Deliverable;
 }
 
 const deliverableTypeOptions: { value: DeliverableType; label: string }[] = [
@@ -57,14 +60,27 @@ const assetTypeOptions: { value: "physical" | "digital"; label: string }[] = [
   { value: "digital", label: "Digital" },
 ];
 
-export default function AddDeliverableForm({ onSubmit, isLoading = false }: AddDeliverableFormProps) {
+export default function AddDeliverableForm({ onSubmit, isLoading = false, deliverable }: AddDeliverableFormProps) {
+  const isEditMode = !!deliverable;
+  
   const {
     control,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm<AddDeliverableFormData>({
-    defaultValues: {
+    defaultValues: deliverable ? {
+      type: deliverable.type,
+      displayName: deliverable.displayName,
+      additionalDetails: deliverable.additionalDetails,
+      deliveryTime: deliverable.deliveryTime,
+      assetType: deliverable.assetType,
+      updateTemplates: deliverable.updateTemplates.map(template => ({
+        title: template.title,
+        status: template.status,
+        lastUpdatedOn: template.lastUpdatedOn?.toString(),
+      })),
+    } : {
       type: "edited_photos",
       displayName: "",
       additionalDetails: "",
@@ -85,8 +101,8 @@ export default function AddDeliverableForm({ onSubmit, isLoading = false }: AddD
       ...data,
       updateTemplates: data.updateTemplates.map(template => ({
         ...template,
-        status: "not_started" as const,
-        lastUpdatedOn: new Date().toISOString(),
+        status: template.status || ("not_started" as const),
+        lastUpdatedOn: template.lastUpdatedOn || new Date().toISOString(),
       })),
     };
     onSubmit(formattedData);
@@ -111,7 +127,7 @@ export default function AddDeliverableForm({ onSubmit, isLoading = false }: AddD
       overflow: "auto"
     }}>
       <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 3 }}>
-        Add New Deliverable
+        {isEditMode ? "Edit Deliverable" : "Add New Deliverable"}
       </Typography>
 
       <form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -284,7 +300,7 @@ export default function AddDeliverableForm({ onSubmit, isLoading = false }: AddD
               Reset
             </Button>
             <Button type="submit" variant="contained" disabled={isLoading}>
-              {isLoading ? "Adding..." : "Add Deliverable"}
+              {isLoading ? (isEditMode ? "Updating..." : "Adding...") : (isEditMode ? "Update Deliverable" : "Add Deliverable")}
             </Button>
           </Box>
         </Stack>

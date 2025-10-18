@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -7,6 +7,11 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  IconButton,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
 } from "@mui/material";
 import {
   Timeline,
@@ -18,16 +23,23 @@ import {
 } from "@mui/lab";
 import {
   AccessTime,
-  CheckCircle,
-  Pending,
   LocalShipping,
   CloudUpload,
   ExpandMore,
+  MoreVert,
+  Edit,
+  Delete,
 } from "@mui/icons-material";
 import { Deliverable as DeliverablesType } from "../interfaces/data/interface";
+import { useDialog } from "../context/DialogContext";
+import { useDeleteMutation } from "../mutations/useDeleteMutation";
+import AddDeliverableForm from "./forms/AddDeliverableForm";
+import useUpdateMutation from "../mutations/useUpdateMutation";
 
 interface DeliverableProps {
   deliverable: DeliverablesType;
+  onEdit?: (deliverable: DeliverablesType) => void;
+  onDelete?: (id: string) => void;
 }
 
 const DeliverableTypeLabels: Record<DeliverablesType["type"], string> = {
@@ -61,7 +73,49 @@ const StatusConfig = {
   },
 };
 
-export default function Deliverable({ deliverable }: DeliverableProps) {
+export default function Deliverable({ deliverable, onEdit, onDelete }: DeliverableProps) {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const { openDialog, closeDialog } = useDialog();
+  const deleteMutation = useDeleteMutation("deliverables");
+  const updateMutation = useUpdateMutation("deliverables", `id=${deliverable.id}`);
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleEdit = () => {
+    handleMenuClose();
+    openDialog(
+      <AddDeliverableForm
+        deliverable={deliverable}
+        onSubmit={async (data) => {
+          await updateMutation.mutateAsync(data);
+          closeDialog();
+        }}
+        isLoading={updateMutation.isPending}
+      />,
+      { maxWidth: "md", fullWidth: true }
+    );
+    if (onEdit) {
+      onEdit(deliverable);
+    }
+  };
+
+  const handleDelete = async () => {
+    handleMenuClose();
+    if (window.confirm(`Are you sure you want to delete "${deliverable.displayName}"?`)) {
+      await deleteMutation.mutateAsync(deliverable.id);
+      if (onDelete) {
+        onDelete(deliverable.id);
+      }
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -110,11 +164,41 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
             />
           </Stack>
         </Box>
-        {/* <Chip
-          label={deliverable.isDelivered ? "Delivered" : "Pending"}
-          color={deliverable.isDelivered ? "success" : "warning"}
-          icon={deliverable.isDelivered ? <CheckCircle /> : <Pending />}
-        /> */}
+        
+        {/* Context Menu */}
+        <Box>
+          <IconButton
+            aria-label="more"
+            aria-controls={open ? 'deliverable-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleMenuOpen}
+          >
+            <MoreVert />
+          </IconButton>
+          <Menu
+            id="deliverable-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleMenuClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem onClick={handleEdit}>
+              <ListItemIcon>
+                <Edit fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Edit</ListItemText>
+            </MenuItem>
+            <MenuItem onClick={handleDelete}>
+              <ListItemIcon>
+                <Delete fontSize="small" color="error" />
+              </ListItemIcon>
+              <ListItemText>Delete</ListItemText>
+            </MenuItem>
+          </Menu>
+        </Box>
       </Box>
 
       {/* Timeline for Delivery Updates */}
