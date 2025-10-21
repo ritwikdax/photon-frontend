@@ -1,11 +1,7 @@
 "use client";
-import Image from "next/image";
-import Button from "@mui/material/Button";
-//import styles from "./page.module.css";
-import { ThemeProvider } from "@emotion/react";
-import { createTheme, Stack } from "@mui/material";
+import { Box, createTheme, Stack, Typography } from "@mui/material";
 import { ThemeOptions } from "@mui/material/styles";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 
 const client = new QueryClient();
 
@@ -27,20 +23,11 @@ export default function Home() {
   };
   const theme = createTheme(themeOptions);
   return (
-    <ThemeProvider theme={theme}>
-      <QueryClientProvider client={client}>
-        <div>
-          <main>
-            <Button variant="contained">Click Me</Button>
-            <Stack spacing={2} direction="row">
-              <Button variant="text">Text</Button>
-              <Button variant="contained">Contained</Button>
-              <Button variant="outlined">Outlined</Button>
-            </Stack>
-          </main>
-          <footer></footer>
-        </div>
-      </QueryClientProvider>
-    </ThemeProvider>
+    <Box>
+      <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }}>
+        Your central hub for managing projects, events, and deliverables with
+        ease.
+      </Typography>
+    </Box>
   );
 }

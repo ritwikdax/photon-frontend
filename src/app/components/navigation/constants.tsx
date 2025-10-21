@@ -6,6 +6,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import BusinessIcon from "@mui/icons-material/Business";
 import UpdateIcon from "@mui/icons-material/Update";
 import TaskIcon from "@mui/icons-material/Task";
+import FolderIcon from "@mui/icons-material/Folder";
 
 export const DRAWER_WIDTH = 240;
 
@@ -16,7 +17,8 @@ export interface MenuItem {
 }
 
 export const NAVIGATION_MENU_ITEMS: MenuItem[] = [
-  { text: "Project", path: "/project", icon: <DashboardIcon /> },
+  { text: "Dashboard", path: "/", icon: <DashboardIcon /> },
+  { text: "Project", path: "/project", icon: <FolderIcon /> },
   { text: "Events", path: "/events", icon: <EventIcon /> },
   { text: "Deliverables", path: "/deliverables", icon: <AssignmentIcon /> },
   { text: "Employees", path: "/employees", icon: <PeopleIcon /> },
@@ -34,7 +36,7 @@ export const ROOT_LEVEL_ADD_ITEMS: AddMenuItem[] = [
   {
     text: "Project",
     path: "/project/add",
-    icon: <DashboardIcon fontSize="small" />,
+    icon: <FolderIcon fontSize="small" />,
   },
   {
     text: "Deliverable",

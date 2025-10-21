@@ -10,7 +10,8 @@ export type Collections =
   | "projects"
   | "deliverables"
   | "projectDeliverables"
-  | "events";
+  | "events"
+  | "updates";
 
 export type BookingType =
   | "wedding"
@@ -32,13 +33,6 @@ export type LeadType =
   | "other";
 export type ProjectStatus = "open" | "close" | "reopen" | "withdrawn";
 
-export type UpdateType =
-  | "info"
-  | "error"
-  | "blocker"
-  | "success"
-  | "failed"
-  | "unblocker";
 export type DeliverableType =
   | "raw_photos"
   | "raw_videoes"
@@ -93,10 +87,31 @@ export interface Project extends Entity {
   clientId?: string;
 }
 
+type UpdateStatus =
+  | "incomplete"
+  | "not_started"
+  | "in_progress"
+  | "completed"
+  | "on_hold"
+  | "cancelled"
+  | "unknown";
+interface UpdateType {
+  type:
+    | "payment"
+    | "drive_backup"
+    | "team_breafing"
+    | "drive_uplaod"
+    | "image_transfer"
+    | "sheet_update"
+    | "contract_signing"
+    | "other";
+  status: UpdateStatus;
+}
+
 export interface Update extends Entity {
   title: string;
   description: string;
-  type: UpdateType;
+  updateType: UpdateType;
 }
 
 export interface DeliveryUpdate extends Entity {
@@ -130,7 +145,7 @@ export interface ProjectsDeliverable extends Entity {
 export interface Event extends Entity {
   projectId: string;
   startDateTime: Date;
-  endDateTime: Date,
+  endDateTime: Date;
   venue: string;
   assignment: string;
   team: Array<{ employeeId: string; isLead: string }>;
