@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import CardContent from "@mui/material/CardContent";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Events from "./events";
+import Events from "./Events";
 import useProjectUpdates from "../queries/useUpdates";
 import useProjectEvents from "../queries/useEvents";
 import { useProjectDeliverables } from "../queries/useProjectDeliverables";
