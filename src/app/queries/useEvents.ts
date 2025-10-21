@@ -1,7 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { http } from "../utils/http";
-import { eventsData } from "./data";
-import { Event } from "../interfaces/data/interface";
 
 export default function useProjectEvents(projectId: string) {
   return useQuery({

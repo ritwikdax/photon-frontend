@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Chip, Stack } from "@mui/material";
+import { Box, Typography, Chip, Stack, IconButton } from "@mui/material";
 import {
   Phone,
   PhoneAndroid,
@@ -9,40 +9,36 @@ import {
   Link as LinkIcon,
   Chat,
   Info,
+  Edit,
 } from "@mui/icons-material";
 
 // Remove MUI Tabs imports, import ProjectTabsCard instead
 import EditableTypography from "./EditableTypography";
+import useUpdateMutation from "../mutations/useUpdateMutation";
+import { Project } from "../interfaces/data/interface";
 
 interface ProjectDetailsProps {
-  name: string;
-  phone: string;
-  alternatePhone?: string;
-  email: string;
-  bookingCategory?: string;
-  dateOfBooking?: string;
-  leadSource?: string;
-  discussionSummary?: string;
-  details?: string;
-  status?: "open" | "close";
+  project: Project;
+  onEdit?: () => void;
 }
 
-const ProjectDetails: React.FC<ProjectDetailsProps> = ({
-  name,
-  phone,
-  alternatePhone,
-  email,
-  bookingCategory,
-  dateOfBooking,
-  leadSource,
-  discussionSummary,
-  details,
-  status,
-}) => {
+const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
+  // const {
+  //   phone="123456780",
+  //   alternatePhone,
+  //   email,
+  //   bookingCategory,
+  //   dateOfBooking,
+  //   leadSource,
+  //   discussionSummary,
+  //   details,
+  //   status,
+  // } = project;
+  const updateMutation = useUpdateMutation("projects", `id=${project?.id}`);
   const statusColor =
-    status === "open" ? "success" : status === "close" ? "error" : "default";
+    project?.status === "open" ? "success" : project?.status === "close" ? "error" : "default";
   const statusLabel =
-    status === "open" ? "Open" : status === "close" ? "Closed" : "Unknown";
+    project?.status === "open" ? "Open" : project?.status === "close" ? "Closed" : "Unknown";
 
   return (
     <Box
@@ -55,8 +51,9 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
         position: "relative",
         m: "1rem auto",
         fontFamily: "Inter, sans-serif",
-      }}>
-      {status && (
+      }}
+    >
+      {project?.status && (
         <Chip
           label={statusLabel}
           color={statusColor}
@@ -79,8 +76,10 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
               <strong>Phone:</strong>
             </Typography>
             <EditableTypography
-              value={phone}
-              onSave={() => {}}
+              value={project?.phone}
+              onSave={(val) => {
+                updateMutation.mutate({ phone: val });
+              }}
               variant="body1"
               color="text.primary"
               component="span"
@@ -89,7 +88,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
           </Box>
         </Stack>
 
-        {alternatePhone && (
+        {project?.alternatePhone && (
           <Stack direction="row" spacing={1} alignItems="center">
             <PhoneAndroid sx={{ color: "text.secondary" }} />
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
@@ -97,7 +96,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                 <strong>Alternate Phone:</strong>
               </Typography>
               <EditableTypography
-                value={alternatePhone}
+                value={project?.alternatePhone}
                 onSave={() => {}}
                 variant="body1"
                 color="text.primary"
@@ -115,7 +114,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
               <strong>Email:</strong>
             </Typography>
             <EditableTypography
-              value={email}
+              value={project?.email}
               onSave={() => {}}
               variant="body1"
               color="text.primary"
@@ -125,7 +124,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
           </Box>
         </Stack>
 
-        {bookingCategory && (
+        {project?.bookingCategory && (
           <Stack direction="row" spacing={1} alignItems="center">
             <Label sx={{ color: "text.secondary" }} />
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
@@ -133,7 +132,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                 <strong>Booking Category:</strong>
               </Typography>
               <EditableTypography
-                value={bookingCategory}
+                value={project?.bookingCategory}
                 onSave={() => {}}
                 variant="body1"
                 color="text.primary"
@@ -144,7 +143,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
           </Stack>
         )}
 
-        {dateOfBooking && (
+        {project?.dateOfBooking && (
           <Stack direction="row" spacing={1} alignItems="center">
             <CalendarToday sx={{ color: "text.secondary" }} />
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
@@ -152,7 +151,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                 <strong>Date of Booking:</strong>
               </Typography>
               <EditableTypography
-                value={dateOfBooking}
+                value={new Date(project?.dateOfBooking?? new Date()).toLocaleDateString()}
                 onSave={() => {}}
                 variant="body1"
                 color="text.primary"
@@ -163,7 +162,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
           </Stack>
         )}
 
-        {leadSource && (
+        {project?.leadSource && (
           <Stack direction="row" spacing={1} alignItems="center">
             <LinkIcon sx={{ color: "text.secondary" }} />
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
@@ -171,7 +170,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                 <strong>Lead Source:</strong>
               </Typography>
               <EditableTypography
-                value={leadSource}
+                value={project?.leadSource}
                 onSave={() => {}}
                 variant="body1"
                 color="text.primary"
@@ -182,7 +181,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
           </Stack>
         )}
 
-        {discussionSummary && (
+        {project?.discussionSummary && (
           <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1 }}>
             <Chat sx={{ color: "primary.main" }} />
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
@@ -190,11 +189,12 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
                 variant="body1"
                 color="primary.main"
                 component="span"
-                sx={{ fontStyle: "italic" }}>
+                sx={{ fontStyle: "italic" }}
+              >
                 <strong>Discussion Summary:</strong>
               </Typography>
               <EditableTypography
-                value={discussionSummary}
+                value={project?.discussionSummary}
                 onSave={() => {}}
                 variant="body1"
                 color="primary.main"
@@ -205,11 +205,16 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
           </Stack>
         )}
 
-        {details && (
-          <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1.5 }}>
+        {project?.details && (
+          <Stack
+            direction="row"
+            spacing={1}
+            alignItems="center"
+            sx={{ mt: 1.5 }}
+          >
             <Info sx={{ color: "text.secondary" }} />
             <EditableTypography
-              value={details}
+              value={project?.details}
               onSave={() => {}}
               variant="body2"
               color="text.secondary"
@@ -219,11 +224,21 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({
           </Stack>
         )}
       </Stack>
+
+      {/* Edit Button */}
+      <Box
+        sx={{
+          position: "absolute",
+          bottom: 16,
+          right: 16,
+        }}
+      >
+        <IconButton onClick={onEdit} color="primary">
+          <Edit />
+        </IconButton>
+      </Box>
     </Box>
   );
 };
 
 export default ProjectDetails;
-
-
-

@@ -18,7 +18,7 @@ import { Add as AddIcon } from "@mui/icons-material";
 import { Deliverable } from "@/app/interfaces/data/interface";
 import useGenericQueries from "@/app/queries/useGenericQueries";
 import useAddMutataion from "@/app/mutations/useAddMutataion";
-import { useProjectContext } from "@/app/context/all";
+import { useProjectSelected } from "@/app/hooks/useProjectSelected";
 
 interface AddProjectDeliverableFormProps {
   onCancel?: () => void;
@@ -27,9 +27,9 @@ interface AddProjectDeliverableFormProps {
 export default function AddProjectDeliverableForm({
   onCancel,
 }: AddProjectDeliverableFormProps) {
-  const { selectedProject } = useProjectContext();
+  const { selectedProject } = useProjectSelected();
   const { data: deliverables, isLoading, isError } = useGenericQueries<Deliverable[]>("deliverables");
-  const addMutation = useAddMutataion("projectDeliverables");
+  const addMutation = useAddMutataion("projectDeliverables", false);
   
   const projectId = selectedProject?.id;
   const [addingDeliverableId, setAddingDeliverableId] = React.useState<string | null>(null);

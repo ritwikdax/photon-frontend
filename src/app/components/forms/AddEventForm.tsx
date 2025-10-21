@@ -31,7 +31,7 @@ import useEmployees from "@/app/queries/useEmployees";
 import { Employee } from "@/app/interfaces/data/interface";
 import useAddMutataion from "@/app/mutations/useAddMutataion";
 import useUpdateMutation from "@/app/mutations/useUpdateMutation";
-import { useProjectContext } from "@/app/context/all";
+import { useProjectSelected } from "@/app/hooks/useProjectSelected";
 
 interface TeamMember {
   employeeId: string;
@@ -73,11 +73,19 @@ const statusOptions = [
   { value: "postponed", label: "Postponed" },
 ] as const;
 
-export default function AddEventForm({ onCancel, mode = "add", eventId, initialData }: AddEventFormProps) {
-  const { selectedProject } = useProjectContext();
+export default function AddEventForm({
+  onCancel,
+  mode = "add",
+  eventId,
+  initialData,
+}: AddEventFormProps) {
+  const { selectedProject } = useProjectSelected();
   const { data: employees, isLoading: isLoadingEmployees } = useEmployees();
-  const addMutation = useAddMutataion("events");
-  const updateMutation = useUpdateMutation("events", eventId ? `id=${eventId}` : "");
+  const addMutation = useAddMutataion("events", false);
+  const updateMutation = useUpdateMutation(
+    "events",
+    eventId ? `id=${eventId}` : ""
+  );
 
   const isEditMode = mode === "edit";
   const mutation = isEditMode ? updateMutation : addMutation;
@@ -88,25 +96,26 @@ export default function AddEventForm({ onCancel, mode = "add", eventId, initialD
     formState: { errors },
     reset,
   } = useForm<AddEventFormData>({
-    defaultValues: isEditMode && initialData
-      ? {
-          projectId: initialData.projectId,
-          startDateTime: dayjs(initialData.startDateTime),
-          endDateTime: dayjs(initialData.endDateTime),
-          venue: initialData.venue,
-          assignment: initialData.assignment,
-          team: initialData.team,
-          status: initialData.status,
-        }
-      : {
-          projectId: selectedProject?.id || "",
-          startDateTime: null,
-          endDateTime: null,
-          venue: "",
-          assignment: "",
-          team: [],
-          status: "upcoming",
-        },
+    defaultValues:
+      isEditMode && initialData
+        ? {
+            projectId: initialData.projectId,
+            startDateTime: dayjs(initialData.startDateTime),
+            endDateTime: dayjs(initialData.endDateTime),
+            venue: initialData.venue,
+            assignment: initialData.assignment,
+            team: initialData.team,
+            status: initialData.status,
+          }
+        : {
+            projectId: selectedProject?.id || "",
+            startDateTime: null,
+            endDateTime: null,
+            venue: "",
+            assignment: "",
+            team: [],
+            status: "upcoming",
+          },
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -118,16 +127,16 @@ export default function AddEventForm({ onCancel, mode = "add", eventId, initialD
     if (mutation.isSuccess) {
       reset();
       if (onCancel) {
-        setTimeout(() => {
-          onCancel();
-        }, 1500);
+        onCancel();
       }
     }
   }, [mutation.isSuccess, reset, onCancel]);
 
   const onSubmit = (data: AddEventFormData) => {
-    const projectIdToUse = isEditMode ? initialData?.projectId : selectedProject?.id;
-    
+    const projectIdToUse = isEditMode
+      ? initialData?.projectId
+      : selectedProject?.id;
+
     if (!projectIdToUse) {
       console.error("No project selected");
       return;
@@ -135,7 +144,8 @@ export default function AddEventForm({ onCancel, mode = "add", eventId, initialD
 
     const eventData = {
       projectId: projectIdToUse,
-      startDateTime: data.startDateTime?.toISOString() || new Date().toISOString(),
+      startDateTime:
+        data.startDateTime?.toISOString() || new Date().toISOString(),
       endDateTime: data.endDateTime?.toISOString() || new Date().toISOString(),
       venue: data.venue,
       assignment: data.assignment,
@@ -151,13 +161,16 @@ export default function AddEventForm({ onCancel, mode = "add", eventId, initialD
     append({ employeeId: "", isLead: "false" });
   };
 
-  const currentProject = isEditMode ? { id: initialData?.projectId, name: "Current Project" } : selectedProject;
+  const currentProject = isEditMode
+    ? { id: initialData?.projectId, name: "Current Project" }
+    : selectedProject;
 
   if (!currentProject && !isEditMode) {
     return (
       <Box p={3}>
         <Alert severity="error">
-          <strong>No project selected!</strong> Please select a project first to add an event.
+          <strong>No project selected!</strong> Please select a project first to
+          add an event.
         </Alert>
       </Box>
     );
@@ -165,20 +178,26 @@ export default function AddEventForm({ onCancel, mode = "add", eventId, initialD
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ p: 3, minWidth: 600 }}>
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        sx={{ p: 3, minWidth: 600 }}
+      >
         <Typography variant="h6" component="h2" gutterBottom>
           {isEditMode ? "Edit Event" : "Add Event to Project"}
         </Typography>
 
         {!isEditMode && currentProject && (
           <Alert severity="info" sx={{ mb: 3 }}>
-            Adding event to: <strong>{currentProject.name || currentProject.id}</strong>
+            Adding event to:{" "}
+            <strong>{currentProject.name || currentProject.id}</strong>
           </Alert>
         )}
 
         {mutation.isError && (
           <Alert severity="error" sx={{ mb: 2 }}>
-            Failed to {isEditMode ? "update" : "add"} event. Error: {mutation.error?.message || "Unknown error"}
+            Failed to {isEditMode ? "update" : "add"} event. Error:{" "}
+            {mutation.error?.message || "Unknown error"}
           </Alert>
         )}
 
@@ -291,7 +310,12 @@ export default function AddEventForm({ onCancel, mode = "add", eventId, initialD
 
           {/* Team Members */}
           <Box>
-            <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              mb={2}
+            >
               <Typography variant="subtitle1" fontWeight="medium">
                 Team Members
               </Typography>
@@ -307,7 +331,8 @@ export default function AddEventForm({ onCancel, mode = "add", eventId, initialD
 
             {fields.length === 0 && (
               <Alert severity="info" sx={{ mb: 2 }}>
-                No team members added yet. Click "Add Team Member" to assign employees to this event.
+                No team members added yet. Click "Add Team Member" to assign
+                employees to this event.
               </Alert>
             )}
 
@@ -326,22 +351,31 @@ export default function AddEventForm({ onCancel, mode = "add", eventId, initialD
                             options={employees || []}
                             getOptionLabel={(option: Employee) => option.name}
                             loading={isLoadingEmployees}
-                            onChange={(_, value) => employeeField.onChange(value?.id || "")}
+                            onChange={(_, value) =>
+                              employeeField.onChange(value?.id || "")
+                            }
                             value={
-                              employees?.find((emp) => emp.id === employeeField.value) || null
+                              employees?.find(
+                                (emp) => emp.id === employeeField.value
+                              ) || null
                             }
                             renderInput={(params) => (
                               <TextField
                                 {...params}
                                 label="Employee"
                                 error={!!errors.team?.[index]?.employeeId}
-                                helperText={errors.team?.[index]?.employeeId?.message}
+                                helperText={
+                                  errors.team?.[index]?.employeeId?.message
+                                }
                                 InputProps={{
                                   ...params.InputProps,
                                   endAdornment: (
                                     <>
                                       {isLoadingEmployees ? (
-                                        <CircularProgress color="inherit" size={20} />
+                                        <CircularProgress
+                                          color="inherit"
+                                          size={20}
+                                        />
                                       ) : null}
                                       {params.InputProps.endAdornment}
                                     </>
@@ -352,8 +386,13 @@ export default function AddEventForm({ onCancel, mode = "add", eventId, initialD
                             renderOption={(props, option: Employee) => (
                               <li {...props} key={option.id}>
                                 <Box>
-                                  <Typography variant="body1">{option.name}</Typography>
-                                  <Typography variant="caption" color="text.secondary">
+                                  <Typography variant="body1">
+                                    {option.name}
+                                  </Typography>
+                                  <Typography
+                                    variant="caption"
+                                    color="text.secondary"
+                                  >
                                     {option?.expertise?.join(", ")}
                                   </Typography>
                                 </Box>
@@ -372,7 +411,11 @@ export default function AddEventForm({ onCancel, mode = "add", eventId, initialD
                           control={
                             <Checkbox
                               checked={leadField.value === "true"}
-                              onChange={(e) => leadField.onChange(e.target.checked ? "true" : "false")}
+                              onChange={(e) =>
+                                leadField.onChange(
+                                  e.target.checked ? "true" : "false"
+                                )
+                              }
                             />
                           }
                           label="Lead"
@@ -418,7 +461,13 @@ export default function AddEventForm({ onCancel, mode = "add", eventId, initialD
                 },
               }}
             >
-              {mutation.isPending ? (isEditMode ? "Updating..." : "Adding...") : (isEditMode ? "Update Event" : "Add Event")}
+              {mutation.isPending
+                ? isEditMode
+                  ? "Updating..."
+                  : "Adding..."
+                : isEditMode
+                ? "Update Event"
+                : "Add Event"}
             </Button>
           </Stack>
         </Stack>

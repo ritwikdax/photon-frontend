@@ -8,12 +8,12 @@ import { useRouter } from "next/navigation";
 import { Event } from "../interfaces/data/interface";
 import MonthlyCalendar from "../components/MonthlyCalendar";
 import useGenericQueries from "../queries/useGenericQueries";
-import { useProjectContext } from "../context/all";
+import { useProjectSelected } from "../hooks/useProjectSelected";
 
 export default function EventsPage() {
   const { data: events } = useGenericQueries<Event[]>("events");
   const { data: projects } = useGenericQueries<any[]>("projects");
-  const { setSelectedProject } = useProjectContext();
+  const { setSelectedProject } = useProjectSelected();
   const router = useRouter();
 
   const handleEventClick = (event: Event) => {

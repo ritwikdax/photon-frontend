@@ -303,9 +303,6 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
                   bgcolor: day.isCurrentMonth
                     ? "background.paper"
                     : alpha(theme.palette.action.disabledBackground, 0.2),
-                  border: today 
-                    ? `2px solid ${theme.palette.primary.main}` 
-                    : `1px solid ${alpha(theme.palette.divider, 0.1)}`,
                   boxShadow: hasEvents 
                     ? `0 2px 8px ${alpha(theme.palette.primary.main, 0.08)}`
                     : "none",

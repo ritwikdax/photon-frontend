@@ -3,7 +3,7 @@ import { http } from "../utils/http";
 import { useSnackbar } from "../context/SnackbarContext";
 import { useRouter } from "next/navigation";
 
-export default function useAddMuttion(collection: string) {
+export default function useAddMuttion(collection: string, redirect: boolean = true) {
   const client = useQueryClient();
   const snackbar = useSnackbar();
   const router = useRouter();
@@ -14,7 +14,7 @@ export default function useAddMuttion(collection: string) {
     },
     onSuccess: () => {
       client.invalidateQueries({ queryKey: [collection] });
-      router.back();
+      redirect && router.back();
       snackbar.success("Added successfully");
     },
     onError: ()=>{

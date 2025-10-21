@@ -304,6 +304,7 @@ export default function AddProjectForm({
               rules={{ required: "Date of booking is required" }}
               render={({ field }) => (
                 <TextField
+                disabled
                   {...field}
                   label="Date of Booking"
                   type="date"

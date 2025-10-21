@@ -20,23 +20,6 @@ type ProjectContextType = {
   setSelectedProject: (project: any | null) => void;
 };
 
-const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
-
-export function useProjectContext() {
-  const ctx = useContext(ProjectContext);
-  if (!ctx)
-    throw new Error("useProjectContext must be used within ProjectProvider");
-  return ctx;
-}
-
-function ProjectProvider({ children }: { children: React.ReactNode }) {
-  const [selectedProject, setSelectedProject] = useState<any | null>(null);
-  return (
-    <ProjectContext.Provider value={{ selectedProject, setSelectedProject }}>
-      {children}
-    </ProjectContext.Provider>
-  );
-}
 
 export default function AllContextProviders({
   children,
@@ -65,9 +48,7 @@ export default function AllContextProviders({
     <QueryClientProvider client={client}>
       <ThemeProvider theme={theme}>
         <SnackbarProvider>
-          <ProjectProvider>
             <DialogProvider>{children}</DialogProvider>
-          </ProjectProvider>
         </SnackbarProvider>
       </ThemeProvider>
     </QueryClientProvider>

@@ -7,10 +7,9 @@ import ProjectUpdates, { Update } from "./ProjectUpdates";
 import Events from "./events";
 import useProjectUpdates from "../queries/useUpdates";
 import useProjectEvents from "../queries/useEvents";
-import { Event } from "../interfaces/data/interface";
-import { useProjectContext } from "../context/all";
 import { useProjectDeliverables } from "../queries/useProjectDeliverables";
 import ProjectDeliverables from "./ProjectDeliverables";
+import { useProjectSelected } from "../hooks/useProjectSelected";
 
 function TabPanel(props: {
   children?: React.ReactNode;
@@ -37,7 +36,7 @@ const ProjectTabsCard: React.FC = () => {
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  const { selectedProject } = useProjectContext();
+  const { selectedProject } = useProjectSelected();
   const { data: projectUpdates } = useProjectUpdates(selectedProject?.id || "");
   const { data: projectEvents } = useProjectEvents(selectedProject?.id || "");
   const projectDeliverables = useProjectDeliverables(selectedProject?.id || "");

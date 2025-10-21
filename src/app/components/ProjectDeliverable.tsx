@@ -75,9 +75,11 @@ type StatusType = "not_started" | "in_progress" | "done";
 export default function Deliverable({ deliverable }: DeliverableProps) {
   const deleteMutation = useDeleteMutation("projectDeliverables");
   const [deliveryUpdates, setDeliveryUpdates] = useState(deliverable.deliveryUpdates);
+  const [isDelivered, setIsDelivered] = useState(deliverable.isDelivered);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [deliveryStatusAnchorEl, setDeliveryStatusAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedUpdateIndex, setSelectedUpdateIndex] = useState<number | null>(null);
-  const updateDeliverablesStatusUpdateMutation = useUpdateMutation("projectDeliverables", `id=${deliverable.id}`);
+  const updateMutation = useUpdateMutation("projectDeliverables", `id=${deliverable.id}`);
 
   const handleDelete = () => {
     if (window.confirm(`Are you sure you want to delete "${deliverable.displayName}"?`)) {
@@ -98,7 +100,6 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
   };
 
   const handleStatusChange = (newStatus: StatusType) => {
-    console.log("Status change triggered:", newStatus, "for index:", selectedUpdateIndex);
     if (selectedUpdateIndex !== null) {
       const updatedDeliveryUpdates = deliveryUpdates.map((update, index) =>
         index === selectedUpdateIndex
@@ -113,12 +114,35 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
         projectDeliverableId: deliverable.id,
         deliveryUpdates: updatedDeliveryUpdates,
       });
-      updateDeliverablesStatusUpdateMutation.mutate({
+      updateMutation.mutate({
         deliveryUpdates: updatedDeliveryUpdates
       })
     }
     
     handleMenuClose();
+  };
+
+  const handleDeliveryStatusClick = (event: React.MouseEvent<HTMLElement>) => {
+    setDeliveryStatusAnchorEl(event.currentTarget);
+  };
+
+  const handleDeliveryStatusMenuClose = () => {
+    setDeliveryStatusAnchorEl(null);
+  };
+
+  const handleDeliveryStatusChange = (newIsDelivered: boolean) => {
+    setIsDelivered(newIsDelivered);
+    
+    console.log("Updated Delivery Status Payload:", {
+      projectDeliverableId: deliverable.id,
+      isDelivered: newIsDelivered,
+    });
+
+    updateMutation.mutate({
+      isDelivered: newIsDelivered
+    });
+
+    handleDeliveryStatusMenuClose();
   };
 
   return (
@@ -171,9 +195,11 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
         </Box>
         <Stack direction="row" spacing={1} alignItems="center">
           <Chip
-            label={deliverable.isDelivered ? "Delivered" : "Pending"}
-            color={deliverable.isDelivered ? "success" : "warning"}
-            icon={deliverable.isDelivered ? <CheckCircle /> : <Pending />}
+            label={isDelivered ? "Delivered" : "Pending"}
+            color={isDelivered ? "success" : "warning"}
+            icon={isDelivered ? <CheckCircle /> : <Pending />}
+            onClick={handleDeliveryStatusClick}
+            sx={{ cursor: "pointer" }}
           />
           <IconButton
             onClick={handleDelete}
@@ -304,6 +330,32 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
                 label={StatusConfig.done.label}
                 size="small"
                 color={StatusConfig.done.color}
+                sx={{ pointerEvents: "none" }}
+              />
+            </MenuItem>
+          </Menu>
+
+          {/* Delivery Status Menu */}
+          <Menu
+            anchorEl={deliveryStatusAnchorEl}
+            open={Boolean(deliveryStatusAnchorEl)}
+            onClose={handleDeliveryStatusMenuClose}
+          >
+            <MenuItem onClick={() => handleDeliveryStatusChange(false)}>
+              <Chip
+                label="Pending"
+                size="small"
+                color="warning"
+                icon={<Pending />}
+                sx={{ pointerEvents: "none" }}
+              />
+            </MenuItem>
+            <MenuItem onClick={() => handleDeliveryStatusChange(true)}>
+              <Chip
+                label="Delivered"
+                size="small"
+                color="success"
+                icon={<CheckCircle />}
                 sx={{ pointerEvents: "none" }}
               />
             </MenuItem>
