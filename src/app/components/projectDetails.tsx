@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Typography, Chip, Stack, IconButton } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Typography, Chip, Stack, Popover, MenuItem, ListItemIcon, ListItemText } from "@mui/material";
 import {
   Phone,
   PhoneAndroid,
@@ -10,6 +10,8 @@ import {
   Chat,
   Info,
   Edit,
+  CheckCircle,
+  Cancel,
 } from "@mui/icons-material";
 
 // Remove MUI Tabs imports, import ProjectTabsCard instead
@@ -23,18 +25,9 @@ interface ProjectDetailsProps {
 }
 
 const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
-  // const {
-  //   phone="123456780",
-  //   alternatePhone,
-  //   email,
-  //   bookingCategory,
-  //   dateOfBooking,
-  //   leadSource,
-  //   discussionSummary,
-  //   details,
-  //   status,
-  // } = project;
   const updateMutation = useUpdateMutation("projects", `id=${project?.id}`);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  
   const statusColor =
     project?.status === "open"
       ? "success"
@@ -47,6 +40,21 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
       : project?.status === "close"
       ? "Closed"
       : "Unknown";
+
+  const handleStatusClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleStatusClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleStatusChange = (newStatus: string) => {
+    updateMutation.mutate({ status: newStatus });
+    handleStatusClose();
+  };
+
+  const open = Boolean(anchorEl);
 
   return (
     <Box
@@ -62,18 +70,51 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
       }}
     >
       {project?.status && (
-        <Chip
-          label={statusLabel}
-          color={statusColor}
-          sx={{
-            position: "absolute",
-            top: 18,
-            right: 18,
-            fontWeight: 600,
-            letterSpacing: 0.5,
-            textTransform: "uppercase",
-          }}
-        />
+        <>
+          <Chip
+            label={statusLabel}
+            color={statusColor}
+            onClick={handleStatusClick}
+            sx={{
+              position: "absolute",
+              top: 18,
+              right: 18,
+              fontWeight: 600,
+              letterSpacing: 0.5,
+              textTransform: "uppercase",
+              cursor: "pointer",
+              "&:hover": {
+                opacity: 0.8,
+              },
+            }}
+          />
+          <Popover
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleStatusClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+          >
+            <MenuItem onClick={() => handleStatusChange("open")}>
+              <ListItemIcon>
+                <CheckCircle fontSize="small" color="success" />
+              </ListItemIcon>
+              <ListItemText>Open</ListItemText>
+            </MenuItem>
+            <MenuItem onClick={() => handleStatusChange("close")}>
+              <ListItemIcon>
+                <Cancel fontSize="small" color="error" />
+              </ListItemIcon>
+              <ListItemText>Closed</ListItemText>
+            </MenuItem>
+          </Popover>
+        </>
       )}
 
       <Stack spacing={1}>
@@ -164,20 +205,6 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
               <Typography variant="body1" color="text.primary" component="span">
                 <strong>Date of Booking:</strong>
               </Typography>
-              {/* <Typography
-                value={new Date(project?.dateOfBooking?? new Date()).toLocaleDateString()}
-                onSave={(val) => {
-                  // Convert the date string back to ISO format for the API
-                  const date = new Date(val);
-                  if (!isNaN(date.getTime())) {
-                    updateMutation.mutate({ dateOfBooking: date.toISOString() });
-                  }
-                }}
-                variant="body1"
-                color="text.primary"
-                component="span"
-                sx={{ display: "inline" }}
-              /> */}
               <Typography
                 variant="body1"
                 color="text.primary"
@@ -262,7 +289,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
       </Stack>
 
       {/* Edit Button */}
-      <Box
+      {/* <Box
         sx={{
           position: "absolute",
           bottom: 16,
@@ -272,7 +299,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
         <IconButton onClick={onEdit} color="primary">
           <Edit />
         </IconButton>
-      </Box>
+      </Box> */}
     </Box>
   );
 };

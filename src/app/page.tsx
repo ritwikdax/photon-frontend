@@ -1,33 +1,39 @@
 "use client";
 import { Box, createTheme, Stack, Typography } from "@mui/material";
-import { ThemeOptions } from "@mui/material/styles";
-import { QueryClient } from "@tanstack/react-query";
-
-const client = new QueryClient();
+import useGenericQueries from "./queries/useGenericQueries";
+import { Project } from "./interfaces/data/interface";
+import ProjectCard from "./components/ProjectCard";
+import { useProjectSelected } from "./hooks/useProjectSelected";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const themeOptions: ThemeOptions = {
-    palette: {
-      mode: "dark",
-      primary: {
-        main: "#5893df",
-      },
-      secondary: {
-        main: "#2ec5d3",
-      },
-      background: {
-        default: "#192231",
-        paper: "#24344d",
-      },
-    },
-  };
-  const theme = createTheme(themeOptions);
+  const { data: projects } = useGenericQueries<Project[]>("projects");
+  const { setSelectedProject } = useProjectSelected();
+  const router = useRouter();
   return (
-    <Box>
-      <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }}>
-        Your central hub for managing projects, events, and deliverables with
-        ease.
-      </Typography>
+    <Box
+      display="flex"
+      justifyContent="start"
+      height="calc(100vh - 150px)"
+      flexWrap="wrap"
+    >
+      {projects?.map((project) => (
+        <Box sx={{ margin: "8px" }}>
+          <ProjectCard
+            project={project}
+            onDetailsClick={(p) => {
+              if (p) {
+                // Set the selected project in context
+                setSelectedProject(p);
+                // Redirect to the project page
+                router.push("/project");
+              } else {
+                console.warn("Project not found for event:");
+              }
+            }}
+          />
+        </Box>
+      ))}
     </Box>
   );
 }
