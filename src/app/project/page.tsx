@@ -1,10 +1,10 @@
 "use client";
 import { Box, Button, Grid, Stack, Typography } from "@mui/material";
-import ProjectDetails from "../components/projectDetails";
-import ProjectTabsCard from "../components/projectTabsCard";
 import ProjectAnalyticsCards from "../components/ProjectAnalyticsCards";
 import { ContentCopy } from "@mui/icons-material";
 import { useProjectSelected } from "../hooks/useProjectSelected";
+import ProjectDetails from "../components/ProjectDetails";
+import ProjectTabsCard from "../components/ProjectTabsCard";
 export default function Dashboard() {
   const { selectedProject } = useProjectSelected();
   return (
@@ -26,8 +26,7 @@ export default function Dashboard() {
               height: "calc(100vh - 200px)",
               overflowY: "auto",
               overflowX: "hidden",
-            }}
-          >
+            }}>
             <ProjectDetails
               project={selectedProject as any}
               onEdit={() => {}}

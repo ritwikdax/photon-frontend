@@ -6,7 +6,7 @@ import AppHeader from "./navigation/AppHeader";
 import NavigationDrawer from "./navigation/NavigationDrawer";
 import { DRAWER_WIDTH } from "./navigation/constants";
 
-export default function Layout({
+export default function CustomLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -24,8 +24,7 @@ export default function Layout({
           display: "flex",
           height: "100vh",
           overflow: "hidden",
-        }}
-      >
+        }}>
         <CssBaseline />
 
         {/* Top App Bar */}
@@ -46,8 +45,7 @@ export default function Layout({
             width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
             backgroundColor: "#f5f5f5",
             minHeight: "100vh",
-          }}
-        >
+          }}>
           <Toolbar />
           {children}
         </Box>

@@ -5,7 +5,7 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import Layout from "./components/RootLayout";
+import CustomLayout from "./components/CustomLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable}`}
         style={{ overflow: "hidden", height: "100vh", margin: 0 }}
         suppressHydrationWarning>
-        <Layout>{children}</Layout>
+        <CustomLayout>{children}</CustomLayout>
       </body>
     </html>
   );

@@ -3,7 +3,6 @@ import Box from "@mui/material/Box";
 import CardContent from "@mui/material/CardContent";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import ProjectUpdates, { Update } from "./ProjectUpdates";
 import Events from "./events";
 import useProjectUpdates from "../queries/useUpdates";
 import useProjectEvents from "../queries/useEvents";
@@ -25,8 +24,7 @@ function TabPanel(props: {
       id={`mui-tabpanel-${index}`}
       aria-labelledby={`mui-tab-${index}`}
       {...other}
-      style={{ width: "100%" }}
-    >
+      style={{ width: "100%" }}>
       {value === index && <Box sx={{ p: 2 }}>{children}</Box>}
     </div>
   );
@@ -45,7 +43,7 @@ const ProjectTabsCard: React.FC = () => {
 
   // Check if there's an event ID in the URL hash and switch to Events tab
   React.useEffect(() => {
-    if (typeof window !== 'undefined' && window.location.hash) {
+    if (typeof window !== "undefined" && window.location.hash) {
       setValue(0); // Switch to Events tab (index 0)
     }
   }, []);
@@ -55,8 +53,7 @@ const ProjectTabsCard: React.FC = () => {
         value={value}
         onChange={handleChange}
         aria-label="project tabs"
-        variant="standard"
-      >
+        variant="standard">
         <Tab label="Events" id="mui-tab-0" aria-controls="mui-tabpanel-0" />
         <Tab
           label="Deliverables"
@@ -73,7 +70,7 @@ const ProjectTabsCard: React.FC = () => {
           <ProjectDeliverables deliverables={projectDeliverables ?? []} />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <Updates/>
+          <Updates />
         </TabPanel>
       </CardContent>
     </Box>
