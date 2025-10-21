@@ -6,8 +6,8 @@ import {
   IconButton,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import AutoCompleteDropdown from "../forms/autocomplete";
 import AddMenu from "./AddMenu";
+import AutoCompleteDropdown from "../forms/Autocomplete";
 
 interface AppHeaderProps {
   onMenuClick: () => void;
