@@ -30,19 +30,32 @@ export default function Deliverables({ deliverables }: DeliverablesProps) {
   return (
     <Box
       sx={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 2,
-        mb: 3,
         maxHeight: "calc(100vh - 200px)",
         overflow: "auto",
+        mb: 3,
       }}
     >
-      {deliverables.map((deliverable) => (
-        <Box key={deliverable.id}>
-          <Deliverable deliverable={deliverable} />
-        </Box>
-      ))}
+      <Box
+        sx={{
+          columnCount: 2,
+          columnGap: 2,
+          px: 2,
+        }}
+      >
+        {deliverables.map((deliverable) => (
+          <Box
+            key={deliverable.id}
+            sx={{
+              breakInside: "avoid",
+              marginBottom: 2,
+              display: "inline-block",
+              width: "100%",
+            }}
+          >
+            <Deliverable deliverable={deliverable} />
+          </Box>
+        ))}
+      </Box>
     </Box>
   );
 }

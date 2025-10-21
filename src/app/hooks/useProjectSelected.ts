@@ -10,15 +10,23 @@ export function useProjectSelected() {
   const client = useQueryClient();
   const { data: projects, isLoading } = useGenericQueries<Project[]>("projects");
   
-  // Use React Query to manage selected project state
+  // Use React Query to manage selected project state with dependency on projects
   const { data: selectedProject } = useQuery<Project | null>({
     queryKey: SELECTED_PROJECT_QUERY_KEY,
     queryFn: () => {
-      // This will never actually be called since we use setQueryData
-      return null;
+      const currentSelected = client.getQueryData<Project | null>(SELECTED_PROJECT_QUERY_KEY);
+      
+      // If we have a selected project ID and projects data, find the updated project
+      if (currentSelected?.id && projects && projects.length > 0) {
+        const updatedProject = projects.find(p => p.id === currentSelected.id);
+        return updatedProject || currentSelected;
+      }
+      
+      return currentSelected || null;
     },
     initialData: null,
-    staleTime: Infinity, // Never refetch
+    staleTime: Infinity, // Never refetch automatically
+    enabled: !!projects, // Only run when projects data is available
   });
 
   // Initialize selected project only once when projects are loaded
@@ -29,6 +37,17 @@ export function useProjectSelected() {
       client.setQueryData(SELECTED_PROJECT_QUERY_KEY, projects[0]);
     }
   }, [projects, isLoading, client]);
+
+  // Update selected project data when projects list changes
+  useEffect(() => {
+    if (!isLoading && projects && projects.length > 0 && selectedProject?.id) {
+      const updatedProject = projects.find(p => p.id === selectedProject.id);
+      if (updatedProject && JSON.stringify(updatedProject) !== JSON.stringify(selectedProject)) {
+        console.log("Updating selected project with fresh data:", updatedProject);
+        client.setQueryData(SELECTED_PROJECT_QUERY_KEY, updatedProject);
+      }
+    }
+  }, [projects, isLoading, client, selectedProject]);
 
   console.log("Projects in useProjectSelected:", projects);
   console.log("Selected project:", selectedProject);

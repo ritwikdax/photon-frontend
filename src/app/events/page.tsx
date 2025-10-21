@@ -27,7 +27,7 @@ export default function EventsPage() {
       setSelectedProject(project);
       
       // Redirect to the project page
-      router.push("/project");
+      router.push(`/project#${event.id}`);
     } else {
       console.warn("Project not found for event:", event.projectId);
     }

@@ -14,12 +14,15 @@ import { useRouter } from "next/navigation";
 import { ROOT_LEVEL_ADD_ITEMS, PROJECT_LEVEL_ADD_ITEMS } from "./constants";
 import AddProjectDeliverableForm from "../forms/AddProjectDeliverableForm";
 import AddEventForm from "../forms/AddEventForm";
+import AddUpdateForm from "../forms/AddUpdateForm";
 import { useDialog } from "@/app/context/DialogContext";
+import useAddMutataion from "@/app/mutations/useAddMutataion";
 
 export default function AddMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const router = useRouter();
   const { openDialog, closeDialog } = useDialog();
+  const addUpdateMutation = useAddMutataion("updates", false);
 
   const handleAddMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -41,6 +44,22 @@ export default function AddMenu() {
     // Check if this is the "Event" item (Project Level)
     if (item.text === "Project Event") {
       openDialog(<AddEventForm onCancel={closeDialog} />);
+      return;
+    }
+    
+    // Check if this is the "Project Update" item
+    if (item.text === "Project Update") {
+      openDialog(
+        <AddUpdateForm
+          onSubmit={async (data) => {
+            await addUpdateMutation.mutateAsync(data);
+            closeDialog();
+          }}
+          onCancel={closeDialog}
+          isLoading={addUpdateMutation.isPending}
+        />,
+        { maxWidth: "md", fullWidth: true }
+      );
       return;
     }
     

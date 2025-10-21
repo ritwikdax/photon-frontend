@@ -36,9 +36,17 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
   // } = project;
   const updateMutation = useUpdateMutation("projects", `id=${project?.id}`);
   const statusColor =
-    project?.status === "open" ? "success" : project?.status === "close" ? "error" : "default";
+    project?.status === "open"
+      ? "success"
+      : project?.status === "close"
+      ? "error"
+      : "default";
   const statusLabel =
-    project?.status === "open" ? "Open" : project?.status === "close" ? "Closed" : "Unknown";
+    project?.status === "open"
+      ? "Open"
+      : project?.status === "close"
+      ? "Closed"
+      : "Unknown";
 
   return (
     <Box
@@ -97,7 +105,9 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
               </Typography>
               <EditableTypography
                 value={project?.alternatePhone}
-                onSave={() => {}}
+                onSave={(val) => {
+                  updateMutation.mutate({ alternatePhone: val });
+                }}
                 variant="body1"
                 color="text.primary"
                 component="span"
@@ -115,7 +125,9 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
             </Typography>
             <EditableTypography
               value={project?.email}
-              onSave={() => {}}
+              onSave={(val) => {
+                updateMutation.mutate({ email: val });
+              }}
               variant="body1"
               color="text.primary"
               component="span"
@@ -133,7 +145,9 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
               </Typography>
               <EditableTypography
                 value={project?.bookingCategory}
-                onSave={() => {}}
+                onSave={(val) => {
+                  updateMutation.mutate({ bookingCategory: val });
+                }}
                 variant="body1"
                 color="text.primary"
                 component="span"
@@ -150,14 +164,30 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
               <Typography variant="body1" color="text.primary" component="span">
                 <strong>Date of Booking:</strong>
               </Typography>
-              <EditableTypography
+              {/* <Typography
                 value={new Date(project?.dateOfBooking?? new Date()).toLocaleDateString()}
-                onSave={() => {}}
+                onSave={(val) => {
+                  // Convert the date string back to ISO format for the API
+                  const date = new Date(val);
+                  if (!isNaN(date.getTime())) {
+                    updateMutation.mutate({ dateOfBooking: date.toISOString() });
+                  }
+                }}
                 variant="body1"
                 color="text.primary"
                 component="span"
                 sx={{ display: "inline" }}
-              />
+              /> */}
+              <Typography
+                variant="body1"
+                color="text.primary"
+                component="span"
+                sx={{ display: "inline" }}
+              >
+                {new Date(
+                  project?.dateOfBooking ?? new Date()
+                ).toLocaleDateString()}
+              </Typography>
             </Box>
           </Stack>
         )}
@@ -171,7 +201,9 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
               </Typography>
               <EditableTypography
                 value={project?.leadSource}
-                onSave={() => {}}
+                onSave={(val) => {
+                  updateMutation.mutate({ leadSource: val });
+                }}
                 variant="body1"
                 color="text.primary"
                 component="span"
@@ -195,7 +227,9 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
               </Typography>
               <EditableTypography
                 value={project?.discussionSummary}
-                onSave={() => {}}
+                onSave={(val) => {
+                  updateMutation.mutate({ discussionSummary: val });
+                }}
                 variant="body1"
                 color="primary.main"
                 component="span"
@@ -215,7 +249,9 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
             <Info sx={{ color: "text.secondary" }} />
             <EditableTypography
               value={project?.details}
-              onSave={() => {}}
+              onSave={(val) => {
+                updateMutation.mutate({ details: val });
+              }}
               variant="body2"
               color="text.secondary"
               component="span"

@@ -10,6 +10,7 @@ import useProjectEvents from "../queries/useEvents";
 import { useProjectDeliverables } from "../queries/useProjectDeliverables";
 import ProjectDeliverables from "./ProjectDeliverables";
 import { useProjectSelected } from "../hooks/useProjectSelected";
+import Updates from "./Updates";
 
 function TabPanel(props: {
   children?: React.ReactNode;
@@ -41,6 +42,13 @@ const ProjectTabsCard: React.FC = () => {
   const { data: projectEvents } = useProjectEvents(selectedProject?.id || "");
   const projectDeliverables = useProjectDeliverables(selectedProject?.id || "");
   console.log(projectUpdates);
+
+  // Check if there's an event ID in the URL hash and switch to Events tab
+  React.useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      setValue(0); // Switch to Events tab (index 0)
+    }
+  }, []);
   return (
     <Box>
       <Tabs
@@ -65,16 +73,7 @@ const ProjectTabsCard: React.FC = () => {
           <ProjectDeliverables deliverables={projectDeliverables ?? []} />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <ProjectUpdates
-            updates={projectUpdates?.map((update: Update) => {
-              return {
-                title: update.title,
-                description: update.description,
-                createdAt: update.createdAt,
-                type: update.type,
-              };
-            })}
-          />
+          <Updates/>
         </TabPanel>
       </CardContent>
     </Box>

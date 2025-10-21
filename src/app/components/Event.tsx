@@ -51,6 +51,19 @@ export const Event: React.FC<EventProps> = ({
   const deleteMutation = useDeleteMutation("events");
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const menuOpen = Boolean(anchorEl);
+  
+  // Scroll into view if this event is in the URL hash
+  const eventRef = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === id && eventRef.current) {
+        setTimeout(() => {
+          eventRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300); // Small delay to ensure the page and tabs are rendered
+      }
+    }
+  }, [id]);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -181,6 +194,8 @@ export const Event: React.FC<EventProps> = ({
 
   return (
     <Card
+      ref={eventRef}
+      id={`event-${id}`}
       elevation={0}
       sx={{
         border: "1px solid",
@@ -189,6 +204,7 @@ export const Event: React.FC<EventProps> = ({
         position: "relative",
         marginTop: "8px",
         padding: "12px",
+        scrollMarginTop: "20px", // Add some spacing when scrolled to
       }}
     >
       <CardContent
