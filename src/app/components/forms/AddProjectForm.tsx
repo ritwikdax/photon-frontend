@@ -111,8 +111,7 @@ export default function AddProjectForm({
         mb: 4,
         bgcolor: "white",
         borderRadius: 2,
-      }}
-    >
+      }}>
       <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 3 }}>
         Add New Project
       </Typography>
@@ -212,8 +211,7 @@ export default function AddProjectForm({
                   <Select
                     {...field}
                     labelId="lead-source-label"
-                    label="Lead Source *"
-                  >
+                    label="Lead Source *">
                     {leadSourceOptions.map((option) => (
                       <MenuItem key={option.value} value={option.value}>
                         {option.label}
@@ -238,8 +236,7 @@ export default function AddProjectForm({
                   <Select
                     {...field}
                     labelId="booking-category-label"
-                    label="Booking Category *"
-                  >
+                    label="Booking Category *">
                     {bookingCategoryOptions.map((option) => (
                       <MenuItem key={option.value} value={option.value}>
                         {option.label}
@@ -294,7 +291,9 @@ export default function AddProjectForm({
                       }}
                     />
                   )}
-                  isOptionEqualToValue={(option, value) => option.id === value.id}
+                  isOptionEqualToValue={(option, value) =>
+                    option.id === value.id
+                  }
                 />
               )}
             />
@@ -304,7 +303,6 @@ export default function AddProjectForm({
               rules={{ required: "Date of booking is required" }}
               render={({ field }) => (
                 <TextField
-                disabled
                   {...field}
                   label="Date of Booking"
                   type="date"
@@ -381,8 +379,7 @@ export default function AddProjectForm({
             <Button
               variant="outlined"
               onClick={() => reset()}
-              disabled={isLoading}
-            >
+              disabled={isLoading}>
               Reset
             </Button>
             <Button type="submit" variant="contained" disabled={isLoading}>

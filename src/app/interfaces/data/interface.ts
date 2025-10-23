@@ -31,7 +31,13 @@ export type LeadType =
   | "wordofmouth"
   | "referrel"
   | "other";
-export type ProjectStatus = "open" | "close" | "reopen" | "withdrawn";
+export type ProjectStatus =
+  | "open"
+  | "close"
+  | "reopen"
+  | "withdrawn"
+  | "on_hold"
+  | "unknown";
 
 export type DeliverableType =
   | "raw_photos"
@@ -85,6 +91,8 @@ export interface Project extends Entity {
   discussionSummary: string;
   details: string;
   clientId?: string;
+  trackCount: number;
+  lastTrackedAt: Date | null;
 }
 
 type UpdateStatus =

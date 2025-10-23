@@ -5,7 +5,21 @@ import { ContentCopy } from "@mui/icons-material";
 import { useProjectSelected } from "../hooks/useProjectSelected";
 import ProjectDetails from "../components/ProjectDetails";
 import ProjectTabsCard from "../components/ProjectTabsCard";
+import { useSnackbar } from "../context/SnackbarContext";
+
+const TRACKER_APP_URL =
+  process.env.NEXT_PUBLIC_TRACKER_APP_URL || "http://localhost:3000/track";
+
 export default function Dashboard() {
+  const snackbar = useSnackbar();
+  async function copyToClipboard(text: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  }
+
   const { selectedProject } = useProjectSelected();
   return (
     <Box>
@@ -16,7 +30,16 @@ export default function Dashboard() {
               {selectedProject?.name || "No Project Selected"}
             </Typography>
             <Box sx={{ marginLeft: "20px" }}>
-              <Button variant="outlined" startIcon={<ContentCopy />}>
+              <Button
+                variant="outlined"
+                startIcon={<ContentCopy />}
+                onClick={() => {
+                  copyToClipboard(
+                    `${TRACKER_APP_URL}/${selectedProject?.id}`
+                  ).then(() => {
+                    snackbar.success("Tracker link copied to clipboard!");
+                  });
+                }}>
                 Track
               </Button>
             </Box>

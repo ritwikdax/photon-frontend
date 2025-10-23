@@ -74,20 +74,35 @@ type StatusType = "not_started" | "in_progress" | "done";
 
 export default function Deliverable({ deliverable }: DeliverableProps) {
   const deleteMutation = useDeleteMutation("projectDeliverables");
-  const [deliveryUpdates, setDeliveryUpdates] = useState(deliverable.deliveryUpdates);
+  const [deliveryUpdates, setDeliveryUpdates] = useState(
+    deliverable.deliveryUpdates
+  );
   const [isDelivered, setIsDelivered] = useState(deliverable.isDelivered);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [deliveryStatusAnchorEl, setDeliveryStatusAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedUpdateIndex, setSelectedUpdateIndex] = useState<number | null>(null);
-  const updateMutation = useUpdateMutation("projectDeliverables", `id=${deliverable.id}`);
+  const [deliveryStatusAnchorEl, setDeliveryStatusAnchorEl] =
+    useState<null | HTMLElement>(null);
+  const [selectedUpdateIndex, setSelectedUpdateIndex] = useState<number | null>(
+    null
+  );
+  const updateMutation = useUpdateMutation(
+    "projectDeliverables",
+    `id=${deliverable.id}`
+  );
 
   const handleDelete = () => {
-    if (window.confirm(`Are you sure you want to delete "${deliverable.displayName}"?`)) {
+    if (
+      window.confirm(
+        `Are you sure you want to delete "${deliverable.displayName}"?`
+      )
+    ) {
       deleteMutation.mutate(deliverable.id);
     }
   };
 
-  const handleChipClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
+  const handleChipClick = (
+    event: React.MouseEvent<HTMLElement>,
+    index: number
+  ) => {
     console.log("Chip clicked, index:", index);
     setAnchorEl(event.currentTarget);
     setSelectedUpdateIndex(index);
@@ -103,22 +118,22 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
     if (selectedUpdateIndex !== null) {
       const updatedDeliveryUpdates = deliveryUpdates.map((update, index) =>
         index === selectedUpdateIndex
-          ? { ...update, status: newStatus }
+          ? { ...update, status: newStatus, lastUpdatedOn: new Date() }
           : update
       );
-      
+
       setDeliveryUpdates(updatedDeliveryUpdates);
-      
+
       // Console log the payload
       console.log("Updated Delivery Updates Payload:", {
         projectDeliverableId: deliverable.id,
         deliveryUpdates: updatedDeliveryUpdates,
       });
       updateMutation.mutate({
-        deliveryUpdates: updatedDeliveryUpdates
-      })
+        deliveryUpdates: updatedDeliveryUpdates,
+      });
     }
-    
+
     handleMenuClose();
   };
 
@@ -132,14 +147,14 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
 
   const handleDeliveryStatusChange = (newIsDelivered: boolean) => {
     setIsDelivered(newIsDelivered);
-    
+
     console.log("Updated Delivery Status Payload:", {
       projectDeliverableId: deliverable.id,
       isDelivered: newIsDelivered,
     });
 
     updateMutation.mutate({
-      isDelivered: newIsDelivered
+      isDelivered: newIsDelivered,
     });
 
     handleDeliveryStatusMenuClose();
@@ -154,8 +169,7 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
         borderRadius: 1,
         border: "1px solid",
         borderColor: "divider",
-      }}
-    >
+      }}>
       {/* Deliverable Header */}
       <Box
         sx={{
@@ -163,8 +177,7 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
           justifyContent: "space-between",
           alignItems: "flex-start",
           mb: 2,
-        }}
-      >
+        }}>
         <Box>
           <Typography variant="h6" component="h3" gutterBottom>
             {deliverable.displayName}
@@ -172,7 +185,11 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
           <Typography variant="body2" component="h3" gutterBottom>
             {deliverable.additionalDetails}
           </Typography>
-          <Stack direction="row" spacing={2} alignItems="center" sx={{marginTop: "24px"}}>
+          <Stack
+            direction="row"
+            spacing={2}
+            alignItems="center"
+            sx={{ marginTop: "24px" }}>
             <Stack direction="row" spacing={0.5} alignItems="center">
               <AccessTime fontSize="small" color="action" />
               <Typography variant="body2" color="text.secondary">
@@ -206,8 +223,7 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
             disabled={deleteMutation.isPending}
             color="error"
             size="small"
-            aria-label="delete deliverable"
-          >
+            aria-label="delete deliverable">
             <Delete />
           </IconButton>
         </Stack>
@@ -221,8 +237,7 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
             sx={{
               boxShadow: "none",
               "&:before": { display: "none" },
-            }}
-          >
+            }}>
             <AccordionSummary
               expandIcon={<ExpandMore />}
               sx={{
@@ -230,8 +245,7 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
                 "&.Mui-expanded": {
                   minHeight: "48px",
                 },
-              }}
-            >
+              }}>
               <Typography variant="subtitle2" color="text.secondary">
                 Delivery Timeline ({deliveryUpdates.length})
               </Typography>
@@ -251,8 +265,7 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
                   "& .MuiTimelineContent-root": {
                     py: 0.5,
                   },
-                }}
-              >
+                }}>
                 {deliveryUpdates.map((update, index) => (
                   <TimelineItem key={`${update.id}-${index}`}>
                     <TimelineSeparator>
@@ -270,8 +283,7 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
                           display: "flex",
                           alignItems: "center",
                           gap: 1.5,
-                        }}
-                      >
+                        }}>
                         <Typography variant="body1">{update.title}</Typography>
                         <Chip
                           label={StatusConfig[update.status].label}
@@ -292,14 +304,12 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
           <Menu
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
-            onClose={handleMenuClose}
-          >
-            <MenuItem 
+            onClose={handleMenuClose}>
+            <MenuItem
               onClick={() => {
                 console.log("Not Started MenuItem clicked");
                 handleStatusChange("not_started");
-              }}
-            >
+              }}>
               <Chip
                 label={StatusConfig.not_started.label}
                 size="small"
@@ -307,12 +317,11 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
                 sx={{ pointerEvents: "none" }}
               />
             </MenuItem>
-            <MenuItem 
+            <MenuItem
               onClick={() => {
                 console.log("In Progress MenuItem clicked");
                 handleStatusChange("in_progress");
-              }}
-            >
+              }}>
               <Chip
                 label={StatusConfig.in_progress.label}
                 size="small"
@@ -320,12 +329,11 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
                 sx={{ pointerEvents: "none" }}
               />
             </MenuItem>
-            <MenuItem 
+            <MenuItem
               onClick={() => {
                 console.log("Done MenuItem clicked");
                 handleStatusChange("done");
-              }}
-            >
+              }}>
               <Chip
                 label={StatusConfig.done.label}
                 size="small"
@@ -339,8 +347,7 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
           <Menu
             anchorEl={deliveryStatusAnchorEl}
             open={Boolean(deliveryStatusAnchorEl)}
-            onClose={handleDeliveryStatusMenuClose}
-          >
+            onClose={handleDeliveryStatusMenuClose}>
             <MenuItem onClick={() => handleDeliveryStatusChange(false)}>
               <Chip
                 label="Pending"
@@ -367,8 +374,7 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
             textAlign: "center",
             py: 4,
             color: "text.disabled",
-          }}
-        >
+          }}>
           <Typography variant="body2">No delivery updates yet</Typography>
         </Box>
       )}

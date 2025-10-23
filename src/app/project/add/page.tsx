@@ -10,8 +10,6 @@ export default function AddProject() {
     <Box sx={{ overflow: "scroll", height: "calc(100vh - 150px)" }}>
       <AddProjectForm
         onSubmit={(data) => {
-          // Handle form submission
-          console.log(data);
           addProjectMutation.mutate(data);
         }}
         isLoading={false}

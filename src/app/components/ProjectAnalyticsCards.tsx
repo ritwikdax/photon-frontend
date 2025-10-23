@@ -1,9 +1,12 @@
 "use client";
-import { Box, Card, CardContent, Typography, Chip } from "@mui/material";
+import { Box, Typography, Chip } from "@mui/material";
 import { Assignment, EventNote, Update } from "@mui/icons-material";
 import { useProjectDeliverables } from "../queries/useProjectDeliverables";
 import useProjectUpdates from "../queries/useUpdates";
 import useProjectEvents from "../queries/useEvents";
+import { useProjectSelected } from "../hooks/useProjectSelected";
+import TrackCount from "./TrackCount";
+import moment from "moment";
 
 interface AnalyticsCardProps {
   icon: React.ReactNode;
@@ -23,15 +26,12 @@ function AnalyticsCard({
   return (
     <Box
       sx={{
-        // height: "100%",
-        //width: "240px",
         backgroundColor: "background.paper",
         borderRadius: 1,
         border: 1,
         borderColor: "divider",
         p: 2,
-      }}
-    >
+      }}>
       <Box>
         <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
           <Box
@@ -42,11 +42,9 @@ function AnalyticsCard({
               width: 48,
               height: 48,
               borderRadius: 2,
-              //   bgcolor: "primary.light",
               color: "primary.main",
               mr: 2,
-            }}
-          >
+            }}>
             {icon}
           </Box>
           <Box>
@@ -85,6 +83,7 @@ export default function ProjectAnalyticsCards({
   projectId,
 }: ProjectAnalyticsCardsProps) {
   const projectDeliverables = useProjectDeliverables(projectId);
+  const { selectedProject } = useProjectSelected();
   const { data: updates, isLoading: updatesLoading } =
     useProjectUpdates(projectId);
   const { data: events, isLoading: eventsLoading } =
@@ -141,14 +140,13 @@ export default function ProjectAnalyticsCards({
   ].filter((item) => item.count > 0);
 
   return (
-    <Box 
-      sx={{ 
-        display: "grid", 
+    <Box
+      sx={{
+        display: "grid",
         gridTemplateColumns: "1fr 1fr",
-        gap: 2, 
+        gap: 2,
         mb: 3,
-      }}
-    >
+      }}>
       <AnalyticsCard
         icon={<Assignment />}
         title="Deliverables"
@@ -169,6 +167,16 @@ export default function ProjectAnalyticsCards({
         total={eventsTotal}
         breakdown={eventsBreakdown}
         isLoading={eventsLoading}
+      />
+      <TrackCount
+        icon={<EventNote />}
+        title="Tracker Click"
+        total={selectedProject?.trackCount || 0}
+        lastTracked={
+          selectedProject?.lastTrackedAt
+            ? moment(selectedProject?.lastTrackedAt).fromNow()
+            : "No data found"
+        }
       />
     </Box>
   );

@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Box, Typography, Chip, Stack, Popover, MenuItem, ListItemIcon, ListItemText } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Chip,
+  Stack,
+  Popover,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import {
   Phone,
   PhoneAndroid,
@@ -9,9 +18,12 @@ import {
   Link as LinkIcon,
   Chat,
   Info,
-  Edit,
   CheckCircle,
-  Cancel,
+  OpenWith,
+  ForkLeft,
+  Lightbulb,
+  Check,
+  CancelOutlined,
 } from "@mui/icons-material";
 
 // Remove MUI Tabs imports, import ProjectTabsCard instead
@@ -24,22 +36,25 @@ interface ProjectDetailsProps {
   onEdit?: () => void;
 }
 
+const PROJECT_STATUS_COLORS = {
+  open: "success",
+  close: "error",
+  reopen: "warning",
+  withdrawn: "default",
+  on_hold: "default",
+  unknown: "default",
+} as const;
+
 const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
   const updateMutation = useUpdateMutation("projects", `id=${project?.id}`);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  
+
   const statusColor =
-    project?.status === "open"
-      ? "success"
-      : project?.status === "close"
-      ? "error"
-      : "default";
-  const statusLabel =
-    project?.status === "open"
-      ? "Open"
-      : project?.status === "close"
-      ? "Closed"
-      : "Unknown";
+    PROJECT_STATUS_COLORS[project?.status || "unknown"] || "default";
+
+  const statusLabel = project?.status
+    ? project.status.replace("_", " ").toUpperCase()
+    : "UNKNOWN";
 
   const handleStatusClick = (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
@@ -67,8 +82,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
         position: "relative",
         m: "1rem auto",
         fontFamily: "Inter, sans-serif",
-      }}
-    >
+      }}>
       {project?.status && (
         <>
           <Chip
@@ -99,19 +113,36 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
             transformOrigin={{
               vertical: "top",
               horizontal: "right",
-            }}
-          >
+            }}>
             <MenuItem onClick={() => handleStatusChange("open")}>
               <ListItemIcon>
-                <CheckCircle fontSize="small" color="success" />
+                <Check fontSize="small" color="success" />
               </ListItemIcon>
               <ListItemText>Open</ListItemText>
             </MenuItem>
             <MenuItem onClick={() => handleStatusChange("close")}>
               <ListItemIcon>
-                <Cancel fontSize="small" color="error" />
+                <CancelOutlined fontSize="small" color="error" />
               </ListItemIcon>
               <ListItemText>Closed</ListItemText>
+            </MenuItem>
+            <MenuItem onClick={() => handleStatusChange("reopen")}>
+              <ListItemIcon>
+                <OpenWith fontSize="small" color="warning" />
+              </ListItemIcon>
+              <ListItemText>Re Open</ListItemText>
+            </MenuItem>
+            <MenuItem onClick={() => handleStatusChange("withdrawn")}>
+              <ListItemIcon>
+                <ForkLeft fontSize="small" color="info" />
+              </ListItemIcon>
+              <ListItemText>Withdrawn</ListItemText>
+            </MenuItem>
+            <MenuItem onClick={() => handleStatusChange("on_hold")}>
+              <ListItemIcon>
+                <Lightbulb fontSize="small" color="warning" />
+              </ListItemIcon>
+              <ListItemText>On Hold</ListItemText>
             </MenuItem>
           </Popover>
         </>
@@ -209,8 +240,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
                 variant="body1"
                 color="text.primary"
                 component="span"
-                sx={{ display: "inline" }}
-              >
+                sx={{ display: "inline" }}>
                 {new Date(
                   project?.dateOfBooking ?? new Date()
                 ).toLocaleDateString()}
@@ -248,8 +278,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
                 variant="body1"
                 color="primary.main"
                 component="span"
-                sx={{ fontStyle: "italic" }}
-              >
+                sx={{ fontStyle: "italic" }}>
                 <strong>Discussion Summary:</strong>
               </Typography>
               <EditableTypography
@@ -271,8 +300,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
             direction="row"
             spacing={1}
             alignItems="center"
-            sx={{ mt: 1.5 }}
-          >
+            sx={{ mt: 1.5 }}>
             <Info sx={{ color: "text.secondary" }} />
             <EditableTypography
               value={project?.details}
@@ -287,19 +315,6 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
           </Stack>
         )}
       </Stack>
-
-      {/* Edit Button */}
-      {/* <Box
-        sx={{
-          position: "absolute",
-          bottom: 16,
-          right: 16,
-        }}
-      >
-        <IconButton onClick={onEdit} color="primary">
-          <Edit />
-        </IconButton>
-      </Box> */}
     </Box>
   );
 };
