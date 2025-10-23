@@ -74,16 +74,13 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
       const eventEnd = new Date(event.endDateTime);
 
       // Event starts on this day
-      const startsOnDay =
-        eventStart >= dayStart && eventStart <= dayEnd;
+      const startsOnDay = eventStart >= dayStart && eventStart <= dayEnd;
 
       // Event ends on this day
-      const endsOnDay =
-        eventEnd >= dayStart && eventEnd <= dayEnd;
+      const endsOnDay = eventEnd >= dayStart && eventEnd <= dayEnd;
 
       // Event spans across this day
-      const spansDay =
-        eventStart < dayStart && eventEnd > dayEnd;
+      const spansDay = eventStart < dayStart && eventEnd > dayEnd;
 
       return startsOnDay || endsOnDay || spansDay;
     });
@@ -167,17 +164,19 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
   };
 
   return (
-    <Paper 
-      elevation={0} 
-      sx={{ 
+    <Paper
+      elevation={0}
+      sx={{
         p: 3,
-        background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.05)} 0%, ${alpha(theme.palette.secondary.main, 0.05)} 100%)`,
+        background: `linear-gradient(135deg, ${alpha(
+          theme.palette.primary.main,
+          0.05
+        )} 0%, ${alpha(theme.palette.secondary.main, 0.05)} 100%)`,
         borderRadius: 3,
         border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
         width: "100%",
         minWidth: "800px", // Ensures calendar has minimum width for proper display
-      }}
-    >
+      }}>
       {/* Calendar Header */}
       <Box
         sx={{
@@ -186,10 +185,9 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
           alignItems: "center",
           mb: 4,
           px: 1,
-        }}
-      >
-        <IconButton 
-          onClick={handlePreviousMonth} 
+        }}>
+        <IconButton
+          onClick={handlePreviousMonth}
           size="large"
           sx={{
             bgcolor: alpha(theme.palette.primary.main, 0.1),
@@ -198,26 +196,24 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
               transform: "scale(1.05)",
             },
             transition: "all 0.2s ease-in-out",
-          }}
-        >
+          }}>
           <ChevronLeftIcon />
         </IconButton>
         <Box sx={{ textAlign: "center" }}>
-          <Typography 
-            variant="h4" 
+          <Typography
+            variant="h4"
             fontWeight="700"
             sx={{
               background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
-            }}
-          >
+            }}>
             {monthYearText}
           </Typography>
         </Box>
-        <IconButton 
-          onClick={handleNextMonth} 
+        <IconButton
+          onClick={handleNextMonth}
           size="large"
           sx={{
             bgcolor: alpha(theme.palette.primary.main, 0.1),
@@ -226,8 +222,7 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
               transform: "scale(1.05)",
             },
             transition: "all 0.2s ease-in-out",
-          }}
-        >
+          }}>
           <ChevronRightIcon />
         </IconButton>
       </Box>
@@ -239,8 +234,7 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
           gridTemplateColumns: "repeat(7, 1fr)",
           mb: 2,
           px: 0.5,
-        }}
-      >
+        }}>
         {DAYS_OF_WEEK.map((day) => (
           <Box
             key={day}
@@ -248,18 +242,16 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
               textAlign: "center",
               py: 1.5,
               borderRadius: 1,
-            }}
-          >
-            <Typography 
-              variant="subtitle2" 
+            }}>
+            <Typography
+              variant="subtitle2"
               fontWeight="700"
               sx={{
                 color: theme.palette.primary.main,
                 textTransform: "uppercase",
                 letterSpacing: 1,
                 fontSize: "0.75rem",
-              }}
-            >
+              }}>
               {day}
             </Typography>
           </Box>
@@ -273,8 +265,7 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
           gridTemplateColumns: "repeat(7, 1fr)",
           gap: 1,
           gridAutoRows: "minmax(110px, auto)",
-        }}
-      >
+        }}>
         {calendarDays.map((day, index) => {
           const today = isToday(day.date);
           const hasEvents = day.events.length > 0;
@@ -290,10 +281,12 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
                 transition: "all 0.3s ease",
                 "&:hover": {
                   transform: "translateY(-2px)",
-                  boxShadow: `0 4px 12px ${alpha(theme.palette.primary.main, 0.15)}`,
+                  boxShadow: `0 4px 12px ${alpha(
+                    theme.palette.primary.main,
+                    0.15
+                  )}`,
                 },
-              }}
-            >
+              }}>
               <Box
                 sx={{
                   p: 1,
@@ -303,11 +296,10 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
                   bgcolor: day.isCurrentMonth
                     ? "background.paper"
                     : alpha(theme.palette.action.disabledBackground, 0.2),
-                  boxShadow: hasEvents 
+                  boxShadow: hasEvents
                     ? `0 2px 8px ${alpha(theme.palette.primary.main, 0.08)}`
                     : "none",
-                }}
-              >
+                }}>
                 {/* Day Number */}
                 <Box
                   sx={{
@@ -315,12 +307,15 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
                     justifyContent: "flex-end",
                     alignItems: "center",
                     mb: 0.5,
-                  }}
-                >
+                  }}>
                   <Typography
                     variant="body2"
                     sx={{
-                      fontWeight: today ? "800" : day.isCurrentMonth ? "600" : "400",
+                      fontWeight: today
+                        ? "800"
+                        : day.isCurrentMonth
+                        ? "600"
+                        : "400",
                       bgcolor: today
                         ? theme.palette.primary.main
                         : hasEvents && day.isCurrentMonth
@@ -338,11 +333,10 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
                       alignItems: "center",
                       justifyContent: "center",
                       fontSize: "0.875rem",
-                      boxShadow: today 
+                      boxShadow: today
                         ? `0 2px 8px ${alpha(theme.palette.primary.main, 0.4)}`
                         : "none",
-                    }}
-                  >
+                    }}>
                     {day.date.getDate()}
                   </Typography>
                 </Box>
@@ -352,30 +346,38 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
                   {day.events.map((event, eventIndex) => {
                     const eventStart = new Date(event.startDateTime);
                     const eventEnd = new Date(event.endDateTime);
-                    const isMultiDay =
-                      eventStart.toDateString() !== eventEnd.toDateString();
-
                     return (
                       <Tooltip
                         key={event.id}
                         title={
                           <Box sx={{ p: 0.5 }}>
-                            <Typography variant="body2" fontWeight="bold" sx={{ mb: 0.5 }}>
+                            <Typography
+                              variant="body2"
+                              fontWeight="bold"
+                              sx={{ mb: 0.5 }}>
                               {event.assignment || "Event"}
                             </Typography>
-                            <Typography variant="caption" sx={{ display: "block", mb: 0.5 }}>
-                              ⏰ {formatTime(eventStart)} - {formatTime(eventEnd)}
+                            <Typography
+                              variant="caption"
+                              sx={{ display: "block", mb: 0.5 }}>
+                              ⏰ {formatTime(eventStart)} -{" "}
+                              {formatTime(eventEnd)}
                             </Typography>
-                            <Typography variant="caption" sx={{ display: "block", mb: 0.5 }}>
+                            <Typography
+                              variant="caption"
+                              sx={{ display: "block", mb: 0.5 }}>
                               📍 {event.venue}
                             </Typography>
-                            <Chip 
+                            <Chip
                               label={event.status}
                               size="small"
                               sx={{
                                 height: 18,
                                 fontSize: "0.65rem",
-                                bgcolor: alpha(STATUS_COLORS[event.status], 0.2),
+                                bgcolor: alpha(
+                                  STATUS_COLORS[event.status],
+                                  0.2
+                                ),
                                 color: STATUS_COLORS[event.status],
                                 mt: 0.5,
                               }}
@@ -383,8 +385,7 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
                           </Box>
                         }
                         arrow
-                        placement="top"
-                      >
+                        placement="top">
                         <Box
                           onClick={() => onEventClick?.(event)}
                           sx={{
@@ -393,7 +394,9 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
                             px: 0.75,
                             bgcolor: alpha(STATUS_COLORS[event.status], 0.15),
                             color: STATUS_COLORS[event.status],
-                            borderLeft: `3px solid ${STATUS_COLORS[event.status]}`,
+                            borderLeft: `3px solid ${
+                              STATUS_COLORS[event.status]
+                            }`,
                             borderRadius: 1,
                             cursor: "pointer",
                             transition: "all 0.2s ease",
@@ -404,38 +407,28 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
                             "&:hover": {
                               bgcolor: alpha(STATUS_COLORS[event.status], 0.25),
                               transform: "translateX(2px)",
-                              boxShadow: `0 2px 6px ${alpha(STATUS_COLORS[event.status], 0.3)}`,
+                              boxShadow: `0 2px 6px ${alpha(
+                                STATUS_COLORS[event.status],
+                                0.3
+                              )}`,
                             },
-                          }}
-                        >
+                          }}>
                           {event.assignment || "Event"}
+                          {event.team.length === 0 && (
+                            <Typography
+                              color="error"
+                              sx={{
+                                display: "inline",
+                                ml: 1,
+                                fontSize: "1rem",
+                              }}>
+                              x
+                            </Typography>
+                          )}
                         </Box>
                       </Tooltip>
                     );
                   })}
-                  {/* {day.events.length > 3 && (
-                    <Box
-                      sx={{
-                        textAlign: "center",
-                        py: 0.5,
-                        px: 0.75,
-                        bgcolor: alpha(theme.palette.primary.main, 0.1),
-                        borderRadius: 1,
-                        border: `1px dashed ${alpha(theme.palette.primary.main, 0.3)}`,
-                      }}
-                    >
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          color: theme.palette.primary.main,
-                          fontSize: "0.7rem",
-                          fontWeight: 600,
-                        }}
-                      >
-                        +{day.events.length - 3} more
-                      </Typography>
-                    </Box>
-                  )} */}
                 </Stack>
               </Box>
             </Box>
