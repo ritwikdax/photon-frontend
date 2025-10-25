@@ -32,6 +32,7 @@ import { Employee } from "@/app/interfaces/data/interface";
 import useAddMutataion from "@/app/mutations/useAddMutataion";
 import useUpdateMutation from "@/app/mutations/useUpdateMutation";
 import { useProjectSelected } from "@/app/hooks/useProjectSelected";
+import useOccupiedUserIds from "@/app/queries/analytics/useOccupiedUserIds";
 
 interface TeamMember {
   employeeId: string;
@@ -86,7 +87,6 @@ export default function AddEventForm({
     "events",
     eventId ? `id=${eventId}` : ""
   );
-
   const isEditMode = mode === "edit";
   const mutation = isEditMode ? updateMutation : addMutation;
 
@@ -95,6 +95,7 @@ export default function AddEventForm({
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm<AddEventFormData>({
     defaultValues:
       isEditMode && initialData
@@ -122,6 +123,13 @@ export default function AddEventForm({
     control,
     name: "team",
   });
+
+  const startDateTimeValue = watch("startDateTime")?.toISOString() ?? "";
+  const endDateTimeValue = watch("endDateTime")?.toISOString() ?? "";
+  const { data: occupiedIds } = useOccupiedUserIds(
+    startDateTimeValue,
+    endDateTimeValue
+  );
 
   React.useEffect(() => {
     if (mutation.isSuccess) {
@@ -181,8 +189,7 @@ export default function AddEventForm({
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
-        sx={{ p: 3, minWidth: 600 }}
-      >
+        sx={{ p: 3, minWidth: 600 }}>
         <Typography variant="h6" component="h2" gutterBottom>
           {isEditMode ? "Edit Event" : "Add Event to Project"}
         </Typography>
@@ -230,6 +237,7 @@ export default function AddEventForm({
           />
 
           {/* End Date Time */}
+
           <Controller
             name="endDateTime"
             control={control}
@@ -314,8 +322,7 @@ export default function AddEventForm({
               display="flex"
               justifyContent="space-between"
               alignItems="center"
-              mb={2}
-            >
+              mb={2}>
               <Typography variant="subtitle1" fontWeight="medium">
                 Team Members
               </Typography>
@@ -323,8 +330,7 @@ export default function AddEventForm({
                 startIcon={<AddIcon />}
                 onClick={handleAddTeamMember}
                 variant="outlined"
-                size="small"
-              >
+                size="small">
                 Add Team Member
               </Button>
             </Box>
@@ -347,6 +353,7 @@ export default function AddEventForm({
                         rules={{ required: "Employee is required" }}
                         render={({ field: employeeField }) => (
                           <Autocomplete
+                            key={String(JSON.stringify(occupiedIds))}
                             {...employeeField}
                             options={employees || []}
                             getOptionLabel={(option: Employee) => option.name}
@@ -383,21 +390,38 @@ export default function AddEventForm({
                                 }}
                               />
                             )}
-                            renderOption={(props, option: Employee) => (
-                              <li {...props} key={option.id}>
-                                <Box>
-                                  <Typography variant="body1">
-                                    {option.name}
-                                  </Typography>
-                                  <Typography
-                                    variant="caption"
-                                    color="text.secondary"
-                                  >
-                                    {option?.expertise?.join(", ")}
-                                  </Typography>
-                                </Box>
-                              </li>
-                            )}
+                            renderOption={(props, option: Employee) => {
+                              const isOccupied =
+                                occupiedIds?.occupiedEmployeeIds?.includes(
+                                  option.id
+                                );
+
+                              return (
+                                <li
+                                  {...props}
+                                  key={option.id}
+                                  aria-disabled={isOccupied}>
+                                  <Box>
+                                    <Typography variant="body1">
+                                      {option.name}
+                                    </Typography>
+                                    <Typography
+                                      variant="caption"
+                                      color="text.secondary">
+                                      {option?.expertise?.join(", ")}
+                                    </Typography>
+                                    {isOccupied ? (
+                                      <Typography
+                                        variant="caption"
+                                        color="error"
+                                        sx={{ display: "block" }}>
+                                        Occupied
+                                      </Typography>
+                                    ) : null}
+                                  </Box>
+                                </li>
+                              );
+                            }}
                           />
                         )}
                       />
@@ -427,8 +451,7 @@ export default function AddEventForm({
                     <IconButton
                       color="error"
                       onClick={() => remove(index)}
-                      sx={{ mt: 1 }}
-                    >
+                      sx={{ mt: 1 }}>
                       <DeleteIcon />
                     </IconButton>
                   </Box>
@@ -445,8 +468,7 @@ export default function AddEventForm({
               <Button
                 variant="outlined"
                 onClick={onCancel}
-                disabled={mutation.isPending}
-              >
+                disabled={mutation.isPending}>
                 Cancel
               </Button>
             )}
@@ -459,8 +481,7 @@ export default function AddEventForm({
                 "&:hover": {
                   backgroundColor: "#8a0043ff",
                 },
-              }}
-            >
+              }}>
               {mutation.isPending
                 ? isEditMode
                   ? "Updating..."
