@@ -3,12 +3,19 @@ import { http } from "../utils/http";
 import { useSnackbar } from "../context/SnackbarContext";
 import { Collections } from "../interfaces/data/interface";
 
-export default function useUpdateMutation(collection: Collections, queryParams: string) {
+export default function useUpdateMutation(
+  collection: Collections,
+  queryParams: string,
+  onSuccess?: Function
+) {
   const client = useQueryClient();
   const snackbar = useSnackbar();
   return useMutation({
     mutationFn: async (body: Record<string, any>) => {
-      const response = await http.put(`/api/${collection}?${queryParams}`, body);
+      const response = await http.put(
+        `/api/${collection}?${queryParams}`,
+        body
+      );
       return response.data;
     },
     onMutate: async (newData: Record<string, any>) => {
@@ -26,7 +33,7 @@ export default function useUpdateMutation(collection: Collections, queryParams: 
             // Extract ID from queryParams (e.g., "id=123" -> "123")
             const idMatch = queryParams.match(/id=([^&]+)/);
             const targetId = idMatch ? idMatch[1] : null;
-            
+
             if (targetId && item.id?.toString() === targetId) {
               return { ...item, ...newData };
             }
@@ -41,6 +48,7 @@ export default function useUpdateMutation(collection: Collections, queryParams: 
       return { previousData };
     },
     onSuccess: () => {
+      onSuccess && onSuccess();
       client.invalidateQueries({ queryKey: [collection] });
       snackbar.success("Updated successfully");
     },

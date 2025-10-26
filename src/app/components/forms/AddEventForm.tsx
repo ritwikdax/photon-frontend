@@ -33,6 +33,7 @@ import useAddMutataion from "@/app/mutations/useAddMutataion";
 import useUpdateMutation from "@/app/mutations/useUpdateMutation";
 import { useProjectSelected } from "@/app/hooks/useProjectSelected";
 import useOccupiedUserIds from "@/app/queries/analytics/useOccupiedUserIds";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface TeamMember {
   employeeId: string;
@@ -81,14 +82,10 @@ export default function AddEventForm({
   initialData,
 }: AddEventFormProps) {
   const { selectedProject } = useProjectSelected();
+  const clinet = useQueryClient();
   const { data: employees, isLoading: isLoadingEmployees } = useEmployees();
   const addMutation = useAddMutataion("events", false);
-  const updateMutation = useUpdateMutation(
-    "events",
-    eventId ? `id=${eventId}` : ""
-  );
   const isEditMode = mode === "edit";
-  const mutation = isEditMode ? updateMutation : addMutation;
 
   const {
     control,
@@ -130,6 +127,15 @@ export default function AddEventForm({
     startDateTimeValue,
     endDateTimeValue
   );
+  const updateMutation = useUpdateMutation(
+    "events",
+    eventId ? `id=${eventId}` : "",
+    () =>
+      clinet.invalidateQueries({
+        queryKey: ["occupiedUserIds", startDateTimeValue, endDateTimeValue],
+      })
+  );
+  const mutation = isEditMode ? updateMutation : addMutation;
 
   React.useEffect(() => {
     if (mutation.isSuccess) {
@@ -162,6 +168,7 @@ export default function AddEventForm({
     };
 
     console.log(`${isEditMode ? "Updating" : "Submitting"} event:`, eventData);
+
     mutation.mutate(eventData);
   };
 
