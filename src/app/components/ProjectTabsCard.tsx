@@ -10,6 +10,14 @@ import { useProjectDeliverables } from "../queries/useProjectDeliverables";
 import ProjectDeliverables from "./ProjectDeliverables";
 import { useProjectSelected } from "../hooks/useProjectSelected";
 import Updates from "./Updates";
+import ImageSelection from "./ImageSelection";
+import useGenericQueries from "../queries/useGenericQueries";
+import { ImageSelectionEntry } from "../interfaces/data/interface";
+import useImageSelectionsDetails from "../queries/useImageSelectionDetails";
+import { Button } from "@mui/material";
+import { ContentCopy } from "@mui/icons-material";
+import { copyToClipboard } from "../utils/utils";
+import TrackingDetails from "./TrackingDetails";
 
 function TabPanel(props: {
   children?: React.ReactNode;
@@ -24,7 +32,8 @@ function TabPanel(props: {
       id={`mui-tabpanel-${index}`}
       aria-labelledby={`mui-tab-${index}`}
       {...other}
-      style={{ width: "100%" }}>
+      style={{ width: "100%" }}
+    >
       {value === index && <Box sx={{ p: 2 }}>{children}</Box>}
     </div>
   );
@@ -39,7 +48,9 @@ const ProjectTabsCard: React.FC = () => {
   const { data: projectUpdates } = useProjectUpdates(selectedProject?.id || "");
   const { data: projectEvents } = useProjectEvents(selectedProject?.id || "");
   const projectDeliverables = useProjectDeliverables(selectedProject?.id || "");
-  console.log(projectUpdates);
+  const { data: imageSelectionDetails } = useImageSelectionsDetails(
+    selectedProject?.id || ""
+  );
 
   // Check if there's an event ID in the URL hash and switch to Events tab
   React.useEffect(() => {
@@ -53,7 +64,8 @@ const ProjectTabsCard: React.FC = () => {
         value={value}
         onChange={handleChange}
         aria-label="project tabs"
-        variant="standard">
+        variant="standard"
+      >
         <Tab label="Events" id="mui-tab-0" aria-controls="mui-tabpanel-0" />
         <Tab
           label="Deliverables"
@@ -61,6 +73,12 @@ const ProjectTabsCard: React.FC = () => {
           aria-controls="mui-tabpanel-1"
         />
         <Tab label="Updates" id="mui-tab-2" aria-controls="mui-tabpanel-2" />
+        <Tab
+          label="Image Selections"
+          id="mui-tab-2"
+          aria-controls="mui-tabpanel-2"
+        />
+        <Tab label="Trackings" id="mui-tab-2" aria-controls="mui-tabpanel-2" />
       </Tabs>
       <CardContent sx={{ p: 0 }}>
         <TabPanel value={value} index={0}>
@@ -71,6 +89,19 @@ const ProjectTabsCard: React.FC = () => {
         </TabPanel>
         <TabPanel value={value} index={2}>
           <Updates />
+        </TabPanel>
+        <TabPanel value={value} index={3}>
+          <ImageSelection
+            imageSelection={
+              imageSelectionDetails && imageSelectionDetails?.length > 0
+                ? imageSelectionDetails[0]
+                : undefined
+            }
+          />
+        </TabPanel>
+        <TabPanel value={value} index={4}>
+          {/* Tracking Details Component */}
+          <TrackingDetails />
         </TabPanel>
       </CardContent>
     </Box>

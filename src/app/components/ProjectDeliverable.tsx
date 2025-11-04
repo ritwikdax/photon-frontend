@@ -169,7 +169,8 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
         borderRadius: 1,
         border: "1px solid",
         borderColor: "divider",
-      }}>
+      }}
+    >
       {/* Deliverable Header */}
       <Box
         sx={{
@@ -177,7 +178,8 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
           justifyContent: "space-between",
           alignItems: "flex-start",
           mb: 2,
-        }}>
+        }}
+      >
         <Box>
           <Typography variant="h6" component="h3" gutterBottom>
             {deliverable.displayName}
@@ -189,7 +191,8 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
             direction="row"
             spacing={2}
             alignItems="center"
-            sx={{ marginTop: "24px" }}>
+            sx={{ marginTop: "24px" }}
+          >
             <Stack direction="row" spacing={0.5} alignItems="center">
               <AccessTime fontSize="small" color="action" />
               <Typography variant="body2" color="text.secondary">
@@ -223,7 +226,8 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
             disabled={deleteMutation.isPending}
             color="error"
             size="small"
-            aria-label="delete deliverable">
+            aria-label="delete deliverable"
+          >
             <Delete />
           </IconButton>
         </Stack>
@@ -237,7 +241,8 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
             sx={{
               boxShadow: "none",
               "&:before": { display: "none" },
-            }}>
+            }}
+          >
             <AccordionSummary
               expandIcon={<ExpandMore />}
               sx={{
@@ -245,7 +250,8 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
                 "&.Mui-expanded": {
                   minHeight: "48px",
                 },
-              }}>
+              }}
+            >
               <Typography variant="subtitle2" color="text.secondary">
                 Delivery Timeline ({deliveryUpdates.length})
               </Typography>
@@ -265,7 +271,8 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
                   "& .MuiTimelineContent-root": {
                     py: 0.5,
                   },
-                }}>
+                }}
+              >
                 {deliveryUpdates.map((update, index) => (
                   <TimelineItem key={`${update.id}-${index}`}>
                     <TimelineSeparator>
@@ -283,15 +290,36 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
                           display: "flex",
                           alignItems: "center",
                           gap: 1.5,
-                        }}>
+                        }}
+                      >
                         <Typography variant="body1">{update.title}</Typography>
                         <Chip
+                          clickable={update.status !== "done"}
                           label={StatusConfig[update.status].label}
                           size="small"
                           color={StatusConfig[update.status].color}
-                          onClick={(e) => handleChipClick(e, index)}
-                          sx={{ cursor: "pointer" }}
+                          onClick={(e) => {
+                            if (update.status !== "done") {
+                              handleChipClick(e, index);
+                            }
+                          }}
+                          sx={{ cursor: update.status === "done" ? "default" : "pointer" }}
                         />
+                        {update.status === "not_started" ? null : (
+                          <Typography variant="caption" color="text.secondary">
+                            {new Date(update.lastUpdatedOn).toLocaleString(
+                              "en-US",
+                              {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                                hour: "numeric",
+                                minute: "2-digit",
+                                hour12: true,
+                              }
+                            )}
+                          </Typography>
+                        )}
                       </Box>
                     </TimelineContent>
                   </TimelineItem>
@@ -304,12 +332,14 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
           <Menu
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
-            onClose={handleMenuClose}>
+            onClose={handleMenuClose}
+          >
             <MenuItem
               onClick={() => {
                 console.log("Not Started MenuItem clicked");
                 handleStatusChange("not_started");
-              }}>
+              }}
+            >
               <Chip
                 label={StatusConfig.not_started.label}
                 size="small"
@@ -321,7 +351,8 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
               onClick={() => {
                 console.log("In Progress MenuItem clicked");
                 handleStatusChange("in_progress");
-              }}>
+              }}
+            >
               <Chip
                 label={StatusConfig.in_progress.label}
                 size="small"
@@ -333,7 +364,8 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
               onClick={() => {
                 console.log("Done MenuItem clicked");
                 handleStatusChange("done");
-              }}>
+              }}
+            >
               <Chip
                 label={StatusConfig.done.label}
                 size="small"
@@ -347,7 +379,8 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
           <Menu
             anchorEl={deliveryStatusAnchorEl}
             open={Boolean(deliveryStatusAnchorEl)}
-            onClose={handleDeliveryStatusMenuClose}>
+            onClose={handleDeliveryStatusMenuClose}
+          >
             <MenuItem onClick={() => handleDeliveryStatusChange(false)}>
               <Chip
                 label="Pending"
@@ -374,7 +407,8 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
             textAlign: "center",
             py: 4,
             color: "text.disabled",
-          }}>
+          }}
+        >
           <Typography variant="body2">No delivery updates yet</Typography>
         </Box>
       )}

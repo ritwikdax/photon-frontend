@@ -1,4 +1,4 @@
-interface Entity {
+export interface Entity {
   id: string;
   createdAt: Date;
   updatedAt: Date;
@@ -11,7 +11,9 @@ export type Collections =
   | "deliverables"
   | "projectDeliverables"
   | "events"
-  | "updates";
+  | "updates"
+  | "imageSelections"
+  | "selectedImages";
 
 export type BookingType =
   | "wedding"
@@ -159,4 +161,19 @@ export interface Event extends Entity {
   assignment: string;
   team: Array<{ employeeId: string; isLead: string }>;
   status: "upcoming" | "done" | "cancelled" | "postponed" | "in_progress";
+}
+
+export interface ImageSelectionEntry extends Entity{
+  projectId: string;
+  folderIds: Array<string>;
+  isSelectionAllowed:boolean;
+  maxSelectionCount:number;
+}
+
+export interface SelectedImage extends Entity{
+  projectId: string;
+  imageId: string;
+  imageFileName: string;
+  folderId: string;
+  folderName: string;
 }

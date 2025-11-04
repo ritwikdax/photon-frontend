@@ -23,13 +23,15 @@ import {
   ForkLeft,
   Lightbulb,
   Check,
+  Person,
   CancelOutlined,
 } from "@mui/icons-material";
 
 // Remove MUI Tabs imports, import ProjectTabsCard instead
 import EditableTypography from "./EditableTypography";
 import useUpdateMutation from "../mutations/useUpdateMutation";
-import { Project } from "../interfaces/data/interface";
+import { Client, Project } from "../interfaces/data/interface";
+import useGenericQueries from "../queries/useGenericQueries";
 
 interface ProjectDetailsProps {
   project: Project;
@@ -48,6 +50,10 @@ const PROJECT_STATUS_COLORS = {
 const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
   const updateMutation = useUpdateMutation("projects", `id=${project?.id}`);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const { data: client } = useGenericQueries<Client[]>(
+    "clients",
+    `id=${project?.clientId}`
+  );
 
   const statusColor =
     PROJECT_STATUS_COLORS[project?.status || "unknown"] || "default";
@@ -82,7 +88,8 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
         position: "relative",
         m: "1rem auto",
         fontFamily: "Inter, sans-serif",
-      }}>
+      }}
+    >
       {project?.status && (
         <>
           <Chip
@@ -113,7 +120,8 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
             transformOrigin={{
               vertical: "top",
               horizontal: "right",
-            }}>
+            }}
+          >
             <MenuItem onClick={() => handleStatusChange("open")}>
               <ListItemIcon>
                 <Check fontSize="small" color="success" />
@@ -240,7 +248,8 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
                 variant="body1"
                 color="text.primary"
                 component="span"
-                sx={{ display: "inline" }}>
+                sx={{ display: "inline" }}
+              >
                 {new Date(
                   project?.dateOfBooking ?? new Date()
                 ).toLocaleDateString()}
@@ -278,7 +287,8 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
                 variant="body1"
                 color="primary.main"
                 component="span"
-                sx={{ fontStyle: "italic" }}>
+                sx={{ fontStyle: "italic" }}
+              >
                 <strong>Discussion Summary:</strong>
               </Typography>
               <EditableTypography
@@ -300,7 +310,8 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
             direction="row"
             spacing={1}
             alignItems="center"
-            sx={{ mt: 1.5 }}>
+            sx={{ mt: 1.5 }}
+          >
             <Info sx={{ color: "text.secondary" }} />
             <EditableTypography
               value={project?.details}
@@ -312,6 +323,25 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
               component="span"
               sx={{ display: "inline" }}
             />
+          </Stack>
+        )}
+
+        {project?.clientId && (
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Person sx={{ color: "text.secondary" }} />
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+              <Typography variant="body1" color="text.primary" component="span">
+                <strong>Client Name:</strong>
+              </Typography>
+              <Typography
+                variant="body1"
+                color="text.primary"
+                component="span"
+                sx={{ display: "inline" }}
+              >
+                {client && client.length > 0 ? client[0].name : "N/A"}
+              </Typography>
+            </Box>
           </Stack>
         )}
       </Stack>
