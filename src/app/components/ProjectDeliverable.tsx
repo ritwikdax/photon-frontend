@@ -28,29 +28,13 @@ import {
   ExpandMore,
   Delete,
 } from "@mui/icons-material";
-import {
-  Deliverable as DeliverablesType,
-  ProjectDeliverable,
-} from "../interfaces/data/interface";
+import { ProjectDeliverable } from "../interfaces/data/interface";
 import { useDeleteMutation } from "../mutations/useDeleteMutation";
 import useUpdateMutation from "../mutations/useUpdateMutation";
 
 interface DeliverableProps {
   deliverable: ProjectDeliverable;
 }
-
-const DeliverableTypeLabels: Record<DeliverablesType["type"], string> = {
-  raw_photos: "Raw Photos",
-  raw_videoes: "Raw Videos",
-  album: "Album",
-  pendrive: "Pendrive",
-  hard_drive: "Hard Drive",
-  teaser: "Teaser",
-  reels: "Reels",
-  edited_photos: "Edited Photos",
-  full_video: "Full Video",
-  other: "Other",
-};
 
 const StatusConfig = {
   not_started: {
@@ -121,14 +105,7 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
           ? { ...update, status: newStatus, lastUpdatedOn: new Date() }
           : update
       );
-
       setDeliveryUpdates(updatedDeliveryUpdates);
-
-      // Console log the payload
-      console.log("Updated Delivery Updates Payload:", {
-        projectDeliverableId: deliverable.id,
-        deliveryUpdates: updatedDeliveryUpdates,
-      });
       updateMutation.mutate({
         deliveryUpdates: updatedDeliveryUpdates,
       });
@@ -303,7 +280,10 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
                               handleChipClick(e, index);
                             }
                           }}
-                          sx={{ cursor: update.status === "done" ? "default" : "pointer" }}
+                          sx={{
+                            cursor:
+                              update.status === "done" ? "default" : "pointer",
+                          }}
                         />
                         {update.status === "not_started" ? null : (
                           <Typography variant="caption" color="text.secondary">

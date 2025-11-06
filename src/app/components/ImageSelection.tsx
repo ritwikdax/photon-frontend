@@ -133,7 +133,6 @@ export default function ImageSelection({
     // Add each folder section
     Object.entries(groupedByFolder).forEach(([folderId, data], folderIndex) => {
       textContent += `Folder ${folderIndex + 1}: ${data.folderName}\n`;
-      textContent += `Folder ID: ${folderId}\n`;
       textContent += `Image Count: ${data.images.length}\n`;
       textContent += "-".repeat(80) + "\n";
       
@@ -400,13 +399,13 @@ export default function ImageSelection({
                 variant="h4"
                 sx={{
                   fontWeight: 300,
-                  color: "primary.main",
+                  color: (selectedImages?.length || 0) > (imageSelection?.maxSelectionCount || 0) ? "error.main" : "primary.main",
                   mb: 0.5,
                   letterSpacing: "-0.02em",
                 }}
               >
                 <strong>
-                  {selectedImages?.length || 0} / {watchedMaxCount}
+                  {selectedImages?.length || 0} / {imageSelection?.maxSelectionCount ?? "∞"}
                 </strong>
               </Typography>
               <Typography
