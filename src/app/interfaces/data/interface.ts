@@ -163,17 +163,29 @@ export interface Event extends Entity {
   status: "upcoming" | "done" | "cancelled" | "postponed" | "in_progress";
 }
 
-export interface ImageSelectionEntry extends Entity{
+export interface ImageSelectionEntry extends Entity {
   projectId: string;
   folderIds: Array<string>;
-  isSelectionAllowed:boolean;
-  maxSelectionCount:number;
+  isSelectionAllowed: boolean;
+  maxSelectionCount: number;
 }
 
-export interface SelectedImage extends Entity{
+export interface SelectedImage extends Entity {
   projectId: string;
   imageId: string;
   imageFileName: string;
   folderId: string;
   folderName: string;
+}
+
+export interface MerchantDetails {
+  merchantId: string;
+  mail: string;
+  merchantDetails: {
+    id: string;
+    businessName: string;
+    logo: string;
+    isActive: boolean;
+    description: string;
+  };
 }

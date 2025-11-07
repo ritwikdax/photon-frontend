@@ -6,6 +6,7 @@ import { useProjectSelected } from "../hooks/useProjectSelected";
 import ProjectDetails from "../components/ProjectDetails";
 import ProjectTabsCard from "../components/ProjectTabsCard";
 import { useSnackbar } from "../context/SnackbarContext";
+import NoProjectSelected from "../components/NoProjectSelected";
 
 export default function Dashboard() {
   const snackbar = useSnackbar();
@@ -18,6 +19,12 @@ export default function Dashboard() {
   }
 
   const { selectedProject } = useProjectSelected();
+
+  if(!selectedProject){
+    return <NoProjectSelected />;
+  }
+
+
   return (
     <Box>
       <Grid container spacing={2}>
@@ -46,5 +53,5 @@ export default function Dashboard() {
         </Grid>
       </Grid>
     </Box>
-  );
+  )
 }
