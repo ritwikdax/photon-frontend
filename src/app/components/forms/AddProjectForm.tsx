@@ -79,6 +79,7 @@ export default function AddProjectForm({
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<AddProjectFormData>({
     defaultValues: {
       name: "",
@@ -269,6 +270,12 @@ export default function AddProjectForm({
                   value={clients?.find((c) => c.id === value) || null}
                   onChange={(_, newValue) => {
                     onChange(newValue?.id || "");
+                    // Auto-fill phone, alternatePhone, and email when client is selected
+                    if (newValue) {
+                      setValue("phone", newValue.phone);
+                      setValue("alternatePhone", newValue.alternatePhone);
+                      setValue("email", newValue.email);
+                    }
                   }}
                   loading={isLoadingClients}
                   fullWidth

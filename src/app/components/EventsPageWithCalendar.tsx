@@ -13,7 +13,6 @@ import ViewListIcon from "@mui/icons-material/ViewList";
 import MonthlyCalendar from "../components/MonthlyCalendar";
 import { Event } from "../components/Event";
 import useGenericQueries from "../queries/useGenericQueries";
-import { useEmployeesLookupMap } from "../queries/lookup/useEmployeesLookupMap";
 import { Event as EventInterface } from "../interfaces/data/interface";
 
 /**
@@ -25,7 +24,6 @@ export default function EventsPageWithCalendar() {
   
   // Fetch events and employees data
   const { data: events = [], isLoading: eventsLoading } = useGenericQueries<EventInterface[]>("events");
-  const { data: employeesMap, isLoading: employeesLoading } = useEmployeesLookupMap();
 
   const handleViewChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -42,7 +40,7 @@ export default function EventsPageWithCalendar() {
     console.log("Event clicked:", event);
   };
 
-  const isLoading = eventsLoading || employeesLoading;
+  const isLoading = eventsLoading;
 
   if (isLoading) {
     return (
@@ -104,11 +102,7 @@ export default function EventsPageWithCalendar() {
             </Paper>
           ) : (
             events.map((event: EventInterface) => (
-              <Event
-                key={event.id}
-                {...event}
-                employees={employeesMap}
-              />
+              <Event key={event.id} event={event} />
             ))
           )}
         </Box>

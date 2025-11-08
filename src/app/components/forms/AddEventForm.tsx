@@ -21,6 +21,7 @@ import {
   Divider,
   FormControlLabel,
   Checkbox,
+  Grid,
 } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -29,6 +30,7 @@ import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import dayjs, { Dayjs } from "dayjs";
 import useEmployees from "@/app/queries/useEmployees";
 import { Employee } from "@/app/interfaces/data/interface";
+import CounterInput from "./CounterInput";
 import useAddMutataion from "@/app/mutations/useAddMutataion";
 import useUpdateMutation from "@/app/mutations/useUpdateMutation";
 import { useProjectSelected } from "@/app/hooks/useProjectSelected";
@@ -46,6 +48,11 @@ interface AddEventFormData {
   endDateTime: Dayjs | null;
   venue: string;
   assignment: string;
+  photographerCount: number;
+  videographerCount: number;
+  droneOperatorCount: number;
+  lightmanCount: number;
+  helperCount: number;
   team: TeamMember[];
   status: "upcoming" | "done" | "cancelled" | "postponed" | "in_progress";
 }
@@ -56,6 +63,11 @@ interface EventInitialData {
   endDateTime: Date;
   venue: string;
   assignment: string;
+  photographerCount: number;
+  videographerCount: number;
+  droneOperatorCount: number;
+  lightmanCount: number;
+  helperCount: number;
   team: TeamMember[];
   status: "upcoming" | "done" | "cancelled" | "postponed" | "in_progress";
 }
@@ -93,6 +105,7 @@ export default function AddEventForm({
     formState: { errors },
     reset,
     watch,
+    setValue,
   } = useForm<AddEventFormData>({
     defaultValues:
       isEditMode && initialData
@@ -102,6 +115,11 @@ export default function AddEventForm({
             endDateTime: dayjs(initialData.endDateTime),
             venue: initialData.venue,
             assignment: initialData.assignment,
+            photographerCount: initialData.photographerCount || 0,
+            videographerCount: initialData.videographerCount || 0,
+            droneOperatorCount: initialData.droneOperatorCount || 0,
+            lightmanCount: initialData.lightmanCount || 0,
+            helperCount: initialData.helperCount || 0,
             team: initialData.team,
             status: initialData.status,
           }
@@ -111,6 +129,11 @@ export default function AddEventForm({
             endDateTime: null,
             venue: "",
             assignment: "",
+            photographerCount: 0,
+            videographerCount: 0,
+            droneOperatorCount: 0,
+            lightmanCount: 0,
+            helperCount: 0,
             team: [],
             status: "upcoming",
           },
@@ -163,6 +186,11 @@ export default function AddEventForm({
       endDateTime: data.endDateTime?.toISOString() || new Date().toISOString(),
       venue: data.venue,
       assignment: data.assignment,
+      photographerCount: data.photographerCount,
+      videographerCount: data.videographerCount,
+      droneOperatorCount: data.droneOperatorCount,
+      lightmanCount: data.lightmanCount,
+      helperCount: data.helperCount,
       team: data.team,
       status: data.status,
     };
@@ -300,6 +328,123 @@ export default function AddEventForm({
               />
             )}
           />
+
+          {/* Team Composition Counters */}
+          <Box>
+            <Typography variant="subtitle1" fontWeight="medium" mb={2}>
+              Team Composition
+            </Typography>
+            <Grid container spacing={2}>
+              {/* Photographer Count */}
+              <Grid size={6}>
+                <Controller
+                  name="photographerCount"
+                  control={control}
+                  render={({ field }) => (
+                    <CounterInput
+                      label="Photographers"
+                      value={field.value}
+                      onIncrement={() =>
+                        setValue("photographerCount", field.value + 1)
+                      }
+                      onDecrement={() =>
+                        setValue(
+                          "photographerCount",
+                          Math.max(0, field.value - 1)
+                        )
+                      }
+                    />
+                  )}
+                />
+              </Grid>
+
+              {/* Videographer Count */}
+              <Grid size={6}>
+                <Controller
+                  name="videographerCount"
+                  control={control}
+                  render={({ field }) => (
+                    <CounterInput
+                      label="Videographers"
+                      value={field.value}
+                      onIncrement={() =>
+                        setValue("videographerCount", field.value + 1)
+                      }
+                      onDecrement={() =>
+                        setValue(
+                          "videographerCount",
+                          Math.max(0, field.value - 1)
+                        )
+                      }
+                    />
+                  )}
+                />
+              </Grid>
+
+              {/* Drone Operator Count */}
+              <Grid size={6}>
+                <Controller
+                  name="droneOperatorCount"
+                  control={control}
+                  render={({ field }) => (
+                    <CounterInput
+                      label="Drone Operators"
+                      value={field.value}
+                      onIncrement={() =>
+                        setValue("droneOperatorCount", field.value + 1)
+                      }
+                      onDecrement={() =>
+                        setValue(
+                          "droneOperatorCount",
+                          Math.max(0, field.value - 1)
+                        )
+                      }
+                    />
+                  )}
+                />
+              </Grid>
+
+              {/* Lightman Count */}
+              <Grid size={6}>
+                <Controller
+                  name="lightmanCount"
+                  control={control}
+                  render={({ field }) => (
+                    <CounterInput
+                      label="Lightmen"
+                      value={field.value}
+                      onIncrement={() =>
+                        setValue("lightmanCount", field.value + 1)
+                      }
+                      onDecrement={() =>
+                        setValue("lightmanCount", Math.max(0, field.value - 1))
+                      }
+                    />
+                  )}
+                />
+              </Grid>
+
+              {/* Helper Count */}
+              <Grid size={6}>
+                <Controller
+                  name="helperCount"
+                  control={control}
+                  render={({ field }) => (
+                    <CounterInput
+                      label="Helpers"
+                      value={field.value}
+                      onIncrement={() =>
+                        setValue("helperCount", field.value + 1)
+                      }
+                      onDecrement={() =>
+                        setValue("helperCount", Math.max(0, field.value - 1))
+                      }
+                    />
+                  )}
+                />
+              </Grid>
+            </Grid>
+          </Box>
 
           {/* Status */}
           <Controller

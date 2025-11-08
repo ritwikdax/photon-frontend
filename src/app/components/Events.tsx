@@ -6,10 +6,9 @@ import Event from "./Event";
 
 interface EventsProps {
   events: EventInterface[];
-  employees?: Map<string, { name: string }>;
 }
 
-export const Events: React.FC<EventsProps> = ({ events, employees }) => {
+export const Events: React.FC<EventsProps> = ({ events }) => {
   return (
     <Box>
       {events.length === 0 ? (
@@ -24,18 +23,7 @@ export const Events: React.FC<EventsProps> = ({ events, employees }) => {
           }}
         >
           {events.map((event) => (
-            <Event
-              key={event.id}
-              id={event.id}
-              projectId={event.projectId}
-              startDateTime={event.startDateTime}
-              endDateTime={event.endDateTime}
-              venue={event.venue}
-              assignment={event.assignment}
-              team={event.team}
-              status={event.status}
-              employees={employees}
-            />
+            <Event key={event.id} event={event} />
           ))}
         </Box>
       )}

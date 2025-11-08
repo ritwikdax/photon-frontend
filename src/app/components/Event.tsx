@@ -6,7 +6,6 @@ import {
   Typography,
   Box,
   Chip,
-  Stack,
   Button,
   IconButton,
   Menu,
@@ -16,11 +15,9 @@ import {
   DialogTitle,
   DialogActions,
   Grid,
+  Alert,
 } from "@mui/material";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import AssignmentIcon from "@mui/icons-material/Assignment";
 import PeopleIcon from "@mui/icons-material/People";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -32,21 +29,26 @@ import AddEventForm from "./forms/AddEventForm";
 import { useDeleteMutation } from "../mutations/useDeleteMutation";
 import CalendarEvent from "./CalendarEvent";
 
-interface EventProps extends Omit<EventInterface, "createdAt" | "updatedAt"> {
-  employees?: Map<string, { name: string }>;
+interface EventProps {
+  event: EventInterface;
 }
 
-export const Event: React.FC<EventProps> = ({
-  id,
-  projectId,
-  startDateTime,
-  endDateTime,
-  venue,
-  assignment,
-  team,
-  status,
-  employees,
-}) => {
+export const Event: React.FC<EventProps> = ({ event }) => {
+  const {
+    id,
+    projectId,
+    startDateTime,
+    endDateTime,
+    venue,
+    assignment,
+    team,
+    status,
+    photographerCount,
+    videographerCount,
+    droneOperatorCount,
+    lightmanCount,
+    helperCount,
+  } = event;
   const { openDialog, closeDialog } = useDialog();
   const deleteMutation = useDeleteMutation("events");
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -85,6 +87,11 @@ export const Event: React.FC<EventProps> = ({
           endDateTime,
           venue,
           assignment,
+          photographerCount,
+          videographerCount,
+          droneOperatorCount,
+          lightmanCount,
+          helperCount,
           team,
           status,
         }}
@@ -177,11 +184,6 @@ export const Event: React.FC<EventProps> = ({
     return status?.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
   };
 
-  const startDateParsed = parseDate(startDateTime);
-  const endDateParsed = parseDate(endDateTime);
-  const startTime = formatTime(startDateTime);
-  const endTime = formatTime(endDateTime);
-
   // Format full date string
   const formatFullDate = (date: Date) => {
     return new Date(date).toLocaleDateString("en-US", {
@@ -228,15 +230,78 @@ export const Event: React.FC<EventProps> = ({
               title={assignment}
               color="#1976d2"
             />
+
+            {/* Team Composition Counts */}
+            {(photographerCount > 0 ||
+              videographerCount > 0 ||
+              droneOperatorCount > 0 ||
+              lightmanCount > 0 ||
+              helperCount > 0) && (
+              <Box sx={{ marginTop: "16px" }}>
+                <Typography
+                  variant="body2"
+                  fontWeight="600"
+                  color="text.secondary"
+                  sx={{ mb: 1 }}
+                >
+                  Team Composition
+                </Typography>
+                <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                  {photographerCount > 0 && (
+                    <Chip
+                      label={`${photographerCount} Photographer${
+                        photographerCount > 1 ? "s" : ""
+                      }`}
+                      size="small"
+                      variant="outlined"
+                    />
+                  )}
+                  {videographerCount > 0 && (
+                    <Chip
+                      label={`${videographerCount} Videographer${
+                        videographerCount > 1 ? "s" : ""
+                      }`}
+                      size="small"
+                      variant="outlined"
+                    />
+                  )}
+                  {droneOperatorCount > 0 && (
+                    <Chip
+                      label={`${droneOperatorCount} Drone Operator${
+                        droneOperatorCount > 1 ? "s" : ""
+                      }`}
+                      size="small"
+                      variant="outlined"
+                    />
+                  )}
+                  {lightmanCount > 0 && (
+                    <Chip
+                      label={`${lightmanCount} Lightm${
+                        lightmanCount > 1 ? "en" : "an"
+                      }`}
+                      size="small"
+                      variant="outlined"
+                    />
+                  )}
+                  {helperCount > 0 && (
+                    <Chip
+                      label={`${helperCount} Helper${
+                        helperCount > 1 ? "s" : ""
+                      }`}
+                      size="small"
+                      variant="outlined"
+                    />
+                  )}
+                </Box>
+              </Box>
+            )}
+
             <Box>
               <Box>
                 {team?.length === 0 ? (
-                  <Box>
-                    <WarningIcon color="warning" fontSize="small" />
-                    <Typography variant="body2" color="warning.dark">
-                      No team has been assigned
-                    </Typography>
-                  </Box>
+                  <Alert severity="warning" sx={{ marginTop: "16px" }}>
+                    No team has been assigned
+                  </Alert>
                 ) : (
                   <>
                     <Box sx={{ marginTop: "24px" }}>

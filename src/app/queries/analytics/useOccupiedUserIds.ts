@@ -9,7 +9,7 @@ export default function useOccupiedUserIds(
     queryKey: ["occupiedUserIds", givenStartDateTime, givenEndDateTime],
     queryFn: async () => {
       const { data } = await http.post<{ occupiedEmployeeIds: string[] }>(
-        "/analytics/getOccupiedIds",
+        "/api/analytics/getOccupiedIds",
         {
           startDateTime: new Date(givenStartDateTime).toISOString(),
           endDateTime: new Date(givenEndDateTime).toISOString(),

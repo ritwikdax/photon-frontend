@@ -4,17 +4,19 @@ import React from "react";
 import { Box, Typography, Stack } from "@mui/material";
 import CopyUrlText from "./CopyUrlText";
 import { useProjectSelected } from "../hooks/useProjectSelected";
-import { SELECT_APP_URL, TRACKER_APP_URL } from "../utils/env";
+import { useTrackingUrl } from "../queries/useTrackingUrl";
 
 export default function TrackingDetails() {
   const { selectedProject } = useProjectSelected();
+  const {data: url} = useTrackingUrl(selectedProject?.id || "" );
+
   const trackingUrls = [
     {
-      url: `${TRACKER_APP_URL}/${selectedProject?.id}`,
+      url: url?.track,
       label: "Deliverables Tracking URL",
     },
     {
-      url: `${SELECT_APP_URL}/${selectedProject?.id}`,
+      url: url?.selection,
       label: "Image Selection URL",
     },
   ];
@@ -47,7 +49,7 @@ export default function TrackingDetails() {
                 {item.label}
               </Typography>
             )}
-            <CopyUrlText text={item.url} />
+            <CopyUrlText text={item.url ?? "Loading..."} />
           </Box>
         ))}
       </Stack>

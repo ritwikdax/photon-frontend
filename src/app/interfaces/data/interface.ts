@@ -159,6 +159,11 @@ export interface Event extends Entity {
   endDateTime: Date;
   venue: string;
   assignment: string;
+  photographerCount: number;
+  videographerCount: number;
+  droneOperatorCount: number;
+  lightmanCount: number;
+  helperCount: number;
   team: Array<{ employeeId: string; isLead: string }>;
   status: "upcoming" | "done" | "cancelled" | "postponed" | "in_progress";
 }
