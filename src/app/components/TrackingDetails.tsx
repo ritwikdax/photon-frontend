@@ -23,36 +23,46 @@ export default function TrackingDetails() {
   return (
     <Box
       sx={{
-        border: 1,
-        borderColor: "divider",
-        borderRadius: 1,
-        p: 3,
-        bgcolor: "background.paper",
-        position: "relative",
-        m: "1rem auto",
-        fontFamily: "Inter, sans-serif",
+        width: "100%",
+        maxWidth: "100%",
       }}
     >
-      <Typography variant="h6" sx={{ marginBottom: 2 }}>
-        Tracking Details
-      </Typography>
+      <Box
+        sx={{
+          border: 1,
+          borderColor: "divider",
+          borderRadius: 1,
+          p: 3,
+          bgcolor: "background.paper",
+          position: "relative",
+          m: "1rem auto",
+          fontFamily: "Inter, sans-serif",
+          overflow: "auto",
+          width: "100%",
+          boxSizing: "border-box",
+        }}
+      >
+        <Typography variant="h6" sx={{ marginBottom: 2 }}>
+          Tracking Details
+        </Typography>
 
-      <Stack spacing={2}>
-        {trackingUrls.map((item, index) => (
-          <Box key={index}>
-            {item.label && (
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ marginBottom: 0.5, display: "block" }}
-              >
-                {item.label}
-              </Typography>
-            )}
-            <CopyUrlText text={item.url ?? "Loading..."} />
-          </Box>
-        ))}
-      </Stack>
+        <Stack spacing={2} sx={{ width: "100%" }}>
+          {trackingUrls.map((item, index) => (
+            <Box key={index} sx={{ width: "100%", minWidth: 0 }}>
+              {item.label && (
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ marginBottom: 0.5, display: "block" }}
+                >
+                  {item.label}
+                </Typography>
+              )}
+              <CopyUrlText text={item.url ?? "Loading..."} />
+            </Box>
+          ))}
+        </Stack>
+      </Box>
     </Box>
   );
 }

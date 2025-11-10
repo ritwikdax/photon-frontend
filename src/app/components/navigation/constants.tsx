@@ -21,8 +21,8 @@ export interface MenuItem {
 export const NAVIGATION_MENU_ITEMS: MenuItem[] = [
   { text: "Dashboard", path: "/", icon: <DashboardIcon /> },
   { text: "Project", path: "/project", icon: <FolderIcon /> },
-  { text: "Events", path: "/events", icon: <EventIcon /> },
   { text: "Team Assignment", path: "/assignment", icon: <GroupsIcon /> },
+  { text: "Events Calendar", path: "/events", icon: <EventIcon /> },
   { text: "Contract", path: "/contract", icon: <DescriptionIcon /> },
   { text: "Deliverables", path: "/deliverables", icon: <AssignmentIcon /> },
   { text: "Employees", path: "/employees", icon: <PeopleIcon /> },

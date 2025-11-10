@@ -32,23 +32,25 @@ export default function CopyUrlText({
     <Box 
       sx={{ 
         display: 'flex', 
-        alignItems: 'center', 
+        alignItems: 'flex-start', 
         gap: 1,
         padding: 1,
         border: '1px solid #e0e0e0',
         borderRadius: 1,
         backgroundColor: '#f5f5f5',
-        maxWidth: 'fit-content'
+        maxWidth: '100%',
+        minWidth: 0,
+        width: '100%'
       }}
     >
       {showLabel && (
         <Typography 
           variant="body2" 
           sx={{ 
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            flex: 1
+            wordBreak: 'break-all',
+            overflowWrap: 'break-word',
+            flex: 1,
+            minWidth: 0
           }}
         >
           {text}
