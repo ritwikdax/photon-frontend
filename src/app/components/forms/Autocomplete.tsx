@@ -1,4 +1,4 @@
-import useProjects from "@/app/queries/useProjects";
+import useProjects from "@/app/queries/useAllProjects";
 import { Autocomplete, TextField, Box } from "@mui/material";
 
 import { useEffect, useRef, useState } from "react";

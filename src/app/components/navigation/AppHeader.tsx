@@ -19,9 +19,11 @@ import { useMerchantDetails } from "@/app/queries/useMerchantDetails";
 
 interface AppHeaderProps {
   onMenuClick: () => void;
+  onDesktopMenuClick: () => void;
+  desktopOpen: boolean;
 }
 
-export default function AppHeader({ onMenuClick }: AppHeaderProps) {
+export default function AppHeader({ onMenuClick, onDesktopMenuClick, desktopOpen }: AppHeaderProps) {
   const { data: session } = useSession();
   const {data: merchant} = useMerchantDetails();
 
@@ -58,6 +60,14 @@ export default function AppHeader({ onMenuClick }: AppHeaderProps) {
             edge="start"
             onClick={onMenuClick}
             sx={{ mr: 2, display: { sm: "none" } }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <IconButton
+            color="inherit"
+            edge="start"
+            onClick={onDesktopMenuClick}
+            sx={{ mr: 2, display: { xs: "none", sm: "block" } }}
           >
             <MenuIcon />
           </IconButton>

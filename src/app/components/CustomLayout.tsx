@@ -13,6 +13,7 @@ import UnauthorizedPage from "./UnauthorizedPage";
 // Inner component that uses useSession (must be inside SessionProvider)
 function LayoutContent({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [desktopOpen, setDesktopOpen] = React.useState(true);
   const { data: session, status } = useSession();
   const pathname = usePathname();
   const { data, error, isLoading } = useMerchantDetails();
@@ -20,6 +21,10 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const handleDesktopDrawerToggle = () => {
+    setDesktopOpen(!desktopOpen);
   };
 
   // Show loading state
@@ -79,12 +84,17 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
       <CssBaseline />
 
       {/* Top App Bar */}
-      <AppHeader onMenuClick={handleDrawerToggle} />
+      <AppHeader 
+        onMenuClick={handleDrawerToggle}
+        onDesktopMenuClick={handleDesktopDrawerToggle}
+        desktopOpen={desktopOpen}
+      />
 
       {/* Side Drawer */}
       <NavigationDrawer
         mobileOpen={mobileOpen}
         onDrawerToggle={handleDrawerToggle}
+        desktopOpen={desktopOpen}
       />
 
       {/* Main Content */}
@@ -93,9 +103,12 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
           backgroundColor: "#f5f5f5",
           minHeight: "100vh",
+          transition: (theme) => theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+          }),
         }}
       >
         <Toolbar />

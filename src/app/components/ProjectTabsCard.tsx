@@ -5,7 +5,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Events from "./Events";
 import useProjectUpdates from "../queries/useUpdates";
-import useProjectEvents from "../queries/useEvents";
+import useProjectEvents from "../queries/useEventsByProjectId";
 import { useProjectDeliverables } from "../queries/useProjectDeliverables";
 import ProjectDeliverables from "./ProjectDeliverables";
 import { useProjectSelected } from "../hooks/useProjectSelected";

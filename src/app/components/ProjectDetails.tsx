@@ -32,6 +32,7 @@ import EditableTypography from "./EditableTypography";
 import useUpdateMutation from "../mutations/useUpdateMutation";
 import { Client, Project } from "../interfaces/data/interface";
 import useGenericQueries from "../queries/useGenericQueries";
+import { BOOKING_CATEGORY_LABELS, LEAD_SOURCE_LABELS } from "../constants/projectOptions";
 
 interface ProjectDetailsProps {
   project: Project;
@@ -157,6 +158,24 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
       )}
 
       <Stack spacing={1}>
+        {project?.clientId && (
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Person sx={{ color: "text.secondary" }} />
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+              <Typography variant="body1" color="text.primary" component="span">
+                <strong>Client Name:</strong>
+              </Typography>
+              <Typography
+                variant="body1"
+                color="text.primary"
+                component="span"
+                sx={{ display: "inline" }}
+              >
+                {client && client.length > 0 ? client[0].name : "N/A"}
+              </Typography>
+            </Box>
+          </Stack>
+        )}
         <Stack direction="row" spacing={1} alignItems="center">
           <Phone sx={{ color: "text.secondary" }} />
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
@@ -224,7 +243,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
                 <strong>Booking Category:</strong>
               </Typography>
               <EditableTypography
-                value={project?.bookingCategory}
+                value={BOOKING_CATEGORY_LABELS[project?.bookingCategory]}
                 onSave={(val) => {
                   updateMutation.mutate({ bookingCategory: val });
                 }}
@@ -266,7 +285,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
                 <strong>Lead Source:</strong>
               </Typography>
               <EditableTypography
-                value={project?.leadSource}
+                value={LEAD_SOURCE_LABELS[project?.leadSource]}
                 onSave={(val) => {
                   updateMutation.mutate({ leadSource: val });
                 }}
@@ -323,25 +342,6 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
               component="span"
               sx={{ display: "inline" }}
             />
-          </Stack>
-        )}
-
-        {project?.clientId && (
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Person sx={{ color: "text.secondary" }} />
-            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-              <Typography variant="body1" color="text.primary" component="span">
-                <strong>Client Name:</strong>
-              </Typography>
-              <Typography
-                variant="body1"
-                color="text.primary"
-                component="span"
-                sx={{ display: "inline" }}
-              >
-                {client && client.length > 0 ? client[0].name : "N/A"}
-              </Typography>
-            </Box>
           </Stack>
         )}
       </Stack>

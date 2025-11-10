@@ -21,6 +21,11 @@ import {
   ProjectStatus,
 } from "@/app/interfaces/data/interface";
 import useClients from "@/app/queries/useClients";
+import {
+  leadSourceOptions,
+  bookingCategoryOptions,
+  statusOptions,
+} from "@/app/constants/projectOptions";
 
 interface AddProjectFormData {
   name: string;
@@ -40,35 +45,6 @@ interface AddProjectFormProps {
   onSubmit: (data: AddProjectFormData) => void;
   isLoading?: boolean;
 }
-
-const leadSourceOptions: { value: LeadType; label: string }[] = [
-  { value: "facebook", label: "Facebook" },
-  { value: "instagram", label: "Instagram" },
-  { value: "whatsapp", label: "WhatsApp" },
-  { value: "friends", label: "Friends" },
-  { value: "wordofmouth", label: "Word of Mouth" },
-  { value: "referrel", label: "Referral" },
-  { value: "other", label: "Other" },
-];
-
-const bookingCategoryOptions: { value: BookingType; label: string }[] = [
-  { value: "wedding", label: "Wedding" },
-  { value: "pre_wedding", label: "Pre Wedding" },
-  { value: "post_wedding", label: "Post Wedding" },
-  { value: "anniversary", label: "Anniversary" },
-  { value: "birthday", label: "Birthday" },
-  { value: "corporate_shoot", label: "Corporate Shoot" },
-  { value: "baby_bump", label: "Baby Bump" },
-  { value: "rice_cereony", label: "Rice Ceremony" },
-  { value: "other", label: "Other" },
-];
-
-const statusOptions: { value: ProjectStatus; label: string }[] = [
-  { value: "open", label: "Open" },
-  { value: "close", label: "Close" },
-  { value: "reopen", label: "Reopen" },
-  { value: "withdrawn", label: "Withdrawn" },
-];
 
 export default function AddProjectForm({
   onSubmit,

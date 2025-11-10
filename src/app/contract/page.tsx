@@ -25,7 +25,7 @@ import {
 import { Download, Print } from "@mui/icons-material";
 import { useProjectSelected } from "../hooks/useProjectSelected";
 import { useProjectDeliverables } from "../queries/useProjectDeliverables";
-import useProjectEvents from "../queries/useEvents";
+import useProjectEvents from "../queries/useEventsByProjectId";
 import { useMerchantDetails } from "../queries/useMerchantDetails";
 import NoProjectSelected from "../components/NoProjectSelected";
 import dayjs from "dayjs";
@@ -630,6 +630,44 @@ export default function ContractPage() {
             </Typography>
             <Typography variant="subtitle1" sx={{ color: "rgba(255, 255, 255, 0.8)" }}>
               Contract Date: {today}
+            </Typography>
+          </Box>
+
+
+          {/* Monetary Agreement Section */}
+          <Box sx={{ mb: 4, pageBreakInside: "avoid", bgcolor: "#f8f9fa", p: 3, borderRadius: 1, border: "1px solid #e0e0e0" }}>
+            <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, color: "#001C3D" }}>
+              MONETARY AGREEMENT
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.8 }}>
+              This agreement is entered into between the Service Provider and the Client for photography services 
+              as detailed in this contract. The total package cost for all services, including but not limited to 
+              photography coverage, editing, and deliverables specified herein, amounts to{" "}
+              <strong>₹</strong>
+              <strong 
+                contentEditable 
+                suppressContentEditableWarning
+                style={{ 
+                  minWidth: '100px', 
+                  display: 'inline-block',
+                  borderBottom: '1px solid #ccc',
+                  padding: '2px 4px',
+                  cursor: 'text'
+                }}
+              >
+                __________
+              </strong> (to be agreed upon by both parties).
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.8 }}>
+              A non-refundable booking deposit of <strong>30%</strong> of the total package cost is 
+              required to secure the date and confirm this booking. The remaining balance of{" "}
+              <strong>70%</strong> must be paid at least 7 days prior to the event date. Payment can be made via 
+              bank transfer, UPI, or any other mutually agreed method. Late payments may result in postponement 
+              or cancellation of services as per the cancellation policy outlined in this agreement.
+            </Typography>
+            <Typography variant="body2" sx={{ lineHeight: 1.8, fontStyle: "italic", color: "text.secondary" }}>
+              Both parties acknowledge and agree to the monetary terms stated above and commit to fulfilling 
+              their respective financial obligations as outlined in this contract.
             </Typography>
           </Box>
 

@@ -3,7 +3,7 @@ import { Box, Typography, Chip } from "@mui/material";
 import { Assignment, EventNote, Update } from "@mui/icons-material";
 import { useProjectDeliverables } from "../queries/useProjectDeliverables";
 import useProjectUpdates from "../queries/useUpdates";
-import useProjectEvents from "../queries/useEvents";
+import useProjectEvents from "../queries/useEventsByProjectId";
 import { useProjectSelected } from "../hooks/useProjectSelected";
 import TrackCount from "./TrackCount";
 import moment from "moment";

@@ -6,16 +6,21 @@ import DrawerContent from "./DrawerContent";
 interface NavigationDrawerProps {
   mobileOpen: boolean;
   onDrawerToggle: () => void;
+  desktopOpen: boolean;
 }
 
 export default function NavigationDrawer({
   mobileOpen,
   onDrawerToggle,
+  desktopOpen,
 }: NavigationDrawerProps) {
   return (
     <Box
       component="nav"
-      sx={{ width: { sm: DRAWER_WIDTH }, flexShrink: { sm: 0 } }}
+      sx={{ 
+        width: { xs: 0, sm: desktopOpen ? DRAWER_WIDTH : 0 }, 
+        flexShrink: { sm: 0 } 
+      }}
     >
       {/* Mobile Drawer */}
       <Drawer
@@ -33,15 +38,19 @@ export default function NavigationDrawer({
 
       {/* Desktop Drawer */}
       <Drawer
-        variant="permanent"
+        variant="persistent"
         sx={{
           display: { xs: "none", sm: "block" },
           "& .MuiDrawer-paper": {
             width: DRAWER_WIDTH,
             boxSizing: "border-box",
+            transition: (theme) => theme.transitions.create('width', {
+              easing: theme.transitions.easing.sharp,
+              duration: theme.transitions.duration.enteringScreen,
+            }),
           },
         }}
-        open
+        open={desktopOpen}
       >
         <DrawerContent />
       </Drawer>
