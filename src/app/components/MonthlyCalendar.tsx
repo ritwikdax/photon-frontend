@@ -70,8 +70,15 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
     dayEnd.setHours(23, 59, 59, 999);
 
     return events.filter((event) => {
-      const eventStart = new Date(event.startDateTime);
-      const eventEnd = new Date(event.endDateTime);
+      // Convert eventDate and eventStartTime to Date object
+      const eventDate = new Date(event.eventDate);
+      const [hours, minutes] = event.eventStartTime.split(':');
+      const eventStart = new Date(eventDate);
+      eventStart.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+      
+      // Assume 4 hour duration for end time
+      const eventEnd = new Date(eventStart);
+      eventEnd.setHours(eventEnd.getHours() + 4);
 
       // Event starts on this day
       const startsOnDay = eventStart >= dayStart && eventStart <= dayEnd;
@@ -344,8 +351,16 @@ export const MonthlyCalendar: React.FC<MonthlyCalendarProps> = ({
                 {/* Events */}
                 <Stack spacing={0.5} sx={{ flex: 1, overflow: "hidden" }}>
                   {day.events.map((event, eventIndex) => {
-                    const eventStart = new Date(event.startDateTime);
-                    const eventEnd = new Date(event.endDateTime);
+                    // Convert eventDate and eventStartTime to Date object
+                    const eventDate = new Date(event.eventDate);
+                    const [hours, minutes] = event.eventStartTime.split(':');
+                    const eventStart = new Date(eventDate);
+                    eventStart.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+                    
+                    // Assume 4 hour duration for end time
+                    const eventEnd = new Date(eventStart);
+                    eventEnd.setHours(eventEnd.getHours() + 4);
+                    
                     return (
                       <Tooltip
                         key={event.id}

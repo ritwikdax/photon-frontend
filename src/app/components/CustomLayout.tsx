@@ -8,13 +8,14 @@ import { DRAWER_WIDTH } from "./navigation/constants";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useMerchantDetails } from "../queries/useMerchantDetails";
+import UnauthorizedPage from "./UnauthorizedPage";
 
 // Inner component that uses useSession (must be inside SessionProvider)
 function LayoutContent({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const { data: session, status } = useSession();
   const pathname = usePathname();
-  const {data} = useMerchantDetails();
+  const { data, error, isLoading } = useMerchantDetails();
   const isSignInPage = pathname === "/signin";
 
   const handleDrawerToggle = () => {
@@ -22,7 +23,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
   };
 
   // Show loading state
-  if (status === "loading") {
+  if (status === "loading" || isLoading) {
     return (
       <Box
         sx={{
@@ -60,6 +61,11 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
   // If on sign-in page or not authenticated, show children without layout
   if (isSignInPage || !session) {
     return <>{children}</>;
+  }
+
+  // Show unauthorized page if merchantDetails fetch failed
+  if (error) {
+    return <UnauthorizedPage />;
   }
 
   return (

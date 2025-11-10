@@ -155,8 +155,8 @@ export interface ProjectsDeliverable extends Entity {
 
 export interface Event extends Entity {
   projectId: string;
-  startDateTime: Date;
-  endDateTime: Date;
+  eventDate: Date;
+  eventStartTime: string;
   venue: string;
   assignment: string;
   photographerCount: number;
@@ -191,6 +191,9 @@ export interface MerchantDetails {
     businessName: string;
     logo: string;
     isActive: boolean;
-    description: string;
+    tagline: string;
+    phone: string;
+    email: string;
+
   };
 }

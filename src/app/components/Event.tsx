@@ -37,8 +37,8 @@ export const Event: React.FC<EventProps> = ({ event }) => {
   const {
     id,
     projectId,
-    startDateTime,
-    endDateTime,
+    eventDate,
+    eventStartTime,
     venue,
     assignment,
     team,
@@ -83,8 +83,8 @@ export const Event: React.FC<EventProps> = ({ event }) => {
         eventId={id}
         initialData={{
           projectId,
-          startDateTime,
-          endDateTime,
+          eventDate,
+          eventStartTime,
           venue,
           assignment,
           photographerCount,
@@ -141,6 +141,22 @@ export const Event: React.FC<EventProps> = ({ event }) => {
       </>,
       { maxWidth: "xs", fullWidth: true }
     );
+  };
+
+  // Helper function to combine eventDate and eventStartTime into a Date object
+  const getEventDateTime = () => {
+    const date = new Date(eventDate);
+    const [hours, minutes] = eventStartTime.split(':');
+    date.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+    return date;
+  };
+
+  // For now, assume event duration of 4 hours (can be adjusted)
+  const getEventEndDateTime = () => {
+    const startDate = getEventDateTime();
+    const endDate = new Date(startDate);
+    endDate.setHours(endDate.getHours() + 4); // Add 4 hours
+    return endDate;
   };
 
   // Parse date to display in calendar format
@@ -224,10 +240,9 @@ export const Event: React.FC<EventProps> = ({ event }) => {
               {assignment}
             </Typography>
             <CalendarEvent
-              startDateTime={new Date(startDateTime)}
-              endDateTime={new Date(endDateTime)}
-              venue="Conference Room A, Building 2"
-              title={assignment}
+              startDateTime={getEventDateTime()}
+              endDateTime={getEventEndDateTime()}
+              venue={venue}
               color="#1976d2"
             />
 

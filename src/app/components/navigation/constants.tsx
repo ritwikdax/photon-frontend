@@ -7,6 +7,8 @@ import BusinessIcon from "@mui/icons-material/Business";
 import UpdateIcon from "@mui/icons-material/Update";
 import TaskIcon from "@mui/icons-material/Task";
 import FolderIcon from "@mui/icons-material/Folder";
+import DescriptionIcon from "@mui/icons-material/Description";
+import GroupsIcon from "@mui/icons-material/Groups";
 
 export const DRAWER_WIDTH = 240;
 
@@ -20,6 +22,8 @@ export const NAVIGATION_MENU_ITEMS: MenuItem[] = [
   { text: "Dashboard", path: "/", icon: <DashboardIcon /> },
   { text: "Project", path: "/project", icon: <FolderIcon /> },
   { text: "Events", path: "/events", icon: <EventIcon /> },
+  { text: "Team Assignment", path: "/assignment", icon: <GroupsIcon /> },
+  { text: "Contract", path: "/contract", icon: <DescriptionIcon /> },
   { text: "Deliverables", path: "/deliverables", icon: <AssignmentIcon /> },
   { text: "Employees", path: "/employees", icon: <PeopleIcon /> },
   { text: "Clients", path: "/clients", icon: <BusinessIcon /> },

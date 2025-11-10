@@ -23,7 +23,8 @@ import {
   Checkbox,
   Grid,
 } from "@mui/material";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
@@ -44,8 +45,8 @@ interface TeamMember {
 
 interface AddEventFormData {
   projectId: string;
-  startDateTime: Dayjs | null;
-  endDateTime: Dayjs | null;
+  eventDate: Dayjs | null;
+  eventStartTime: Dayjs | null;
   venue: string;
   assignment: string;
   photographerCount: number;
@@ -59,8 +60,8 @@ interface AddEventFormData {
 
 interface EventInitialData {
   projectId: string;
-  startDateTime: Date;
-  endDateTime: Date;
+  eventDate: Date;
+  eventStartTime: string;
   venue: string;
   assignment: string;
   photographerCount: number;
@@ -111,8 +112,8 @@ export default function AddEventForm({
       isEditMode && initialData
         ? {
             projectId: initialData.projectId,
-            startDateTime: dayjs(initialData.startDateTime),
-            endDateTime: dayjs(initialData.endDateTime),
+            eventDate: dayjs(initialData.eventDate),
+            eventStartTime: dayjs(`1970-01-01T${initialData.eventStartTime}`),
             venue: initialData.venue,
             assignment: initialData.assignment,
             photographerCount: initialData.photographerCount || 0,
@@ -125,8 +126,8 @@ export default function AddEventForm({
           }
         : {
             projectId: selectedProject?.id || "",
-            startDateTime: null,
-            endDateTime: null,
+            eventDate: null,
+            eventStartTime: null,
             venue: "",
             assignment: "",
             photographerCount: 0,
@@ -144,8 +145,24 @@ export default function AddEventForm({
     name: "team",
   });
 
-  const startDateTimeValue = watch("startDateTime")?.toISOString() ?? "";
-  const endDateTimeValue = watch("endDateTime")?.toISOString() ?? "";
+  const eventDate = watch("eventDate");
+  const eventStartTime = watch("eventStartTime");
+  
+  // Combine date and time for occupied users query
+  const startDateTimeValue = React.useMemo(() => {
+    if (!eventDate || !eventStartTime) return "";
+    const date = eventDate.format("YYYY-MM-DD");
+    const time = eventStartTime.format("HH:mm");
+    return dayjs(`${date}T${time}`).toISOString();
+  }, [eventDate, eventStartTime]);
+
+  const endDateTimeValue = React.useMemo(() => {
+    if (!eventDate || !eventStartTime) return "";
+    const date = eventDate.format("YYYY-MM-DD");
+    const time = eventStartTime.format("HH:mm");
+    return dayjs(`${date}T${time}`).add(4, 'hour').toISOString();
+  }, [eventDate, eventStartTime]);
+  
   const { data: occupiedIds } = useOccupiedUserIds(
     startDateTimeValue,
     endDateTimeValue
@@ -179,11 +196,19 @@ export default function AddEventForm({
       return;
     }
 
+    if (!data.eventDate || !data.eventStartTime) {
+      console.error("Date and time are required");
+      return;
+    }
+
+    // Extract date and time
+    const eventDate = data.eventDate.format("YYYY-MM-DD");
+    const eventStartTime = data.eventStartTime.format("HH:mm");
+
     const eventData = {
       projectId: projectIdToUse,
-      startDateTime:
-        data.startDateTime?.toISOString() || new Date().toISOString(),
-      endDateTime: data.endDateTime?.toISOString() || new Date().toISOString(),
+      eventDate,
+      eventStartTime,
       venue: data.venue,
       assignment: data.assignment,
       photographerCount: data.photographerCount,
@@ -250,43 +275,42 @@ export default function AddEventForm({
         )}
 
         <Stack spacing={3}>
-          {/* Start Date Time */}
+          {/* Event Date */}
           <Controller
-            name="startDateTime"
+            name="eventDate"
             control={control}
-            rules={{ required: "Start date and time is required" }}
+            rules={{ required: "Event date is required" }}
             render={({ field }) => (
-              <DateTimePicker
-                label="Start Date & Time"
+              <DatePicker
+                label="Event Date"
                 value={field.value}
                 onChange={(newValue) => field.onChange(newValue)}
                 slotProps={{
                   textField: {
                     fullWidth: true,
-                    error: !!errors.startDateTime,
-                    helperText: errors.startDateTime?.message,
+                    error: !!errors.eventDate,
+                    helperText: errors.eventDate?.message,
                   },
                 }}
               />
             )}
           />
 
-          {/* End Date Time */}
-
+          {/* Event Start Time */}
           <Controller
-            name="endDateTime"
+            name="eventStartTime"
             control={control}
-            rules={{ required: "End date and time is required" }}
+            rules={{ required: "Start time is required" }}
             render={({ field }) => (
-              <DateTimePicker
-                label="End Date & Time"
+              <TimePicker
+                label="Start Time"
                 value={field.value}
                 onChange={(newValue) => field.onChange(newValue)}
                 slotProps={{
                   textField: {
                     fullWidth: true,
-                    error: !!errors.endDateTime,
-                    helperText: errors.endDateTime?.message,
+                    error: !!errors.eventStartTime,
+                    helperText: errors.eventStartTime?.message,
                   },
                 }}
               />

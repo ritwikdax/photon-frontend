@@ -1,16 +1,6 @@
 "use client";
 import React from "react";
-import {
-  Card,
-  CardContent,
-  Box,
-  Typography,
-  Stack,
-  Chip,
-  Grid,
-} from "@mui/material";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import { Box, Typography, Grid } from "@mui/material";
 import EventIcon from "@mui/icons-material/Event";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 
@@ -18,7 +8,6 @@ interface CalendarEventProps {
   startDateTime: Date;
   endDateTime: Date;
   venue: string;
-  title: string;
   color?: string;
 }
 
@@ -26,7 +15,6 @@ export const CalendarEvent: React.FC<CalendarEventProps> = ({
   startDateTime,
   endDateTime,
   venue,
-  title,
   color = "#1976d2",
 }) => {
   // Format date to readable format
@@ -80,44 +68,8 @@ export const CalendarEvent: React.FC<CalendarEventProps> = ({
   };
 
   return (
-    <Box sx={{marginTop: "24px"}}>
+    <Box sx={{ marginTop: "24px" }}>
       <Grid container spacing={2}>
-        <Grid size={6}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-            <LocationOnIcon sx={{ fontSize: 20, color: color }} />
-            <Typography
-              variant="body2"
-              sx={{
-                color: "text.secondary",
-                lineHeight: 1.6,
-                fontWeight: 500,
-              }}
-            >
-              {venue}
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid size={6}>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1.5 
-            }}
-          >
-            <AccessTimeIcon sx={{ fontSize: 20, color: color }} />
-            <Chip
-              label={`Duration: ${calculateDuration()}`}
-              size="small"
-              sx={{
-                bgcolor: `${color}15`,
-                color: color,
-                fontWeight: 600,
-                fontSize: "0.75rem",
-              }}
-            />
-          </Box>
-        </Grid>
         <Grid size={6}>
           {/* Start Date & Time */}
           <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1.5 }}>
@@ -132,7 +84,7 @@ export const CalendarEvent: React.FC<CalendarEventProps> = ({
                   mb: 0.3,
                 }}
               >
-                START
+                Event Date
               </Typography>
               <Typography
                 variant="body2"
@@ -150,8 +102,9 @@ export const CalendarEvent: React.FC<CalendarEventProps> = ({
           </Box>
         </Grid>
         <Grid size={6}>
+          {/* Start Date & Time */}
           <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1.5 }}>
-            <CalendarTodayIcon sx={{ fontSize: 20, color: color, mt: 0.2 }} />
+            <LocationOnIcon sx={{ fontSize: 20, color: color }} />
             <Box sx={{ flex: 1 }}>
               <Typography
                 variant="caption"
@@ -162,19 +115,13 @@ export const CalendarEvent: React.FC<CalendarEventProps> = ({
                   mb: 0.3,
                 }}
               >
-                END
+                Location:
               </Typography>
               <Typography
                 variant="body2"
                 sx={{ color: "text.primary", fontWeight: 500 }}
               >
-                {formatDate(endDateTime)}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ color: color, fontWeight: 600 }}
-              >
-                {formatTime(endDateTime)}
+                {venue}
               </Typography>
             </Box>
           </Box>
