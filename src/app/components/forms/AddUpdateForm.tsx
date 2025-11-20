@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
   Box,
@@ -15,9 +15,12 @@ import {
   Stack,
   Alert,
   Divider,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
 import { Update as UpdateType } from "@/app/interfaces/data/interface";
 import { useProjectSelected } from "@/app/hooks/useProjectSelected";
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
 interface AddUpdateFormData {
   projectId: string;
@@ -62,6 +65,41 @@ const updateTypeOptions = [
   { value: "other", label: "Other" },
 ] as const;
 
+const updateTemplates: Record<string, { title: string; description: string }> = {
+  payment: {
+    title: "Payment Received/Processed",
+    description: "Payment details:\n- Amount: [Amount]\n- Payment method: [Method]\n- Transaction ID: [ID]\n- Date: [Date]\n- Notes: [Additional notes]",
+  },
+  drive_backup: {
+    title: "Drive Backup Completed",
+    description: "Backup details:\n- Files backed up: [Number/Types]\n- Backup location: [Drive folder/path]\n- Size: [Total size]\n- Completion time: [Time]\n- Notes: [Additional notes]",
+  },
+  team_breafing: {
+    title: "Team Briefing Conducted",
+    description: "Briefing details:\n- Date: [Date]\n- Attendees: [Team members]\n- Topics discussed: [Topics]\n- Action items: [Items]\n- Next meeting: [Date/Time]",
+  },
+  drive_uplaod: {
+    title: "Files Uploaded to Drive",
+    description: "Upload details:\n- Files uploaded: [File names/types]\n- Upload location: [Drive folder/path]\n- Total size: [Size]\n- Purpose: [Purpose]\n- Access: [Permissions/sharing]",
+  },
+  image_transfer: {
+    title: "Images Transferred",
+    description: "Transfer details:\n- Number of images: [Count]\n- From: [Source]\n- To: [Destination]\n- Format: [Format]\n- Total size: [Size]\n- Notes: [Additional notes]",
+  },
+  sheet_update: {
+    title: "Spreadsheet Updated",
+    description: "Update details:\n- Sheet name: [Name]\n- Changes made: [Description]\n- Rows/columns affected: [Range]\n- Updated by: [Name]\n- Date: [Date]",
+  },
+  contract_signing: {
+    title: "Contract Signed",
+    description: "Contract details:\n- Contract type: [Type]\n- Parties involved: [Names]\n- Signing date: [Date]\n- Effective date: [Date]\n- Key terms: [Summary]\n- Document location: [Path/link]",
+  },
+  other: {
+    title: "",
+    description: "",
+  },
+};
+
 const statusOptions = [
   { value: "incomplete", label: "Incomplete" },
   { value: "not_started", label: "Not Started" },
@@ -86,6 +124,8 @@ export default function AddUpdateForm({
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
+    watch,
   } = useForm<AddUpdateFormData>({
     defaultValues: isEditMode && update
       ? {
@@ -107,6 +147,29 @@ export default function AddUpdateForm({
           },
         },
   });
+
+  const selectedUpdateType = watch("updateType.type");
+
+  // Apply template when update type changes (only in add mode)
+  useEffect(() => {
+    if (!isEditMode && selectedUpdateType) {
+      const template = updateTemplates[selectedUpdateType];
+      if (template && template.title) {
+        setValue("title", template.title);
+        setValue("description", template.description);
+      }
+    }
+  }, [selectedUpdateType, isEditMode, setValue]);
+
+  const applyTemplate = () => {
+    if (selectedUpdateType) {
+      const template = updateTemplates[selectedUpdateType];
+      if (template && template.title) {
+        setValue("title", template.title);
+        setValue("description", template.description);
+      }
+    }
+  };
 
   const handleFormSubmit = async (data: AddUpdateFormData) => {
     try {
@@ -160,6 +223,21 @@ export default function AddUpdateForm({
         <Alert severity="info" sx={{ mb: 3 }}>
           Adding update to:{" "}
           <strong>{currentProject.name || currentProject.id}</strong>
+        </Alert>
+      )}
+
+      {!isEditMode && selectedUpdateType && updateTemplates[selectedUpdateType]?.title && (
+        <Alert severity="success" sx={{ mb: 2 }}>
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Typography variant="body2">
+              Template auto-applied for <strong>{updateTypeOptions.find(opt => opt.value === selectedUpdateType)?.label}</strong>
+            </Typography>
+            <Tooltip title="Reapply template">
+              <IconButton size="small" onClick={applyTemplate} sx={{ ml: 1 }}>
+                <AutoFixHighIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </Stack>
         </Alert>
       )}
 

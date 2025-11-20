@@ -13,9 +13,10 @@ export default function ProjectDeliverables({ deliverables }: DeliverablesProps)
     return (
       <Box
         sx={{
+          backgroundColor: "ButtonFace",
           textAlign: "center",
-          py: 8,
-          px: 2,
+          // py: 8,
+          // px: 2,
         }}
       >
         <LocalShipping sx={{ fontSize: 64, color: "text.disabled", mb: 2 }} />
@@ -32,10 +33,11 @@ export default function ProjectDeliverables({ deliverables }: DeliverablesProps)
         width: "100%",
         maxHeight: "calc(100vh - 200px)",
         overflowY: "auto",
+        p: 0,
       }}
     >
       {deliverables.map((deliverable) => (
-        <ListItem key={deliverable.id} sx={{ px: 0, py: 1.5 }}>
+        <ListItem key={deliverable.id} sx={{ px: 0, py: 0 }}>
           <Deliverable deliverable={deliverable} />
         </ListItem>
       ))}

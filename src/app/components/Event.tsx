@@ -22,6 +22,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import WarningIcon from "@mui/icons-material/Warning";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { Event as EventInterface } from "../interfaces/data/interface";
 import TeamMember from "./TeamMember";
 import { useDialog } from "../context/DialogContext";
@@ -220,13 +221,12 @@ export const Event: React.FC<EventProps> = ({ event }) => {
         borderColor: "divider",
         width: "100%",
         position: "relative",
-        marginTop: "8px",
-        padding: "12px",
+        mb: 2,
         scrollMarginTop: "20px", // Add some spacing when scrolled to
       }}
     >
       <CardContent
-        sx={{ flex: 1, display: "flex", p: 2, "&:last-child": { pb: 2 } }}
+        sx={{ display: "flex", p: 2, "&:last-child": { pb: 2 } }}
       >
         <Box sx={{ display: "flex", width: "100%", gap: 3 }}>
           <Box sx={{ flexGrow: 1 }}>
@@ -239,12 +239,14 @@ export const Event: React.FC<EventProps> = ({ event }) => {
             >
               {assignment}
             </Typography>
-            <CalendarEvent
-              startDateTime={getEventDateTime()}
-              endDateTime={getEventEndDateTime()}
-              venue={venue}
-              color="#1976d2"
-            />
+            <Box sx={{ mt: 2 }}>
+              <CalendarEvent
+                startDateTime={getEventDateTime()}
+                endDateTime={getEventEndDateTime()}
+                venue={venue}
+                color="#1976d2"
+              />
+            </Box>
 
             {/* Team Composition Counts */}
             {(photographerCount > 0 ||
@@ -252,7 +254,7 @@ export const Event: React.FC<EventProps> = ({ event }) => {
               droneOperatorCount > 0 ||
               lightmanCount > 0 ||
               helperCount > 0) && (
-              <Box sx={{ marginTop: "16px" }}>
+              <Box sx={{ mt: 2 }}>
                 <Typography
                   variant="body2"
                   fontWeight="600"
@@ -314,12 +316,12 @@ export const Event: React.FC<EventProps> = ({ event }) => {
             <Box>
               <Box>
                 {team?.length === 0 ? (
-                  <Alert severity="warning" sx={{ marginTop: "16px" }}>
+                  <Alert severity="warning" sx={{ mt: 2 }}>
                     No team has been assigned
                   </Alert>
                 ) : (
                   <>
-                    <Box sx={{ marginTop: "24px" }}>
+                    <Box sx={{ mt: 2 }}>
                       <Box
                         sx={{ display: "flex", flexDirection: "row", gap: 1.5 }}
                       >
@@ -329,52 +331,32 @@ export const Event: React.FC<EventProps> = ({ event }) => {
                         </Typography>
                       </Box>
                     </Box>
-                    <Grid container spacing={1} sx={{ marginTop: "12px" }}>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap", mt: 1.5 }}>
                       {team?.map((member, index) => {
                         const isLead =
                           member.isLead === "true" || member.isLead === "1";
                         return (
-                          <Grid size={6} key={index}>
+                          <React.Fragment key={index}>
                             <TeamMember
                               employeeId={member.employeeId}
                               isLead={isLead}
                             />
-                          </Grid>
+                            {index < team.length - 1 && (
+                              <FiberManualRecordIcon 
+                                sx={{ 
+                                  fontSize: 8, 
+                                  color: "#1976d2"
+                                }} 
+                              />
+                            )}
+                          </React.Fragment>
                         );
                       })}
-                    </Grid>
-                    <Box
-                      sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}
-                    ></Box>
+                    </Box>
                   </>
                 )}
               </Box>
             </Box>
-
-            <Grid container spacing={2} sx={{ marginTop: "24px" }}>
-              <Grid size={4}>
-                {/* Assignment Details */}
-                <Box
-                  sx={{
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 1.5,
-                    minWidth: 0,
-                  }}
-                >
-                  <Box
-                    sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                  ></Box>
-
-                  {/* End DateTime */}
-                  <Box
-                    sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                  ></Box>
-                </Box>
-              </Grid>
-              <Grid size={8}></Grid>
-            </Grid>
           </Box>
           <Box
             sx={{

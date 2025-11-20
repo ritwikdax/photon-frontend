@@ -23,25 +23,19 @@ export default function TrackingDetails() {
   return (
     <Box
       sx={{
+        border: 1,
+        borderColor: "divider",
+        borderRadius: 1,
+        p: 3,
+        bgcolor: "background.paper",
+        position: "relative",
+        m: 0,
+        fontFamily: "Inter, sans-serif",
+        overflow: "auto",
         width: "100%",
-        maxWidth: "100%",
+        boxSizing: "border-box",
       }}
     >
-      <Box
-        sx={{
-          border: 1,
-          borderColor: "divider",
-          borderRadius: 1,
-          p: 3,
-          bgcolor: "background.paper",
-          position: "relative",
-          m: "1rem auto",
-          fontFamily: "Inter, sans-serif",
-          overflow: "auto",
-          width: "100%",
-          boxSizing: "border-box",
-        }}
-      >
         <Typography variant="h6" sx={{ marginBottom: 2 }}>
           Tracking Details
         </Typography>
@@ -62,7 +56,6 @@ export default function TrackingDetails() {
             </Box>
           ))}
         </Stack>
-      </Box>
     </Box>
   );
 }

@@ -1,14 +1,18 @@
 "use client";
 import React from "react";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import { Box, Chip, Typography, Stack, IconButton, Tooltip } from "@mui/material";
+import { Box, Chip, Typography, Stack, IconButton, Tooltip, TextField, InputAdornment, Button } from "@mui/material";
 import { Project, ProjectStatus, BookingType, LeadType } from "../interfaces/data/interface";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
+import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import DescriptionIcon from "@mui/icons-material/Description";
+import { useRouter } from "next/navigation";
+import { useProjectSelected } from "../hooks/useProjectSelected";
 
 // Custom cell components
 const StatusCell = ({ value }: { value: ProjectStatus }) => {
@@ -131,37 +135,33 @@ const DateCell = ({ value }: { value: Date }) => {
   );
 };
 
-const TrackCountCell = ({ trackCount, lastTrackedAt }: { trackCount: number; lastTrackedAt: Date | null }) => {
+const ContractButtonCell = ({ project, onNavigate }: { project: Project; onNavigate: (project: Project) => void }) => {
   return (
-    <Stack alignItems="center" justifyContent="center" height="100%">
-      <Box display="flex" alignItems="center" gap={0.5}>
-        <TrendingUpIcon sx={{ fontSize: 16, color: "primary.main" }} />
-        <Typography variant="body2" fontWeight={600} color="primary">
-          {trackCount}
-        </Typography>
-      </Box>
-      {lastTrackedAt && (
-        <Typography variant="caption" color="text.secondary">
-          {new Date(lastTrackedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-        </Typography>
-      )}
-    </Stack>
+    <Button
+      variant="contained"
+      size="small"
+      startIcon={<DescriptionIcon />}
+      onClick={() => onNavigate(project)}
+      sx={{ fontWeight: 600 }}
+    >
+      Contract
+    </Button>
   );
 };
 
-const ActionsCell = ({ projectId, onView, onEdit }: { projectId: string; onView?: (id: string) => void; onEdit?: (id: string) => void }) => {
+const ActionsCell = ({ project, onView, onEdit }: { project: Project; onView?: (project: Project) => void; onEdit?: (project: Project) => void }) => {
   return (
     <Stack direction="row" spacing={0.5}>
       {onView && (
         <Tooltip title="View Details">
-          <IconButton size="small" color="primary" onClick={() => onView(projectId)}>
+          <IconButton size="small" color="primary" onClick={() => onView(project)}>
             <VisibilityIcon fontSize="small" />
           </IconButton>
         </Tooltip>
       )}
       {onEdit && (
         <Tooltip title="Edit Project">
-          <IconButton size="small" color="secondary" onClick={() => onEdit(projectId)}>
+          <IconButton size="small" color="secondary" onClick={() => onEdit(project)}>
             <EditIcon fontSize="small" />
           </IconButton>
         </Tooltip>
@@ -183,8 +183,10 @@ const NameCell = ({ name }: { name: string; projectId: string }) => {
 interface ProjectsDataGridProps {
   projects: Project[];
   loading?: boolean;
-  onViewProject?: (id: string) => void;
-  onEditProject?: (id: string) => void;
+  onViewProject?: (project: Project) => void;
+  onEditProject?: (project: Project) => void;
+  searchTerm?: string;
+  onSearchChange?: (value: string) => void;
 }
 
 const ProjectsDataGrid: React.FC<ProjectsDataGridProps> = ({
@@ -192,7 +194,16 @@ const ProjectsDataGrid: React.FC<ProjectsDataGridProps> = ({
   loading = false,
   onViewProject,
   onEditProject,
+  searchTerm = "",
+  onSearchChange,
 }) => {
+  const router = useRouter();
+  const { setSelectedProject } = useProjectSelected();
+
+  const handleContractClick = (project: Project) => {
+    setSelectedProject(project);
+    router.push("/contract");
+  };
   const columns: GridColDef[] = [
     {
       field: "name",
@@ -244,13 +255,14 @@ const ProjectsDataGrid: React.FC<ProjectsDataGridProps> = ({
       ),
     },
     {
-      field: "trackCount",
-      headerName: "Track Count",
-      width: 120,
+      field: "contract",
+      headerName: "Contract",
+      width: 140,
+      sortable: false,
       renderCell: (params: GridRenderCellParams<Project>) => (
-        <TrackCountCell 
-          trackCount={params.row.trackCount} 
-          lastTrackedAt={params.row.lastTrackedAt}
+        <ContractButtonCell 
+          project={params.row}
+          onNavigate={handleContractClick}
         />
       ),
     },
@@ -261,7 +273,7 @@ const ProjectsDataGrid: React.FC<ProjectsDataGridProps> = ({
       sortable: false,
       renderCell: (params: GridRenderCellParams<Project>) => (
         <ActionsCell
-          projectId={params.row.id}
+          project={params.row}
           onView={onViewProject}
           onEdit={onEditProject}
         />
@@ -270,8 +282,36 @@ const ProjectsDataGrid: React.FC<ProjectsDataGridProps> = ({
   ];
 
   return (
-    <Box sx={{ height: "calc(100vh - 150px)", width: "100%" }}>
-      <DataGrid
+    <Box sx={{ width: "100%" }}>
+      <Box sx={{ mb: 2 }}>
+        <TextField
+          size="small"
+          placeholder="Search.."
+          value={searchTerm}
+          onChange={(e) => onSearchChange?.(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon fontSize="small" />
+              </InputAdornment>
+            ),
+            endAdornment: searchTerm && (
+              <InputAdornment position="end">
+                <IconButton
+                  size="small"
+                  onClick={() => onSearchChange?.("")}
+                  edge="end"
+                >
+                  <ClearIcon fontSize="small" />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          sx={{ maxWidth: 400 }}
+        />
+      </Box>
+      <Box sx={{ height: "calc(100vh - 210px)", width: "100%" }}>
+        <DataGrid
         rows={projects || []}
         columns={columns}
         loading={loading}
@@ -301,6 +341,7 @@ const ProjectsDataGrid: React.FC<ProjectsDataGridProps> = ({
           },
         }}
       />
+      </Box>
     </Box>
   );
 };

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import CardContent from "@mui/material/CardContent";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Events from "./Events";
@@ -11,12 +10,7 @@ import ProjectDeliverables from "./ProjectDeliverables";
 import { useProjectSelected } from "../hooks/useProjectSelected";
 import Updates from "./Updates";
 import ImageSelection from "./ImageSelection";
-import useGenericQueries from "../queries/useGenericQueries";
-import { ImageSelectionEntry } from "../interfaces/data/interface";
 import useImageSelectionsDetails from "../queries/useImageSelectionDetails";
-import { Button } from "@mui/material";
-import { ContentCopy } from "@mui/icons-material";
-import { copyToClipboard } from "../utils/utils";
 import TrackingDetails from "./TrackingDetails";
 
 function TabPanel(props: {
@@ -34,7 +28,7 @@ function TabPanel(props: {
       {...other}
       style={{ width: "100%" }}
     >
-      {value === index && <Box sx={{ p: 2 }}>{children}</Box>}
+      {value === index && <Box sx={{pt: 1}}>{children}</Box>}
     </div>
   );
 }
@@ -80,7 +74,7 @@ const ProjectTabsCard: React.FC = () => {
         />
         <Tab label="Trackings" id="mui-tab-2" aria-controls="mui-tabpanel-2" />
       </Tabs>
-      <CardContent sx={{ p: 0 }}>
+      <Box>
         <TabPanel value={value} index={0}>
           <Events events={projectEvents || []} />
         </TabPanel>
@@ -103,7 +97,7 @@ const ProjectTabsCard: React.FC = () => {
           {/* Tracking Details Component */}
           <TrackingDetails />
         </TabPanel>
-      </CardContent>
+      </Box>
     </Box>
   );
 };

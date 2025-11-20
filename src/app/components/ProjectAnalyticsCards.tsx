@@ -145,7 +145,6 @@ export default function ProjectAnalyticsCards({
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
         gap: 2,
-        mb: 3,
       }}>
       <AnalyticsCard
         icon={<Assignment />}

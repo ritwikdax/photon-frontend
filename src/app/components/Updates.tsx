@@ -40,23 +40,13 @@ export default function Updates() {
     >
       <Box
         sx={{
-          columnCount: 2,
-          columnGap: 3,
-          px: 2,
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
         }}
       >
         {updates.map((update) => (
-          <Box
-            key={update.id}
-            sx={{
-              breakInside: "avoid",
-              marginBottom: 3,
-              display: "inline-block",
-              width: "100%",
-            }}
-          >
-            <Update update={update} />
-          </Box>
+          <Update key={update.id} update={update} />
         ))}
       </Box>
     </Box>

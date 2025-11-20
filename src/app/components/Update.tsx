@@ -141,9 +141,10 @@ export default function Update({ update, onEdit, onDelete }: UpdateProps) {
         borderRadius: 1,
         backgroundColor: "background.paper",
         borderColor: "divider",
+        width: "100%",
       }}
     >
-      <CardContent>
+      <CardContent sx={{ width: "100%" }}>
         {/* Update Header */}
         <Box
           sx={{

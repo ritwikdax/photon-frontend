@@ -143,6 +143,7 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
         width: "100%",
         bgcolor: "white",
         p: 3,
+        mb: 2,
         borderRadius: 1,
         border: "1px solid",
         borderColor: "divider",

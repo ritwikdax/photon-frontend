@@ -29,7 +29,7 @@ export default function Dashboard() {
     <Box>
       <Grid container spacing={2}>
         <Grid size={5}>
-          <Typography variant="h4" sx={{ mb: 3, fontWeight: 700 }}>
+          <Typography variant="h4" sx={{ mb: 2, fontWeight: 700 }}>
             {selectedProject?.name || "No Project Selected"}
           </Typography>
           <Box

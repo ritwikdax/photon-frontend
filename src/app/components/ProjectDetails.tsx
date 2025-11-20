@@ -87,7 +87,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project, onEdit }) => {
         p: 3,
         bgcolor: "background.paper",
         position: "relative",
-        m: "1rem auto",
+        mb: 2,
         fontFamily: "Inter, sans-serif",
       }}
     >

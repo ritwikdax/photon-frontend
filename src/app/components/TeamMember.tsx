@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
-import { Box, Typography, Chip, Stack } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Typography, Chip, Stack, Popover } from "@mui/material";
 import { Employee } from "../interfaces/data/interface";
 import useGenericQueries from "../queries/useGenericQueries";
 import StarIcon from "@mui/icons-material/Star";
@@ -12,9 +12,20 @@ interface TeamMemberProps {
 
 export default function TeamMember({ employeeId, isLead }: TeamMemberProps) {
   const { data: employees } = useGenericQueries<Employee[]>("employees", `fields=name,expertise&id=${employeeId}`);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   
   const employee = employees && employees[0];
   console.log("TeamMember employee:", employee);
+
+  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
 
   if (!employee) {
     return (
@@ -37,8 +48,16 @@ export default function TeamMember({ employeeId, isLead }: TeamMemberProps) {
       }}
     >
       <Box sx={{ flex: 1 }}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
-          <Typography variant="subtitle2" fontWeight={600}>
+        <Box 
+          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          onMouseEnter={handlePopoverOpen}
+          onMouseLeave={handlePopoverClose}
+        >
+          <Typography 
+            variant="subtitle2" 
+            fontWeight={600}
+            sx={{ cursor: "pointer" }}
+          >
             {employee?.name}
           </Typography>
           {isLead && (
@@ -51,17 +70,41 @@ export default function TeamMember({ employeeId, isLead }: TeamMemberProps) {
             />
           )}
         </Box>
-        <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{marginTop: "8px"}}>
-          {employee?.expertise?.map((skill, index) => (
-            <Chip
-              key={index}
-              label={skill}
-              size="small"
-              variant="outlined"
-              sx={{ height: 22, fontSize: "0.75rem", margin: "4px"}}
-            />
-          ))}
-        </Stack>
+        
+        <Popover
+          sx={{
+            pointerEvents: "none",
+          }}
+          open={open}
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          onClose={handlePopoverClose}
+          disableRestoreFocus
+        >
+          <Box sx={{ p: 2, maxWidth: 300 }}>
+            <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: "block" }}>
+              Skills & Expertise
+            </Typography>
+            <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
+              {employee?.expertise?.map((skill, index) => (
+                <Chip
+                  key={index}
+                  label={skill}
+                  size="small"
+                  variant="outlined"
+                  sx={{ height: 22, fontSize: "0.75rem", margin: "2px" }}
+                />
+              ))}
+            </Stack>
+          </Box>
+        </Popover>
       </Box>
     </Box>
   );

@@ -88,7 +88,8 @@ export default function AppHeader({ onMenuClick, onDesktopMenuClick, desktopOpen
             </Typography>
           )}
         </div>
-        <AutoCompleteDropdown />
+        {/* <AutoCompleteDropdown /> */}
+        
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <AddMenu />
           {session?.user && (

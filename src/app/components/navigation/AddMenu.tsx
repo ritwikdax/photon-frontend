@@ -10,7 +10,7 @@ import {
   Divider,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { ROOT_LEVEL_ADD_ITEMS, PROJECT_LEVEL_ADD_ITEMS } from "./constants";
 import AddProjectDeliverableForm from "../forms/AddProjectDeliverableForm";
 import AddEventForm from "../forms/AddEventForm";
@@ -21,8 +21,12 @@ import useAddMutataion from "@/app/mutations/useAddMutataion";
 export default function AddMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
   const { openDialog, closeDialog } = useDialog();
   const addUpdateMutation = useAddMutataion("updates", false);
+
+  // Show project-level items only on /project page
+  const isProjectPage = pathname === "/project";
 
   const handleAddMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -109,15 +113,19 @@ export default function AddMenu() {
             </MenuItem>
           ))}
           
-          <Divider sx={{ my: 1 }} />
-          
-          <ListSubheader>Project Level</ListSubheader>
-          {PROJECT_LEVEL_ADD_ITEMS.map((item, index) => (
-            <MenuItem key={item.path || `project-item-${index}`} onClick={() => handleAddMenuItem(item)}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText>{item.text}</ListItemText>
-            </MenuItem>
-          ))}
+          {isProjectPage && (
+            <>
+              <Divider sx={{ my: 1 }} />
+              
+              <ListSubheader>Project Level</ListSubheader>
+              {PROJECT_LEVEL_ADD_ITEMS.map((item, index) => (
+                <MenuItem key={item.path || `project-item-${index}`} onClick={() => handleAddMenuItem(item)}>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText>{item.text}</ListItemText>
+                </MenuItem>
+              ))}
+            </>
+          )}
         </MenuList>
       </Menu>
     </>
