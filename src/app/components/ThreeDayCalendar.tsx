@@ -270,15 +270,16 @@ export default function ThreeDayCalendar({ onDateRangeChange, onEventClick }: Th
                     size="small"
                 >
                     <TableHead>
-                        <TableRow sx={{ backgroundColor: 'primary.main' }}>
+                        <TableRow>
                             <TableCell 
                                 sx={{ 
                                     fontWeight: 'bold',
-                                    color: 'white',
                                     minWidth: 250,
                                     width: '20%',
-                                    borderRight: '1px solid rgba(224, 224, 224, 1)',
-                                    backgroundColor: 'primary.main',
+                                    borderRight: '1px solid',
+                                    borderBottom: '2px solid',
+                                    borderColor: 'divider',
+                                    backgroundColor: 'background.paper',
                                     position: 'sticky',
                                     top: 0,
                                     zIndex: 10
@@ -292,10 +293,11 @@ export default function ThreeDayCalendar({ onDateRangeChange, onEventClick }: Th
                                     align="center"
                                     sx={{ 
                                         fontWeight: 'bold',
-                                        color: 'white',
                                         width: '26.67%',
-                                        backgroundColor: isToday(day) ? 'primary.dark' : 'primary.main',
-                                        borderRight: index < 2 ? '1px solid rgba(224, 224, 224, 1)' : 'none',
+                                        backgroundColor: isToday(day) ? 'action.selected' : 'background.paper',
+                                        borderRight: index < 2 ? '1px solid' : 'none',
+                                        borderBottom: '2px solid',
+                                        borderColor: 'divider',
                                         position: 'sticky',
                                         top: 0,
                                         zIndex: 10
@@ -318,9 +320,6 @@ export default function ThreeDayCalendar({ onDateRangeChange, onEventClick }: Th
                             filteredData.map(({ project, events }: ProjectWithEvents) => (
                                 <TableRow 
                                     key={project.id}
-                                    sx={{ 
-                                        '&:hover': { backgroundColor: 'action.hover' }
-                                    }}
                                 >
                                     <TableCell 
                                         component="th" 

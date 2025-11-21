@@ -15,13 +15,9 @@ export default function DrawerContent() {
       <Box sx={{ p: 2, display: "flex", justifyContent: "center" }}>
         <Fab
           variant="extended"
+          color="primary"
           sx={{
-            backgroundColor: "#b70058ff",
-            color: "white",
             width: "100%",
-            "&:hover": {
-              backgroundColor: "#950047",
-            },
           }}
           onClick={() => {
             navigate.push("/project/add");

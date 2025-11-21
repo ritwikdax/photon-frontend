@@ -86,8 +86,6 @@ export default function AddProjectForm({
         mx: "auto",
         mt: 4,
         mb: 4,
-        bgcolor: "white",
-        borderRadius: 2,
       }}>
       <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 3 }}>
         Add New Project

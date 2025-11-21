@@ -35,9 +35,10 @@ export default function CopyUrlText({
         alignItems: 'flex-start', 
         gap: 1,
         padding: 1,
-        border: '1px solid #e0e0e0',
+        border: '1px solid',
+        borderColor: 'divider',
         borderRadius: 1,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: 'action.hover',
         maxWidth: '100%',
         minWidth: 0,
         width: '100%'

@@ -77,7 +77,7 @@ export default function AddMenu() {
   return (
     <>
       <Button
-        sx={{ marginLeft: "20px", backgroundColor: "#b70058ff" }}
+        sx={{ marginLeft: "20px" }}
         variant="contained"
         startIcon={<Add />}
         onClick={handleAddMenuOpen}

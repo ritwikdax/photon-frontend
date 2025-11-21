@@ -103,7 +103,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
         sx={{
           flexGrow: 1,
           p: 3,
-          backgroundColor: "#f5f5f5",
+          backgroundColor: (theme) => theme.palette.background.default,
           minHeight: "100vh",
           transition: (theme) => theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.sharp,

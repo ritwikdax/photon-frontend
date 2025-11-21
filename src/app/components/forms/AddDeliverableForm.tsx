@@ -121,8 +121,6 @@ export default function AddDeliverableForm({ onSubmit, isLoading = false, delive
       mx: "auto", 
       mt: 4, 
       mb: 4, 
-      bgcolor: "white", 
-      borderRadius: 2,
       maxHeight: "calc(100vh - 120px)",
       overflow: "auto"
     }}>

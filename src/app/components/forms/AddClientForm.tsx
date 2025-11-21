@@ -50,7 +50,7 @@ export default function AddClientForm({ onSubmit, isLoading = false }: AddClient
   };
 
   return (
-    <Box sx={{ p: 4, maxWidth: 900, mx: "auto", mt: 4, mb: 4, bgcolor: "white", borderRadius: 2 }}>
+    <Box sx={{ p: 4, maxWidth: 900, mx: "auto", mt: 4, mb: 4}}>
       <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 3 }}>
         Add New Client
       </Typography>

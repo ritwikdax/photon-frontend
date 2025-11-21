@@ -244,7 +244,6 @@ export const Event: React.FC<EventProps> = ({ event }) => {
                 startDateTime={getEventDateTime()}
                 endDateTime={getEventEndDateTime()}
                 venue={venue}
-                color="#1976d2"
               />
             </Box>
 
@@ -345,7 +344,7 @@ export const Event: React.FC<EventProps> = ({ event }) => {
                               <FiberManualRecordIcon 
                                 sx={{ 
                                   fontSize: 8, 
-                                  color: "#1976d2"
+                                  color: "primary"
                                 }} 
                               />
                             )}

@@ -147,7 +147,7 @@ export default function AddEventForm({
 
   const eventDate = watch("eventDate");
   const eventStartTime = watch("eventStartTime");
-  
+
   // Combine date and time for occupied users query
   const startDateTimeValue = React.useMemo(() => {
     if (!eventDate || !eventStartTime) return "";
@@ -160,9 +160,9 @@ export default function AddEventForm({
     if (!eventDate || !eventStartTime) return "";
     const date = eventDate.format("YYYY-MM-DD");
     const time = eventStartTime.format("HH:mm");
-    return dayjs(`${date}T${time}`).add(4, 'hour').toISOString();
+    return dayjs(`${date}T${time}`).add(4, "hour").toISOString();
   }, [eventDate, eventStartTime]);
-  
+
   const { data: occupiedIds } = useOccupiedUserIds(
     startDateTimeValue,
     endDateTimeValue
@@ -249,7 +249,8 @@ export default function AddEventForm({
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
-        sx={{ p: 3, minWidth: 600 }}>
+        sx={{ p: 3, minWidth: 600 }}
+      >
         <Typography variant="h6" component="h2" gutterBottom>
           {isEditMode ? "Edit Event" : "Add Event to Project"}
         </Typography>
@@ -498,7 +499,8 @@ export default function AddEventForm({
               display="flex"
               justifyContent="space-between"
               alignItems="center"
-              mb={2}>
+              mb={2}
+            >
               <Typography variant="subtitle1" fontWeight="medium">
                 Team Members
               </Typography>
@@ -506,7 +508,8 @@ export default function AddEventForm({
                 startIcon={<AddIcon />}
                 onClick={handleAddTeamMember}
                 variant="outlined"
-                size="small">
+                size="small"
+              >
                 Add Team Member
               </Button>
             </Box>
@@ -520,7 +523,7 @@ export default function AddEventForm({
 
             <Stack spacing={2}>
               {fields.map((field, index) => (
-                <Paper key={field.id} elevation={0} sx={{ p: 2 }}>
+                <Paper key={field.id} sx={{ p: 2, bgcolor: 'transparent', border: '1px solid', borderColor: 'divider', boxShadow: 'none' }}>
                   <Box display="flex" gap={2} alignItems="flex-start">
                     <Box flex={1}>
                       <Controller
@@ -576,21 +579,24 @@ export default function AddEventForm({
                                 <li
                                   {...props}
                                   key={option.id}
-                                  aria-disabled={isOccupied}>
+                                  aria-disabled={isOccupied}
+                                >
                                   <Box>
                                     <Typography variant="body1">
                                       {option.name}
                                     </Typography>
                                     <Typography
                                       variant="caption"
-                                      color="text.secondary">
+                                      color="text.secondary"
+                                    >
                                       {option?.expertise?.join(", ")}
                                     </Typography>
                                     {isOccupied ? (
                                       <Typography
                                         variant="caption"
                                         color="error"
-                                        sx={{ display: "block" }}>
+                                        sx={{ display: "block" }}
+                                      >
                                         Occupied
                                       </Typography>
                                     ) : null}
@@ -627,7 +633,8 @@ export default function AddEventForm({
                     <IconButton
                       color="error"
                       onClick={() => remove(index)}
-                      sx={{ mt: 1 }}>
+                      sx={{ mt: 1 }}
+                    >
                       <DeleteIcon />
                     </IconButton>
                   </Box>
@@ -644,7 +651,8 @@ export default function AddEventForm({
               <Button
                 variant="outlined"
                 onClick={onCancel}
-                disabled={mutation.isPending}>
+                disabled={mutation.isPending}
+              >
                 Cancel
               </Button>
             )}
@@ -652,12 +660,7 @@ export default function AddEventForm({
               type="submit"
               variant="contained"
               disabled={mutation.isPending}
-              sx={{
-                backgroundColor: "#b70058ff",
-                "&:hover": {
-                  backgroundColor: "#8a0043ff",
-                },
-              }}>
+            >
               {mutation.isPending
                 ? isEditMode
                   ? "Updating..."

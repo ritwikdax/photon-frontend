@@ -202,13 +202,9 @@ export default function AddProjectDeliverableForm({
                   onClick={(event) => handleAddDeliverable(deliverable, event)}
                   disabled={!projectId || (addMutation.isPending && addingDeliverableId === deliverable.id)}
                   sx={{ 
-                    backgroundColor: "#b70058ff",
                     minWidth: "100px",
                     ml: 2,
                     flexShrink: 0,
-                    "&:hover": {
-                      backgroundColor: "#8a0043ff",
-                    },
                   }}
                 >
                   {(addMutation.isPending && addingDeliverableId === deliverable.id) ? "Adding..." : "Add"}

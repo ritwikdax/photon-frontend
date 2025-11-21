@@ -383,15 +383,15 @@ export default function ImageSelection({
               sx={{
                 mt: 3,
                 p: 3,
-                backgroundColor: "grey.50",
+                backgroundColor: "action.hover",
                 border: "1px solid",
-                borderColor: "grey.200",
+                borderColor: "divider",
                 borderRadius: 3,
                 textAlign: "center",
                 transition: "all 0.2s ease-in-out",
                 "&:hover": {
-                  backgroundColor: "grey.100",
-                  borderColor: "grey.300",
+                  backgroundColor: "action.selected",
+                  borderColor: "primary.main",
                 },
               }}
             >

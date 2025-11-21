@@ -215,11 +215,11 @@ export default function Update({ update, onEdit, onDelete }: UpdateProps) {
         {update.description && (
           <Box
             sx={{
-              bgcolor: "grey.50",
+              bgcolor: (theme) => theme.palette.mode === "light" ? "grey.50" : "background.default",
               p: 2,
               borderRadius: 1,
               border: "1px solid",
-              borderColor: "grey.200",
+              borderColor: "divider",
             }}
           >
             <Typography

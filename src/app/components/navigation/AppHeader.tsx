@@ -5,7 +5,6 @@ import {
   Toolbar,
   Typography,
   IconButton,
-  Button,
   Avatar,
   Box,
   Tooltip,
@@ -13,7 +12,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AddMenu from "./AddMenu";
-import AutoCompleteDropdown from "../forms/Autocomplete";
+import ThemeSwitcher from "./ThemeSwitcher";
 import { useSession, signOut } from "next-auth/react";
 import { useMerchantDetails } from "@/app/queries/useMerchantDetails";
 
@@ -42,7 +41,6 @@ export default function AppHeader({ onMenuClick, onDesktopMenuClick, desktopOpen
       position="fixed"
       sx={{
         zIndex: (theme) => theme.zIndex.drawer + 1,
-        backgroundColor: "#001c3dff",
         boxShadow: "none",
       }}
     >
@@ -91,6 +89,7 @@ export default function AppHeader({ onMenuClick, onDesktopMenuClick, desktopOpen
         {/* <AutoCompleteDropdown /> */}
         
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <ThemeSwitcher />
           <AddMenu />
           {session?.user && (
             <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>

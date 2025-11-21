@@ -15,7 +15,6 @@ export const CalendarEvent: React.FC<CalendarEventProps> = ({
   startDateTime,
   endDateTime,
   venue,
-  color = "#1976d2",
 }) => {
   // Format date to readable format
   const formatDate = (date: Date): string => {
@@ -73,7 +72,7 @@ export const CalendarEvent: React.FC<CalendarEventProps> = ({
         <Grid size={6}>
           {/* Start Date & Time */}
           <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1.5 }}>
-            <EventIcon sx={{ fontSize: 20, color: color, mt: 0.2 }} />
+            <EventIcon sx={{ fontSize: 20, mt: 0.2, color: 'primary.main'}} />
             <Box sx={{ flex: 1 }}>
               <Typography
                 variant="caption"
@@ -92,10 +91,7 @@ export const CalendarEvent: React.FC<CalendarEventProps> = ({
               >
                 {formatDate(startDateTime)}
               </Typography>
-              <Typography
-                variant="body2"
-                sx={{ color: color, fontWeight: 600 }}
-              >
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>
                 {formatTime(startDateTime)}
               </Typography>
             </Box>
@@ -104,7 +100,7 @@ export const CalendarEvent: React.FC<CalendarEventProps> = ({
         <Grid size={6}>
           {/* Start Date & Time */}
           <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1.5 }}>
-            <LocationOnIcon sx={{ fontSize: 20, color: color }} />
+            <LocationOnIcon sx={{ fontSize: 20, color: 'primary.main' }} />
             <Box sx={{ flex: 1 }}>
               <Typography
                 variant="caption"

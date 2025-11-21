@@ -119,7 +119,6 @@ export default function Deliverable({ deliverable, onEdit, onDelete }: Deliverab
   return (
     <Box
       sx={{
-        bgcolor: "white",
         p: 3,
         borderRadius: 1,
         border: "1px solid",

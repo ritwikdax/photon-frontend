@@ -141,7 +141,7 @@ export default function Deliverable({ deliverable }: DeliverableProps) {
     <Box
       sx={{
         width: "100%",
-        bgcolor: "white",
+        bgcolor: "background.paper",
         p: 3,
         mb: 2,
         borderRadius: 1,

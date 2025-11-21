@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { createTheme, ThemeOptions, ThemeProvider } from "@mui/material";
 import { SnackbarProvider } from "./SnackbarContext";
 import { DialogProvider } from "./DialogContext";
 import AuthProvider from "./AuthContext";
+import { ThemeProvider } from "./ThemeContext";
 
 const client = new QueryClient({
   defaultOptions: {
@@ -29,26 +29,10 @@ export default function AllContextProviders({
 }) {
   console.log("Rendering AllContextProviders");
 
-  const themeOptions: ThemeOptions = {
-    // palette: {
-    //   mode: "dark",
-    //   primary: {
-    //     main: "#5893df",
-    //   },
-    //   secondary: {
-    //     main: "#2ec5d3",
-    //   },
-    //   background: {
-    //     default: "#03050aff",
-    //     paper: "#000000ff",
-    //   },
-    // },
-  };
-  const theme = createTheme(themeOptions);
   return (
     <AuthProvider>
       <QueryClientProvider client={client}>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider>
           <SnackbarProvider>
             <DialogProvider>{children}</DialogProvider>
           </SnackbarProvider>

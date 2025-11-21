@@ -363,12 +363,6 @@ export default function AddUpdateForm({
             type="submit"
             variant="contained"
             disabled={isLoading}
-            sx={{
-              backgroundColor: "#b70058ff",
-              "&:hover": {
-                backgroundColor: "#8a0043ff",
-              },
-            }}
           >
             {isLoading
               ? isEditMode
