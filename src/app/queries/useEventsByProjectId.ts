@@ -13,7 +13,7 @@ export default function useProjectEvents(projectId: string) {
 
 async function fetchProjectEvents(id: string) {
   // Replace with actual API call
-  const { data } = await http.get(`/api/events?projectId=${id}`);
+  const { data } = await http.get<Event[]>(`/api/events?projectId=${id}`);
   console.log(data);
   return data;
 }

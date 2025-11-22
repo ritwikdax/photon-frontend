@@ -3,6 +3,7 @@ import { ColorTheme } from "../context/ThemeContext";
 import { NEON_DARK, NEON_LIGHT } from "./neon";
 import { MINIMALIST_DARK, MINIMALIST_LIGHT } from "./minimalist";
 import { SLACK_DARK, SLACK_LIGHT } from "./slack";
+import { BLUE_THEME } from "./blue";
 
 export const THEME : Record<ColorTheme, ThemeOptions>= {
     'mini_dark': MINIMALIST_DARK,
@@ -11,4 +12,5 @@ export const THEME : Record<ColorTheme, ThemeOptions>= {
     'neon_light': NEON_LIGHT,
     'slack_light': SLACK_LIGHT,
     'slack_dark': SLACK_DARK,
+    'blue': BLUE_THEME,
 }

@@ -1,22 +1,15 @@
 "use client";
-import { Box, Button, Grid, Stack, Typography } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import ProjectAnalyticsCards from "../components/ProjectAnalyticsCards";
-import { ContentCopy } from "@mui/icons-material";
 import { useProjectSelected } from "../hooks/useProjectSelected";
 import ProjectDetails from "../components/ProjectDetails";
 import ProjectTabsCard from "../components/ProjectTabsCard";
 import { useSnackbar } from "../context/SnackbarContext";
 import NoProjectSelected from "../components/NoProjectSelected";
+import ProjectSelector from "../components/ProjectSelector";
 
 export default function Dashboard() {
   const snackbar = useSnackbar();
-  async function copyToClipboard(text: string) {
-    try {
-      await navigator.clipboard.writeText(text);
-    } catch (err) {
-      console.error("Failed to copy:", err);
-    }
-  }
 
   const { selectedProject } = useProjectSelected();
 
@@ -29,9 +22,7 @@ export default function Dashboard() {
     <Box>
       <Grid container spacing={2}>
         <Grid size={5}>
-          <Typography variant="h4" sx={{ mb: 2, fontWeight: 700 }}>
-            {selectedProject?.name || "No Project Selected"}
-          </Typography>
+          <ProjectSelector />
           <Box
             sx={{
               height: "calc(100vh - 200px)",
