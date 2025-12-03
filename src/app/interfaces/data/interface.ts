@@ -194,6 +194,34 @@ export interface MerchantDetails {
     tagline: string;
     phone: string;
     email: string;
-
   };
+}
+
+export interface Contract{
+  contractDate: string;
+  merchant: MerchantDetails;
+  client: Client;
+  events: Array<{
+    eventDate: string;
+    venue: string;
+    assignment: string;
+    team: string;
+  }>;
+  deliverables: ProjectDeliverable[];
+  project: Project;
+}
+
+
+
+//Convention for Projec
+export interface Quotation extends Entity {
+  clientName: string;
+  eventDate: Date;
+  quotationType: BookingType;
+  events: Event[];
+  deliverables: Array<string>; //Array of Deliverable IDs
+  totalAmount?: number;
+  validity: number; //In days ie no of days from creation
+
+
 }

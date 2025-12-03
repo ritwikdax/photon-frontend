@@ -25,6 +25,9 @@ const colorThemeOptions: { value: ColorTheme; label: string; color: string }[] =
   { value: "slack_dark", label: "Slack Dark", color: "#000000ff" },
   { value: "slack_light", label: "Slack Light", color: "#e0e0e0ff" },
   { value: "blue", label: "Blue Theme", color: "#1976d2ff" },
+  { value: "apple_light", label: "Apple Light", color: "#e8e8e8ff" },
+  { value: "apple_dark", label: "Apple Dark", color: "#1a1a1aff" },
+
 ];
 
 export default function ThemeSwitcher() {

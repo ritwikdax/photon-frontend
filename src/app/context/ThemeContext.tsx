@@ -15,7 +15,7 @@ import { PaletteMode } from "@mui/material";
 import { THEME } from "../themes";
 
 // Available color themes
-export type ColorTheme = "neon_dark" | "neon_light" | "slack_light" | "slack_dark" | "mini_dark" | "mini_light" | "blue";
+export type ColorTheme = "neon_dark" | "neon_light" | "slack_light" | "slack_dark" | "mini_dark" | "mini_light" | "blue" | "apple_light" | "apple_dark";
 
 // Theme context type
 type ThemeContextType = {

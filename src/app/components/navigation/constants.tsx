@@ -9,6 +9,8 @@ import TaskIcon from "@mui/icons-material/Task";
 import FolderIcon from "@mui/icons-material/Folder";
 import DescriptionIcon from "@mui/icons-material/Description";
 import GroupsIcon from "@mui/icons-material/Groups";
+import GavelIcon from "@mui/icons-material/Gavel";
+import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
 
 export const DRAWER_WIDTH = 240;
 
@@ -18,14 +20,36 @@ export interface MenuItem {
   icon: React.ReactElement;
 }
 
-export const NAVIGATION_MENU_ITEMS: MenuItem[] = [
-  { text: "Dashboard", path: "/", icon: <DashboardIcon /> },
-  { text: "Team Assignment", path: "/assignment", icon: <GroupsIcon /> },
-  { text: "Events Calendar", path: "/events", icon: <EventIcon /> },
-  { text: "Deliverables", path: "/deliverables", icon: <AssignmentIcon /> },
-  { text: "Employees", path: "/employees", icon: <PeopleIcon /> },
-  { text: "Clients", path: "/clients", icon: <BusinessIcon /> },
+export interface MenuGroup {
+  heading?: string;
+  items: MenuItem[];
+}
+
+export const NAVIGATION_MENU_GROUPS: MenuGroup[] = [
+  {
+    heading: "Main",
+    items: [
+      { text: "Dashboard", path: "/", icon: <DashboardIcon /> },
+      { text: "Team Assignment", path: "/assignment", icon: <GroupsIcon /> },
+      { text: "Events Calendar", path: "/events", icon: <EventIcon /> },
+      { text: "Deliverables", path: "/deliverables", icon: <AssignmentIcon /> },
+      { text: "Employees", path: "/employees", icon: <PeopleIcon /> },
+      { text: "Clients", path: "/clients", icon: <BusinessIcon /> },
+    ],
+  },
+  {
+    heading: "Templates",
+    items: [
+      { text: "Contract", path: "/templates/contracts", icon: <GavelIcon /> },
+      { text: "Quotation", path: "/templates/quotes", icon: <RequestQuoteIcon /> },
+    ],
+  },
 ];
+
+// Legacy: Flat array for backwards compatibility
+export const NAVIGATION_MENU_ITEMS: MenuItem[] = NAVIGATION_MENU_GROUPS.flatMap(
+  (group) => group.items
+);
 
 export interface AddMenuItem {
   text: string;
