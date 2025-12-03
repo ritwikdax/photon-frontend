@@ -7,16 +7,12 @@ import {
   ListItemIcon,
   ListSubheader,
 } from "@mui/material";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { NAVIGATION_MENU_GROUPS } from "./constants";
 
 export default function NavigationMenu() {
-  const router = useRouter();
   const pathname = usePathname();
-
-  const handleNavigation = (path: string) => {
-    router.push(path);
-  };
 
   return (
     <>
@@ -48,8 +44,9 @@ export default function NavigationMenu() {
             return (
               <ListItem key={item.text} disablePadding>
                 <ListItemButton
+                  component={Link}
+                  href={item.path}
                   selected={isActive}
-                  onClick={() => handleNavigation(item.path)}
                   sx={{
                     textDecoration: "none",
                     width: "100%",

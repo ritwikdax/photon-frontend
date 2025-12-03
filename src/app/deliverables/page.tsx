@@ -1,14 +1,13 @@
 "use client";
-import Deliverables from "../components/Deliverables";
-import { Deliverable } from "../interfaces/data/interface";
-import useGenericQueries from "../queries/useGenericQueries";
+import dynamic from "next/dynamic";
+import Loading from "./loading";
 
-export default function DeliverablesPage() {
-  const { data } = useGenericQueries<Deliverable[]>("deliverables");
-  console.log(data);
-  return (
-    <div>
-      <Deliverables deliverables={data ?? []} />
-    </div>
-  );
+// Lazy load the deliverables component
+const DeliverablesPage = dynamic(() => import("./deliverables"), {
+  loading: () => <Loading />,
+  ssr: false,
+});
+
+export default function Page() {
+  return <DeliverablesPage />;
 }
