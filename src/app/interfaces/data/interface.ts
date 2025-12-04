@@ -181,6 +181,7 @@ export interface SelectedImage extends Entity {
   imageFileName: string;
   folderId: string;
   folderName: string;
+  note?: string;
 }
 
 export interface MerchantDetails {
@@ -197,7 +198,7 @@ export interface MerchantDetails {
   };
 }
 
-export interface Contract{
+export interface Contract {
   contractDate: string;
   merchant: MerchantDetails;
   client: Client;
@@ -211,8 +212,6 @@ export interface Contract{
   project: Project;
 }
 
-
-
 //Convention for Projec
 export interface Quotation extends Entity {
   clientName: string;
@@ -222,6 +221,4 @@ export interface Quotation extends Entity {
   deliverables: Array<string>; //Array of Deliverable IDs
   totalAmount?: number;
   validity: number; //In days ie no of days from creation
-
-
 }

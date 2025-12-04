@@ -12,6 +12,7 @@ import Updates from "./Updates";
 import ImageSelection from "./ImageSelection";
 import useImageSelectionsDetails from "../queries/useImageSelectionDetails";
 import TrackingDetails from "./TrackingDetails";
+import SelectedImageNotes from "./SelectedImageNotes";
 
 function TabPanel(props: {
   children?: React.ReactNode;
@@ -26,9 +27,8 @@ function TabPanel(props: {
       id={`mui-tabpanel-${index}`}
       aria-labelledby={`mui-tab-${index}`}
       {...other}
-      style={{ width: "100%" }}
-    >
-      {value === index && <Box sx={{pt: 1}}>{children}</Box>}
+      style={{ width: "100%" }}>
+      {value === index && <Box sx={{ pt: 1 }}>{children}</Box>}
     </div>
   );
 }
@@ -58,8 +58,7 @@ const ProjectTabsCard: React.FC = () => {
         value={value}
         onChange={handleChange}
         aria-label="project tabs"
-        variant="standard"
-      >
+        variant="standard">
         <Tab label="Events" id="mui-tab-0" aria-controls="mui-tabpanel-0" />
         <Tab
           label="Deliverables"
@@ -85,13 +84,21 @@ const ProjectTabsCard: React.FC = () => {
           <Updates />
         </TabPanel>
         <TabPanel value={value} index={3}>
-          <ImageSelection
-            imageSelection={
-              imageSelectionDetails && imageSelectionDetails?.length > 0
-                ? imageSelectionDetails[0]
-                : undefined
-            }
-          />
+          <Box
+            sx={{
+              width: "100%",
+              maxHeight: "calc(100vh - 200px)",
+              overflowY: "auto",
+            }}>
+            <ImageSelection
+              imageSelection={
+                imageSelectionDetails && imageSelectionDetails?.length > 0
+                  ? imageSelectionDetails[0]
+                  : undefined
+              }
+            />
+            <SelectedImageNotes projectId={selectedProject?.id || ""} />
+          </Box>
         </TabPanel>
         <TabPanel value={value} index={4}>
           {/* Tracking Details Component */}
