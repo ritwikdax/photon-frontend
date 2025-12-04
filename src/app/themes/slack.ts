@@ -5,32 +5,32 @@ export const SLACK_LIGHT: ThemeOptions = {
     mode: "light",
 
     primary: {
-      main: "#532755",      // Slack-like plum purple
+      main: "#532755", // Slack-like plum purple
       light: "#7A3B7E",
       dark: "#38173A",
       contrastText: "#FFFFFF",
     },
 
     secondary: {
-      main: "#F9F1FF",      // Light lavender surface
+      main: "#F9F1FF", // Light lavender surface
     },
 
     background: {
-      default: "#FCFFFC",   // Soft mint-white
-      paper: "#FFFFFF",     // Clean white cards
+      default: "#FCFFFC", // Soft mint-white
+      paper: "#FFFFFF", // Clean white cards
     },
 
     text: {
-      primary: "#1A1A1A",   // Dark gray-black
+      primary: "#1A1A1A", // Dark gray-black
       secondary: "#5A5A5A", // Slack-style muted text
     },
 
     divider: "rgba(0,0,0,0.08)",
 
-    success: { main: "#2EB67D" },  // Slack green
-    error:   { main: "#E01E5A" },  // Slack red
-    warning: { main: "#ECB22E" },  // Slack yellow
-    info:    { main: "#36C5F0" },  // Slack teal
+    success: { main: "#2EB67D" }, // Slack green
+    error: { main: "#E01E5A" }, // Slack red
+    warning: { main: "#ECB22E" }, // Slack yellow
+    info: { main: "#36C5F0" }, // Slack teal
   },
 
   shape: {
@@ -198,12 +198,14 @@ export const SLACK_LIGHT: ThemeOptions = {
     // ---------------------------
     MuiChip: {
       styleOverrides: {
-        root: {
+        root: ({ ownerState }: any) => ({
           borderRadius: 6,
-          background: "#F9F1FF",
-          color: "#532755",
           fontWeight: 600,
-        },
+          ...(ownerState.color === "default" && {
+            background: "#F9F1FF",
+            color: "#532755",
+          }),
+        }),
       },
     },
 
@@ -220,8 +222,7 @@ export const SLACK_LIGHT: ThemeOptions = {
       },
     },
   },
-}
-
+};
 
 export const SLACK_DARK: ThemeOptions = {
   palette: {
@@ -229,7 +230,7 @@ export const SLACK_DARK: ThemeOptions = {
 
     // Slack's signature deep purple
     primary: {
-      main: "#BEA2C2",      // Soft plum-accent for dark mode
+      main: "#BEA2C2", // Soft plum-accent for dark mode
       light: "#CDB0D2",
       dark: "#8D6F95",
       contrastText: "#0D0A0E",
@@ -237,12 +238,12 @@ export const SLACK_DARK: ThemeOptions = {
 
     // Secondary lavender BG
     secondary: {
-      main: "#3B2C4A",       // Dark lavender panel (Slack-inspired)
+      main: "#3B2C4A", // Dark lavender panel (Slack-inspired)
     },
 
     background: {
-      default: "#1A1D21",    // Slack dark gray background
-      paper: "#232529",      // Slightly lighter panel
+      default: "#1A1D21", // Slack dark gray background
+      paper: "#232529", // Slightly lighter panel
     },
 
     text: {
@@ -255,9 +256,9 @@ export const SLACK_DARK: ThemeOptions = {
 
     // Slack branding colors
     success: { main: "#2EB67D" },
-    error:   { main: "#E01E5A" },
+    error: { main: "#E01E5A" },
     warning: { main: "#ECB22E" },
-    info:    { main: "#36C5F0" },
+    info: { main: "#36C5F0" },
   },
 
   shape: {
@@ -395,7 +396,7 @@ export const SLACK_DARK: ThemeOptions = {
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: "#532755",  // deep plum
+          backgroundColor: "#532755", // deep plum
           color: "#FFFFFF",
           boxShadow: "0px 2px 10px rgba(0,0,0,0.3)",
           borderBottom: "1px solid rgba(255,255,255,0.08)",
@@ -429,12 +430,14 @@ export const SLACK_DARK: ThemeOptions = {
     // ---------------------------
     MuiChip: {
       styleOverrides: {
-        root: {
+        root: ({ ownerState }: any) => ({
           borderRadius: 6,
-          background: "#3B2C4A",
-          color: "#E2D6ED",
           fontWeight: 600,
-        },
+          ...(ownerState.color === "default" && {
+            background: "#3B2C4A",
+            color: "#E2D6ED",
+          }),
+        }),
       },
     },
 
@@ -451,4 +454,4 @@ export const SLACK_DARK: ThemeOptions = {
       },
     },
   },
-}
+};

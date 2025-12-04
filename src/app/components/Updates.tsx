@@ -7,7 +7,6 @@ import Update from "./Update";
 import useGenericQueries from "../queries/useGenericQueries";
 import { useProjectSelected } from "../hooks/useProjectSelected";
 
-
 export default function Updates() {
   const { selectedProject } = useProjectSelected();
   const { data: updates } = useGenericQueries<UpdateType[]>(
@@ -18,11 +17,13 @@ export default function Updates() {
     return (
       <Box
         sx={{
+          backgroundColor: "background.paper",
           textAlign: "center",
-          py: 8,
-          px: 2,
-        }}
-      >
+          border: 1,
+          borderRadius: 1,
+          borderColor: "divider",
+          p: 8,
+        }}>
         <Notifications sx={{ fontSize: 64, color: "text.disabled", mb: 2 }} />
         <Typography variant="h6" color="text.secondary">
           No updates found
@@ -36,15 +37,13 @@ export default function Updates() {
       sx={{
         height: "calc(100vh - 200px)",
         overflow: "auto",
-      }}
-    >
+      }}>
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           gap: 2,
-        }}
-      >
+        }}>
         {updates.map((update) => (
           <Update key={update.id} update={update} />
         ))}

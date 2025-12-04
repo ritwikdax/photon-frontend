@@ -4,20 +4,15 @@ import ProjectAnalyticsCards from "../components/ProjectAnalyticsCards";
 import { useProjectSelected } from "../hooks/useProjectSelected";
 import ProjectDetails from "../components/ProjectDetails";
 import ProjectTabsCard from "../components/ProjectTabsCard";
-import { useSnackbar } from "../context/SnackbarContext";
 import NoProjectSelected from "../components/NoProjectSelected";
 import ProjectSelector from "../components/ProjectSelector";
 
 export default function Dashboard() {
-  const snackbar = useSnackbar();
-
   const { selectedProject } = useProjectSelected();
 
-  if(!selectedProject){
+  if (!selectedProject) {
     return <NoProjectSelected />;
   }
-
-
   return (
     <Box>
       <Grid container spacing={2}>
@@ -28,8 +23,7 @@ export default function Dashboard() {
               height: "calc(100vh - 200px)",
               overflowY: "auto",
               overflowX: "hidden",
-            }}
-          >
+            }}>
             <ProjectDetails
               project={selectedProject as any}
               onEdit={() => {}}
@@ -44,5 +38,5 @@ export default function Dashboard() {
         </Grid>
       </Grid>
     </Box>
-  )
+  );
 }

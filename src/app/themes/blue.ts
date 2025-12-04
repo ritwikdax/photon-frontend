@@ -1,41 +1,41 @@
 import { ThemeOptions } from "@mui/material";
 
-export const BLUE_THEME : ThemeOptions = {
+export const BLUE_THEME: ThemeOptions = {
   palette: {
     mode: "dark",
 
     background: {
-      default: "#0F172A",   // Deep navy page background
-      paper: "#1E293B",     // Slightly lighter cards/sections
+      default: "#0F172A", // Deep navy page background
+      paper: "#1E293B", // Slightly lighter cards/sections
     },
 
     primary: {
-      main: "#3B82F6",      // Bright blue CTA button
+      main: "#3B82F6", // Bright blue CTA button
       light: "#60A5FA",
       dark: "#2563EB",
       contrastText: "#ffffff",
     },
 
     secondary: {
-      main: "#475569",      // Muted slate-gray for secondary actions
+      main: "#475569", // Muted slate-gray for secondary actions
     },
 
     text: {
-      primary: "#FFFFFF",       // Strong white headings
-      secondary: "#CBD5E1",     // Muted gray body copy
+      primary: "#FFFFFF", // Strong white headings
+      secondary: "#CBD5E1", // Muted gray body copy
       disabled: "rgba(255,255,255,0.4)",
     },
 
     divider: "rgba(255,255,255,0.12)",
 
     success: { main: "#22C55E" },
-    error:   { main: "#EF4444" },
+    error: { main: "#EF4444" },
     warning: { main: "#F59E0B" },
-    info:    { main: "#3B82F6" },
+    info: { main: "#3B82F6" },
   },
 
   shape: {
-    borderRadius: 12,       // clean modern rounding like screenshot
+    borderRadius: 12, // clean modern rounding like screenshot
   },
 
   typography: {
@@ -173,12 +173,14 @@ export const BLUE_THEME : ThemeOptions = {
     // --------------------------------------
     MuiChip: {
       styleOverrides: {
-        root: {
+        root: ({ ownerState }: any) => ({
           borderRadius: 6,
-          backgroundColor: "#1E293B",
-          color: "#E2E8F0",
-          border: "1px solid rgba(255,255,255,0.1)",
-        },
+          ...(ownerState.color === "default" && {
+            backgroundColor: "#1E293B",
+            color: "#E2E8F0",
+            border: "1px solid rgba(255,255,255,0.1)",
+          }),
+        }),
       },
     },
 
@@ -196,4 +198,4 @@ export const BLUE_THEME : ThemeOptions = {
       },
     },
   },
-}
+};

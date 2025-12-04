@@ -14,7 +14,6 @@ import {
   ListItemText,
   DialogTitle,
   DialogActions,
-  Grid,
   Alert,
 } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
@@ -54,15 +53,18 @@ export const Event: React.FC<EventProps> = ({ event }) => {
   const deleteMutation = useDeleteMutation("events");
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const menuOpen = Boolean(anchorEl);
-  
+
   // Scroll into view if this event is in the URL hash
   const eventRef = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const hash = window.location.hash.replace('#', '');
+    if (typeof window !== "undefined") {
+      const hash = window.location.hash.replace("#", "");
       if (hash === id && eventRef.current) {
         setTimeout(() => {
-          eventRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          eventRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
         }, 300); // Small delay to ensure the page and tabs are rendered
       }
     }
@@ -134,8 +136,7 @@ export const Event: React.FC<EventProps> = ({ event }) => {
             onClick={confirmDelete}
             variant="contained"
             color="error"
-            startIcon={<DeleteIcon />}
-          >
+            startIcon={<DeleteIcon />}>
             Delete
           </Button>
         </DialogActions>
@@ -147,7 +148,7 @@ export const Event: React.FC<EventProps> = ({ event }) => {
   // Helper function to combine eventDate and eventStartTime into a Date object
   const getEventDateTime = () => {
     const date = new Date(eventDate);
-    const [hours, minutes] = eventStartTime.split(':');
+    const [hours, minutes] = eventStartTime.split(":");
     date.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
     return date;
   };
@@ -212,22 +213,21 @@ export const Event: React.FC<EventProps> = ({ event }) => {
   };
 
   return (
-    <Card
+    <Box
       ref={eventRef}
       id={`event-${id}`}
-      elevation={0}
+      component="div"
       sx={{
-        border: "1px solid",
+        backgroundColor: "background.paper",
+        border: 1,
+        borderRadius: 1,
         borderColor: "divider",
         width: "100%",
         position: "relative",
         mb: 2,
         scrollMarginTop: "20px", // Add some spacing when scrolled to
-      }}
-    >
-      <CardContent
-        sx={{ display: "flex", p: 2, "&:last-child": { pb: 2 } }}
-      >
+      }}>
+      <CardContent sx={{ display: "flex", p: 2, "&:last-child": { pb: 2 } }}>
         <Box sx={{ display: "flex", width: "100%", gap: 3 }}>
           <Box sx={{ flexGrow: 1 }}>
             <Typography
@@ -235,8 +235,7 @@ export const Event: React.FC<EventProps> = ({ event }) => {
               sx={{
                 fontWeight: 600,
                 lineHeight: 1.3,
-              }}
-            >
+              }}>
               {assignment}
             </Typography>
             <Box sx={{ mt: 2 }}>
@@ -258,8 +257,7 @@ export const Event: React.FC<EventProps> = ({ event }) => {
                   variant="body2"
                   fontWeight="600"
                   color="text.secondary"
-                  sx={{ mb: 1 }}
-                >
+                  sx={{ mb: 1 }}>
                   Team Composition
                 </Typography>
                 <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
@@ -322,15 +320,25 @@ export const Event: React.FC<EventProps> = ({ event }) => {
                   <>
                     <Box sx={{ mt: 2 }}>
                       <Box
-                        sx={{ display: "flex", flexDirection: "row", gap: 1.5 }}
-                      >
+                        sx={{
+                          display: "flex",
+                          flexDirection: "row",
+                          gap: 1.5,
+                        }}>
                         <PeopleIcon color="action" fontSize="small" />
                         <Typography variant="body2" fontWeight="600">
                           Team ({team?.length})
                         </Typography>
                       </Box>
                     </Box>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap", mt: 1.5 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        flexWrap: "wrap",
+                        mt: 1.5,
+                      }}>
                       {team?.map((member, index) => {
                         const isLead =
                           member.isLead === "true" || member.isLead === "1";
@@ -341,11 +349,11 @@ export const Event: React.FC<EventProps> = ({ event }) => {
                               isLead={isLead}
                             />
                             {index < team.length - 1 && (
-                              <FiberManualRecordIcon 
-                                sx={{ 
-                                  fontSize: 8, 
-                                  color: "primary"
-                                }} 
+                              <FiberManualRecordIcon
+                                sx={{
+                                  fontSize: 8,
+                                  color: "primary",
+                                }}
                               />
                             )}
                           </React.Fragment>
@@ -365,8 +373,7 @@ export const Event: React.FC<EventProps> = ({ event }) => {
               display: "flex",
               gap: 0.5,
               alignItems: "center",
-            }}
-          >
+            }}>
             <Chip
               label={getStatusLabel(status)}
               color={getStatusColor(status)}
@@ -379,8 +386,7 @@ export const Event: React.FC<EventProps> = ({ event }) => {
               sx={{
                 bgcolor: "background.paper",
                 "&:hover": { bgcolor: "action.hover" },
-              }}
-            >
+              }}>
               <MoreVertIcon fontSize="small" />
             </IconButton>
           </Box>
@@ -397,8 +403,7 @@ export const Event: React.FC<EventProps> = ({ event }) => {
             transformOrigin={{
               vertical: "top",
               horizontal: "right",
-            }}
-          >
+            }}>
             <MenuItem onClick={handleEdit}>
               <ListItemIcon>
                 <EditIcon fontSize="small" />
@@ -414,7 +419,7 @@ export const Event: React.FC<EventProps> = ({ event }) => {
           </Menu>
         </Box>
       </CardContent>
-    </Card>
+    </Box>
   );
 };
 

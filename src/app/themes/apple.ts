@@ -5,22 +5,22 @@ export const APPLE_DARK: ThemeOptions = {
     mode: "dark",
 
     primary: {
-      main: "#0A84FF",      // Apple's signature blue
+      main: "#0A84FF", // Apple's signature blue
       light: "#409CFF",
       dark: "#0066CC",
       contrastText: "#ffffff",
     },
 
     secondary: {
-      main: "#FF9F0A",      // Apple's orange accent
+      main: "#FF9F0A", // Apple's orange accent
       light: "#FFB340",
       dark: "#FF8800",
       contrastText: "#1C1C1E",
     },
 
     background: {
-      default: "#000000",                    // Pure black base
-      paper: "rgba(28, 28, 30, 0.72)",      // Frosted glass material
+      default: "#000000", // Pure black base
+      paper: "rgba(28, 28, 30, 0.72)", // Frosted glass material
     },
 
     text: {
@@ -31,18 +31,19 @@ export const APPLE_DARK: ThemeOptions = {
 
     divider: "rgba(255, 255, 255, 0.08)",
 
-    success: { main: "#30D158" },   // Apple green
-    error: { main: "#FF453A" },     // Apple red
-    warning: { main: "#FF9F0A" },   // Apple orange
-    info: { main: "#64D2FF" },      // Apple cyan
+    success: { main: "#30D158", contrastText: "#FFFFFF" }, // Apple green
+    error: { main: "#FF453A", contrastText: "#FFFFFF" }, // Apple red
+    warning: { main: "#FF9F0A", contrastText: "#FFFFFF" }, // Apple orange
+    info: { main: "#64D2FF", contrastText: "#000000" }, // Apple cyan
   },
 
   shape: {
-    borderRadius: 18,    // Apple's characteristic smooth corners
+    borderRadius: 18, // Apple's characteristic smooth corners
   },
 
   typography: {
-    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif",
+    fontFamily:
+      "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif",
 
     h1: {
       fontSize: "3.5rem",
@@ -243,19 +244,16 @@ export const APPLE_DARK: ThemeOptions = {
     // --------------------------------------
     MuiChip: {
       styleOverrides: {
-        root: {
+        root: ({ ownerState }: any) => ({
           borderRadius: 16,
-          backgroundColor: "rgba(58, 58, 60, 0.6)",
-          backdropFilter: "blur(10px)",
-          color: "#FFFFFF",
-          border: "0.5px solid rgba(255, 255, 255, 0.1)",
           fontWeight: 500,
-        },
-
-        filled: {
-          backgroundColor: "rgba(10, 132, 255, 0.2)",
-          color: "#0A84FF",
-        },
+          ...(ownerState.color === "default" && {
+            backgroundColor: "rgba(58, 58, 60, 0.6)",
+            backdropFilter: "blur(10px)",
+            color: "#FFFFFF",
+            border: "0.5px solid rgba(255, 255, 255, 0.1)",
+          }),
+        }),
       },
     },
 
@@ -409,22 +407,22 @@ export const APPLE_LIGHT: ThemeOptions = {
     mode: "light",
 
     primary: {
-      main: "#007AFF",      // Apple's light mode blue
+      main: "#007AFF", // Apple's light mode blue
       light: "#5AC8FA",
       dark: "#0051D5",
       contrastText: "#ffffff",
     },
 
     secondary: {
-      main: "#FF9500",      // Apple's orange
+      main: "#FF9500", // Apple's orange
       light: "#FFCC00",
       dark: "#FF6B00",
       contrastText: "#ffffff",
     },
 
     background: {
-      default: "#F2F2F7",                    // Apple's light gray
-      paper: "rgba(255, 255, 255, 0.72)",   // Frosted white glass
+      default: "#F2F2F7", // Apple's light gray
+      paper: "rgba(255, 255, 255, 0.72)", // Frosted white glass
     },
 
     text: {
@@ -435,10 +433,10 @@ export const APPLE_LIGHT: ThemeOptions = {
 
     divider: "rgba(0, 0, 0, 0.08)",
 
-    success: { main: "#34C759" },   // Apple green light
-    error: { main: "#FF3B30" },     // Apple red light
-    warning: { main: "#FF9500" },   // Apple orange light
-    info: { main: "#5AC8FA" },      // Apple cyan light
+    success: { main: "#34C759", contrastText: "#FFFFFF" }, // Apple green light
+    error: { main: "#FF3B30", contrastText: "#FFFFFF" }, // Apple red light
+    warning: { main: "#FF9500", contrastText: "#FFFFFF" }, // Apple orange light
+    info: { main: "#5AC8FA", contrastText: "#000000" }, // Apple cyan light
   },
 
   shape: {
@@ -446,7 +444,8 @@ export const APPLE_LIGHT: ThemeOptions = {
   },
 
   typography: {
-    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif",
+    fontFamily:
+      "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif",
 
     h1: {
       fontSize: "3.5rem",
@@ -647,19 +646,16 @@ export const APPLE_LIGHT: ThemeOptions = {
     // --------------------------------------
     MuiChip: {
       styleOverrides: {
-        root: {
+        root: ({ ownerState }: any) => ({
           borderRadius: 16,
-          backgroundColor: "rgba(242, 242, 247, 0.8)",
-          backdropFilter: "blur(10px)",
-          color: "#000000",
-          border: "0.5px solid rgba(0, 0, 0, 0.08)",
           fontWeight: 500,
-        },
-
-        filled: {
-          backgroundColor: "rgba(0, 122, 255, 0.15)",
-          color: "#007AFF",
-        },
+          ...(ownerState.color === "default" && {
+            backgroundColor: "rgba(242, 242, 247, 0.8)",
+            backdropFilter: "blur(10px)",
+            color: "#000000",
+            border: "0.5px solid rgba(0, 0, 0, 0.08)",
+          }),
+        }),
       },
     },
 

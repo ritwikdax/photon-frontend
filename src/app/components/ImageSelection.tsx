@@ -18,7 +18,6 @@ import {
   Save as SaveIcon,
   Cancel as CancelIcon,
   Delete as DeleteIcon,
-  Download as DownloadIcon,
 } from "@mui/icons-material";
 import { useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
@@ -27,7 +26,8 @@ import useAddMuttion from "../mutations/useAddMutataion";
 import useUpdateMutation from "../mutations/useUpdateMutation";
 import { useProjectSelected } from "../hooks/useProjectSelected";
 import useSelectedImages from "../queries/useSelectedImages";
-import { useSnackbar } from "../context/SnackbarContext";
+import { downloadImageList } from "../utils/utils";
+import SelectedImagesSummary from "./SelectedImagesSummary";
 
 interface ImageSelectionProps {
   imageSelection?: ImageSelectionEntry;
@@ -45,7 +45,6 @@ export default function ImageSelection({
   const [isEditMode, setIsEditMode] = useState(false);
   const [showWarning, setShowWarning] = useState(true);
   const createMutation = useAddMuttion("imageSelections");
-  const snackbar = useSnackbar();
   const updateMutation = useUpdateMutation(
     "imageSelections",
     `projectId=${imageSelection?.projectId}`
@@ -107,58 +106,7 @@ export default function ImageSelection({
   };
 
   const handleDownloadImageList = () => {
-    if (!selectedImages || selectedImages.length === 0) {
-      return;
-    }
-
-    // Group images by folderId
-    const groupedByFolder = selectedImages.reduce((acc, image) => {
-      const folderId = image.folderId;
-      if (!acc[folderId]) {
-        acc[folderId] = {
-          folderName: image.folderName,
-          images: []
-        };
-      }
-      acc[folderId].images.push(image.imageFileName);
-      return acc;
-    }, {} as Record<string, { folderName: string; images: string[] }>);
-
-    // Create formatted text content
-    let textContent = `Selected Images for ${selectedProject?.name || "Project"}\n`;
-    textContent += `Total Images: ${selectedImages.length}\n`;
-    textContent += `Generated on: ${new Date().toLocaleString()}\n`;
-    textContent += "=".repeat(80) + "\n\n";
-
-    // Add each folder section
-    Object.entries(groupedByFolder).forEach(([folderId, data], folderIndex) => {
-      textContent += `Folder ${folderIndex + 1}: ${data.folderName}\n`;
-      textContent += `Image Count: ${data.images.length}\n`;
-      textContent += "-".repeat(80) + "\n";
-      
-      data.images.forEach((imageName) => {
-        textContent += `  ${imageName}\n`;
-      });
-      
-      textContent += "\n";
-    });
-
-    // Create a blob with the text content
-    const blob = new Blob([textContent], { type: "text/plain" });
-
-    // Create a download link
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `selected-images-${selectedProject?.name || "project"}.txt`;
-
-    // Trigger the download
-    document.body.appendChild(link);
-    link.click();
-
-    // Clean up
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+    downloadImageList(selectedImages || [], selectedProject?.name);
   };
 
   if (!imageSelection && !isEditMode) {
@@ -170,8 +118,7 @@ export default function ImageSelection({
           backgroundColor: "background.paper",
           borderColor: "divider",
           p: 2,
-        }}
-      >
+        }}>
         <Stack spacing={2} alignItems="center">
           <Typography variant="body2" color="text.secondary">
             No image selection data available
@@ -180,8 +127,7 @@ export default function ImageSelection({
             variant="contained"
             startIcon={<AddIcon />}
             onClick={handleEdit}
-            size="small"
-          >
+            size="small">
             Add
           </Button>
         </Stack>
@@ -197,15 +143,13 @@ export default function ImageSelection({
         backgroundColor: "background.paper",
         borderColor: "divider",
         p: 2,
-      }}
-    >
+      }}>
       {/* Warning Alert - Only show in edit mode */}
       {isEditMode && showWarning && (
         <Alert
           severity="warning"
           onClose={() => setShowWarning(false)}
-          sx={{ mb: 2 }}
-        >
+          sx={{ mb: 2 }}>
           Make sure you have shared Google Drive Folders with our service
           account
         </Alert>
@@ -215,8 +159,7 @@ export default function ImageSelection({
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        sx={{ mb: 2 }}
-      >
+        sx={{ mb: 2 }}>
         <Typography variant="h6">Image Selection Details</Typography>
         {!isEditMode ? (
           <IconButton onClick={handleEdit} size="small">
@@ -227,8 +170,7 @@ export default function ImageSelection({
             <IconButton
               onClick={handleSubmit(onSubmit)}
               size="small"
-              color="primary"
-            >
+              color="primary">
               <SaveIcon />
             </IconButton>
             <IconButton onClick={handleCancel} size="small" color="secondary">
@@ -246,10 +188,10 @@ export default function ImageSelection({
               <strong>Folder IDs:</strong>
             </Typography>
             {!isEditMode ? (
-              <Stack direction="row" flexWrap="wrap" sx={{ margin: '-4px' }}>
+              <Stack direction="row" flexWrap="wrap" sx={{ margin: "-4px" }}>
                 {imageSelection?.folderIds.map((folderId, index) => (
                   <Chip
-                    sx={{ margin: '8px' }}
+                    sx={{ margin: "8px" }}
                     key={index}
                     label={folderId}
                     size="small"
@@ -268,8 +210,7 @@ export default function ImageSelection({
                     key={field.id}
                     direction="row"
                     spacing={1}
-                    alignItems="center"
-                  >
+                    alignItems="center">
                     <Controller
                       name={`folderIds.${index}.value`}
                       control={control}
@@ -286,8 +227,7 @@ export default function ImageSelection({
                       onClick={() => remove(index)}
                       size="small"
                       color="error"
-                      disabled={fields.length === 1}
-                    >
+                      disabled={fields.length === 1}>
                       <DeleteIcon />
                     </IconButton>
                   </Stack>
@@ -297,8 +237,7 @@ export default function ImageSelection({
                   onClick={addFolderId}
                   variant="outlined"
                   size="small"
-                  sx={{ alignSelf: "flex-start" }}
-                >
+                  sx={{ alignSelf: "flex-start" }}>
                   Add Folder ID
                 </Button>
               </Stack>
@@ -379,67 +318,12 @@ export default function ImageSelection({
 
           {/* Selected Images Count - Hidden in edit mode */}
           {!isEditMode && (
-            <Box
-              sx={{
-                mt: 3,
-                p: 3,
-                backgroundColor: "action.hover",
-                border: "1px solid",
-                borderColor: "divider",
-                borderRadius: 3,
-                textAlign: "center",
-                transition: "all 0.2s ease-in-out",
-                "&:hover": {
-                  backgroundColor: "action.selected",
-                  borderColor: "primary.main",
-                },
-              }}
-            >
-              <Typography
-                variant="h4"
-                sx={{
-                  fontWeight: 300,
-                  color: (selectedImages?.length || 0) > (imageSelection?.maxSelectionCount || 0) ? "error.main" : "primary.main",
-                  mb: 0.5,
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                <strong>
-                  {selectedImages?.length || 0} / {imageSelection?.maxSelectionCount ?? "∞"}
-                </strong>
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  color: "text.secondary",
-                  fontWeight: 400,
-                  fontSize: "0.875rem",
-                  mb: 2,
-                }}
-              >
-                photos selected for editing
-              </Typography>
-
-              {selectedImages && selectedImages.length > 0 && (
-                <Button
-                  variant="outlined"
-                  size="small"
-                  startIcon={<DownloadIcon />}
-                  onClick={handleDownloadImageList}
-                  sx={{
-                    borderColor: "grey.300",
-                    color: "text.secondary",
-                    "&:hover": {
-                      borderColor: "primary.main",
-                      color: "primary.main",
-                      backgroundColor: "primary.50",
-                    },
-                  }}
-                >
-                  Download List
-                </Button>
-              )}
-            </Box>
+            <SelectedImagesSummary
+              selectedImages={selectedImages || []}
+              maxSelectionCount={imageSelection?.maxSelectionCount}
+              projectName={selectedProject?.name}
+              onDownload={handleDownloadImageList}
+            />
           )}
         </Stack>
       </form>

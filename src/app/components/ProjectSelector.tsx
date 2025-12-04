@@ -17,7 +17,8 @@ import { useProjectSelected } from "../hooks/useProjectSelected";
 import { Project } from "../interfaces/data/interface";
 
 export default function ProjectSelector() {
-  const { selectedProject, projects, setSelectedProject } = useProjectSelected();
+  const { selectedProject, projects, setSelectedProject } =
+    useProjectSelected();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -53,7 +54,7 @@ export default function ProjectSelector() {
   return (
     <>
       <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-        <Typography variant="h4">
+        <Typography variant="h5" sx={{ fontWeight: 800 }}>
           {selectedProject?.name || "No Project Selected"}
         </Typography>
         <IconButton onClick={handleOpenPopover} size="small" sx={{ ml: 1 }}>
@@ -72,8 +73,7 @@ export default function ProjectSelector() {
         transformOrigin={{
           vertical: "top",
           horizontal: "left",
-        }}
-      >
+        }}>
         <Box sx={{ width: 350 }}>
           <Box sx={{ p: 2, pb: 1 }}>
             <TextField
@@ -98,8 +98,7 @@ export default function ProjectSelector() {
                 <ListItem key={project.id} disablePadding>
                   <ListItemButton
                     onClick={() => handleProjectSelect(project)}
-                    selected={selectedProject?.id === project.id}
-                  >
+                    selected={selectedProject?.id === project.id}>
                     <ListItemText
                       primary={project.name}
                       secondary={project.status

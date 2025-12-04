@@ -1,6 +1,6 @@
 import { ThemeOptions } from "@mui/material";
 
-export const NEON_DARK : ThemeOptions = {
+export const NEON_DARK: ThemeOptions = {
   palette: {
     mode: "dark",
 
@@ -19,8 +19,8 @@ export const NEON_DARK : ThemeOptions = {
     },
 
     background: {
-      default: "#0B0F19",            // Deep space blue-black
-      paper: "rgba(22, 26, 41, 0.55)" // Glassmorphism on dark
+      default: "#0B0F19", // Deep space blue-black
+      paper: "rgba(22, 26, 41, 0.55)", // Glassmorphism on dark
     },
 
     text: {
@@ -69,7 +69,7 @@ export const NEON_DARK : ThemeOptions = {
     "none",
     "0px 4px 12px rgba(139,130,255,0.18)",
     "0px 8px 24px rgba(34,211,238,0.20)",
-    ...Array(22).fill("0px 4px 16px rgba(0,0,0,0.25)")
+    ...Array(22).fill("0px 4px 16px rgba(0,0,0,0.25)"),
   ] as any,
 
   components: {
@@ -177,18 +177,18 @@ export const NEON_DARK : ThemeOptions = {
     // ---------------------
     MuiChip: {
       styleOverrides: {
-        root: {
+        root: ({ ownerState }: any) => ({
           borderRadius: 10,
           padding: "6px 10px",
-          background: "rgba(139,130,255,0.12)",
-          color: "#E4E7EE",
-        },
+          ...(ownerState.color === "default" && {
+            background: "rgba(139,130,255,0.12)",
+            color: "#E4E7EE",
+          }),
+        }),
       },
     },
   },
-}
-
-
+};
 
 export const NEON_LIGHT: ThemeOptions = {
   palette: {
@@ -344,11 +344,13 @@ export const NEON_LIGHT: ThemeOptions = {
 
     MuiChip: {
       styleOverrides: {
-        root: {
+        root: ({ ownerState }: any) => ({
           borderRadius: 10,
           padding: "6px 10px",
-          background: "rgba(79,70,229,0.08)",
-        },
+          ...(ownerState.color === "default" && {
+            background: "rgba(79,70,229,0.08)",
+          }),
+        }),
       },
     },
   },

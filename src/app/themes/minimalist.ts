@@ -202,11 +202,14 @@ export const MINIMALIST_DARK: ThemeOptions = {
     // ---------------------------
     MuiChip: {
       styleOverrides: {
-        root: {
+        root: ({ ownerState }: any) => ({
           borderRadius: 6,
-          background: "#1C222A",
-          color: "#9BA3AF",
-        },
+          // Only apply custom background if no color prop is set
+          ...(ownerState.color === "default" && {
+            background: "#1C222A",
+            color: "#9BA3AF",
+          }),
+        }),
       },
     },
 
@@ -412,11 +415,14 @@ export const MINIMALIST_LIGHT: ThemeOptions = {
     // ---------------------------
     MuiChip: {
       styleOverrides: {
-        root: {
+        root: ({ ownerState }: any) => ({
           borderRadius: 6,
-          background: "#F1F3F4",
-          color: "#5F6368",
-        },
+          // Only apply custom background if no color prop is set
+          ...(ownerState.color === "default" && {
+            background: "#F1F3F4",
+            color: "#5F6368",
+          }),
+        }),
       },
     },
 

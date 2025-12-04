@@ -62,51 +62,60 @@ const SelectedImageNotes: React.FC<SelectedImageNotesProps> = ({
   }
 
   return (
-    <Paper sx={{ marginTop: 2 }}>
-      <Box p={2}>
-        <Typography variant="h6" gutterBottom>
-          Selected Image Notes
-        </Typography>
-        <List>
-          {imagesWithNotes.map((image) => (
-            <ListItem
-              key={image.id}
-              sx={{
-                borderBottom: "1px solid",
-                borderColor: "divider",
-                "&:last-child": {
-                  borderBottom: "none",
-                },
-              }}>
-              <ListItemText
-                primary={image.note}
-                secondary={
-                  <>
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      color="text.secondary">
-                      Image: {image.imageFileName}
-                    </Typography>
-                    <br />
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      color="text.secondary">
-                      Folder: {image.folderName}
-                    </Typography>
-                  </>
-                }
-                primaryTypographyProps={{
-                  variant: "body1",
-                  fontWeight: 500,
-                }}
-              />
-            </ListItem>
-          ))}
-        </List>
-      </Box>
-    </Paper>
+    <Box
+      sx={{
+        mt: 2,
+        border: 1,
+        borderColor: "divider",
+        borderRadius: 1,
+        p: 3,
+        bgcolor: "background.paper",
+        position: "relative",
+        mb: 2,
+        fontFamily: "Inter, sans-serif",
+      }}>
+      <Typography variant="h6" gutterBottom>
+        Selected Image Notes
+      </Typography>
+      <List>
+        {imagesWithNotes.map((image) => (
+          <ListItem
+            key={image.id}
+            sx={{
+              borderBottom: "1px solid",
+              borderColor: "divider",
+              "&:last-child": {
+                borderBottom: "none",
+              },
+            }}>
+            <ListItemText
+              primary={image.note}
+              secondary={
+                <>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    color="text.secondary">
+                    Image: {image.imageFileName}
+                  </Typography>
+                  <br />
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    color="text.secondary">
+                    Folder: {image.folderName}
+                  </Typography>
+                </>
+              }
+              primaryTypographyProps={{
+                variant: "body1",
+                fontWeight: 500,
+              }}
+            />
+          </ListItem>
+        ))}
+      </List>
+    </Box>
   );
 };
 

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import TabPanel from "@mui/lab/TabPanel";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
 import Events from "./Events";
-import useProjectUpdates from "../queries/useUpdates";
 import useProjectEvents from "../queries/useEventsByProjectId";
 import { useProjectDeliverables } from "../queries/useProjectDeliverables";
 import ProjectDeliverables from "./ProjectDeliverables";
@@ -14,32 +15,12 @@ import useImageSelectionsDetails from "../queries/useImageSelectionDetails";
 import TrackingDetails from "./TrackingDetails";
 import SelectedImageNotes from "./SelectedImageNotes";
 
-function TabPanel(props: {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}) {
-  const { children, value, index, ...other } = props;
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`mui-tabpanel-${index}`}
-      aria-labelledby={`mui-tab-${index}`}
-      {...other}
-      style={{ width: "100%" }}>
-      {value === index && <Box sx={{ pt: 1 }}>{children}</Box>}
-    </div>
-  );
-}
-
 const ProjectTabsCard: React.FC = () => {
-  const [value, setValue] = useState(0);
-  const handleChange = (_: React.SyntheticEvent, newValue: number) => {
+  const [value, setValue] = useState("0");
+  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
   const { selectedProject } = useProjectSelected();
-  const { data: projectUpdates } = useProjectUpdates(selectedProject?.id || "");
   const { data: projectEvents } = useProjectEvents(selectedProject?.id || "");
   const projectDeliverables = useProjectDeliverables(selectedProject?.id || "");
   const { data: imageSelectionDetails } = useImageSelectionsDetails(
@@ -49,63 +30,67 @@ const ProjectTabsCard: React.FC = () => {
   // Check if there's an event ID in the URL hash and switch to Events tab
   React.useEffect(() => {
     if (typeof window !== "undefined" && window.location.hash) {
-      setValue(0); // Switch to Events tab (index 0)
+      setValue("0"); // Switch to Events tab (index 0)
     }
   }, []);
   return (
-    <Box>
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        aria-label="project tabs"
-        variant="standard">
-        <Tab label="Events" id="mui-tab-0" aria-controls="mui-tabpanel-0" />
-        <Tab
-          label="Deliverables"
-          id="mui-tab-1"
-          aria-controls="mui-tabpanel-1"
-        />
-        <Tab label="Updates" id="mui-tab-2" aria-controls="mui-tabpanel-2" />
-        <Tab
-          label="Image Selections"
-          id="mui-tab-2"
-          aria-controls="mui-tabpanel-2"
-        />
-        <Tab label="Trackings" id="mui-tab-2" aria-controls="mui-tabpanel-2" />
-      </Tabs>
+    <TabContext value={value}>
       <Box>
-        <TabPanel value={value} index={0}>
-          <Events events={projectEvents || []} />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <ProjectDeliverables deliverables={projectDeliverables ?? []} />
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <Updates />
-        </TabPanel>
-        <TabPanel value={value} index={3}>
-          <Box
-            sx={{
-              width: "100%",
-              maxHeight: "calc(100vh - 200px)",
-              overflowY: "auto",
-            }}>
-            <ImageSelection
-              imageSelection={
-                imageSelectionDetails && imageSelectionDetails?.length > 0
-                  ? imageSelectionDetails[0]
-                  : undefined
-              }
-            />
-            <SelectedImageNotes projectId={selectedProject?.id || ""} />
-          </Box>
-        </TabPanel>
-        <TabPanel value={value} index={4}>
-          {/* Tracking Details Component */}
-          <TrackingDetails />
-        </TabPanel>
+        <TabList
+          onChange={handleChange}
+          aria-label="project tabs"
+          variant="standard"
+          TabIndicatorProps={{ style: { display: "none" } }}
+          sx={{
+            "& .MuiTab-root": {
+              transition: "background-color 0.3s",
+              borderRadius: 1,
+              padding: "6px 12px",
+              minHeight: "40px",
+            },
+            "& .MuiTab-root.Mui-selected": {
+              backgroundColor: "action.selected",
+              borderRadius: 5,
+            },
+          }}>
+          <Tab label="Events" value="0" />
+          <Tab label="Deliverables" value="1" />
+          <Tab label="Updates" value="2" />
+          <Tab label="Image Selections" value="3" />
+          <Tab label="Trackings" value="4" />
+        </TabList>
       </Box>
-    </Box>
+      <TabPanel value="0" sx={{ p: 0, pt: 1 }}>
+        <Events events={projectEvents || []} />
+      </TabPanel>
+      <TabPanel value="1" sx={{ p: 0, pt: 1 }}>
+        <ProjectDeliverables deliverables={projectDeliverables ?? []} />
+      </TabPanel>
+      <TabPanel value="2" sx={{ p: 0, pt: 1 }}>
+        <Updates />
+      </TabPanel>
+      <TabPanel value="3" sx={{ p: 0, pt: 1 }}>
+        <Box
+          sx={{
+            width: "100%",
+            maxHeight: "calc(100vh - 200px)",
+            overflowY: "auto",
+          }}>
+          <ImageSelection
+            imageSelection={
+              imageSelectionDetails && imageSelectionDetails?.length > 0
+                ? imageSelectionDetails[0]
+                : undefined
+            }
+          />
+          <SelectedImageNotes projectId={selectedProject?.id || ""} />
+        </Box>
+      </TabPanel>
+      <TabPanel value="4" sx={{ p: 0, pt: 1 }}>
+        {/* Tracking Details Component */}
+        <TrackingDetails />
+      </TabPanel>
+    </TabContext>
   );
 };
 
