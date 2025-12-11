@@ -323,6 +323,7 @@ const ProjectsDataGrid: React.FC<ProjectsDataGridProps> = ({
         }}
         rowHeight={80}
         disableRowSelectionOnClick
+        onRowClick={(params) => onViewProject?.(params.row)}
         sx={{
           "& .MuiDataGrid-cell": {
             display: "flex",
@@ -338,6 +339,7 @@ const ProjectsDataGrid: React.FC<ProjectsDataGridProps> = ({
           },
           "& .MuiDataGrid-row:hover": {
             backgroundColor: "action.hover",
+            cursor: "pointer",
           },
         }}
       />
